@@ -11,7 +11,7 @@ Description: tidycomm provides convenience functions for day-to-day
     communication research tasks.
 License: GPL-3
 Suggests: 
-    testthat
+    testthat (>= 2.1.0)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
