@@ -26,10 +26,16 @@ describe <- function(data, ..., na.rm = TRUE) {
       rlang::syms()
   }
 
+  # Check if vars is empty and all vars are numeric
+
+  # Get current grouping
+
+  group_vars <- group_vars(data)
+
   data %>%
-    dplyr::select(!!! vars) %>%
+    dplyr::select(!!! vars, group_vars) %>%
     tidyr::gather(Variable, Value, !!! vars) %>%
-    dplyr::group_by(Variable) %>%
+    dplyr::group_by(Variable, add = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n(),
       Missing = sum(is.na(Value)),
@@ -43,39 +49,4 @@ describe <- function(data, ..., na.rm = TRUE) {
       Q75 = quantile(Value, .75, na.rm = na.rm)
     )
 
-}
-
-#' Describe groups by variable
-#'
-#' Describe one or more groups by descriptive statistics for one continous
-#' variable.
-#'
-#' @param data A (tidy) dataset
-#' @param var Variable to describe by (column name)
-#' @param ... Variable(s) to group by (column name)
-#' @param na.rm a logical value indicating whether NA values should be stripped
-#' before the computation proceeds. Defaults to TRUE.
-#'
-#' @return a [tibble][tibble::tibble-package]
-#'
-#' @examples describe(mtcars, mpg, cyl, am)
-#'
-#' @export
-describe_groups <- function(data, var, ..., na.rm = TRUE) {
-
-  data %>%
-    dplyr::select({{ var }}, ...) %>%
-    dplyr::group_by(...) %>%
-    dplyr::summarise(
-      N = dplyr::n(),
-      Missing = sum(is.na({{ var }})),
-      M = mean({{ var }}, na.rm = na.rm),
-      SD = sd({{ var }}, na.rm = na.rm),
-      Min = min({{ var }}, na.rm = na.rm),
-      Max = max({{ var }}, na.rm = na.rm),
-      Range = Max - Min,
-      Mdn = median({{ var }}, na.rm = na.rm),
-      Q25 = quantile({{ var }}, .25, na.rm = na.rm),
-      Q75 = quantile({{ var }}, .75, na.rm = na.rm)
-    )
 }

@@ -2,6 +2,5 @@
 
 export("%>%")
 export(describe)
-export(describe_groups)
 importFrom(magrittr,"%>%")
 importFrom(tibble,tibble)
