@@ -1,0 +1,18 @@
+Package: tidycomm
+Title: tidycomm: Covenience Functions for Communication Research
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Julian",
+           family = "Unkel",
+           role = c("aut", "cre"),
+           email = "julianunkel@gmail.com",
+           comment = c(ORCID = "0000-0001-9568-7041"))
+Description: tidycomm provides convenience functions for day-to-day
+    communication research tasks.
+License: GPL-3
+Suggests: 
+    testthat
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 6.1.1
