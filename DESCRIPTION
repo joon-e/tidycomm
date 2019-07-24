@@ -19,3 +19,5 @@ RoxygenNote: 6.1.1
 Imports: 
     magrittr,
     tibble
+URL: https://github.com/joon-e/tidycomm
+BugReports: https://github.com/joon-e/tidycomm/issues
