@@ -19,7 +19,7 @@
 describe <- function(data, ..., na.rm = TRUE) {
 
   # Get current grouping
-  group_vars <- dplyr::group_vars(data)
+  grouping <- dplyr::groups(data)
 
   # Get describe vars
   vars <- rlang::quos(...)
@@ -46,7 +46,7 @@ describe <- function(data, ..., na.rm = TRUE) {
 
   # Describe
   data %>%
-    dplyr::select(!!! vars, group_vars) %>%
+    dplyr::select(!!! vars, !!!grouping) %>%
     tidyr::gather(Variable, Value, !!! vars) %>%
     dplyr::group_by(Variable, add = TRUE) %>%
     dplyr::summarise(
