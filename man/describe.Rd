@@ -7,7 +7,7 @@
 describe(data, ..., na.rm = TRUE)
 }
 \arguments{
-\item{data}{A (tidy) dataset.}
+\item{data}{a \link[tibble:tibble-package]{tibble}}
 
 \item{...}{Variables to describe (column names)}
 

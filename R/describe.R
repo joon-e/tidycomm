@@ -4,7 +4,7 @@
 #' central tendency and variability. If no variables are specified,
 #' all numeric (integer or double) variables are described.
 #'
-#' @param data A (tidy) dataset.
+#' @param data a [tibble][tibble::tibble-package]
 #' @param ... Variables to describe (column names)
 #' @param na.rm a logical value indicating whether NA values should be stripped
 #'     before the computation proceeds. Defaults to TRUE.
@@ -17,21 +17,34 @@
 #'
 #' @export
 describe <- function(data, ..., na.rm = TRUE) {
+
+  # Get current grouping
+  group_vars <- dplyr::group_vars(data)
+
+  # Get describe vars
   vars <- rlang::quos(...)
 
   if (length(vars) == 0) {
     vars <- data %>%
-      dplyr::select_if(~ is.numeric(.)) %>%
+      dplyr::ungroup() %>% # Deselect grouping variable
+      dplyr::select_if(is.numeric) %>%
       names() %>%
       rlang::syms()
   }
 
   # Check if vars is empty and all vars are numeric
+  if (length(vars) == 0) {
+    stop("No numeric variables found to descibre")
+  }
 
-  # Get current grouping
+  if (!all(purrr::map_lgl(data %>%
+                          dplyr::ungroup() %>%
+                          dplyr::select(!!! vars),
+                          is.numeric))) {
+    stop("... must only contain numeric variables.")
+  }
 
-  group_vars <- group_vars(data)
-
+  # Describe
   data %>%
     dplyr::select(!!! vars, group_vars) %>%
     tidyr::gather(Variable, Value, !!! vars) %>%
@@ -46,7 +59,9 @@ describe <- function(data, ..., na.rm = TRUE) {
       Range = Max - Min,
       Mdn = median(Value, na.rm = na.rm),
       Q25 = quantile(Value, .25, na.rm = na.rm),
-      Q75 = quantile(Value, .75, na.rm = na.rm)
+      Q75 = quantile(Value, .75, na.rm = na.rm),
+      Skewness = moments::skewness(Value, na.rm = na.rm),
+      Kurtosis = moments::kurtosis(Value, na.rm = na.rm)
     )
 
 }
