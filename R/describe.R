@@ -55,11 +55,11 @@ describe <- function(data, ..., na.rm = TRUE) {
       M = mean(Value, na.rm = na.rm),
       SD = sd(Value, na.rm = na.rm),
       Min = min(Value, na.rm = na.rm),
+      Q25 = quantile(Value, .25, na.rm = na.rm),
+      Mdn = median(Value, na.rm = na.rm),
+      Q75 = quantile(Value, .75, na.rm = na.rm),
       Max = max(Value, na.rm = na.rm),
       Range = Max - Min,
-      Mdn = median(Value, na.rm = na.rm),
-      Q25 = quantile(Value, .25, na.rm = na.rm),
-      Q75 = quantile(Value, .75, na.rm = na.rm),
       Skewness = moments::skewness(Value, na.rm = na.rm),
       Kurtosis = moments::kurtosis(Value, na.rm = na.rm)
     )
