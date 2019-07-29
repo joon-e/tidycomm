@@ -30,3 +30,72 @@ tab_frequencies <- function(data, ...) {
     )
 
 }
+
+
+#' Crosstab variables
+#'
+#' Computes contigency table for one independent (column) variable and one or
+#' more dependent (row) variables.
+#'
+#' @param data a [tibble][tibble::tibble-package]
+#' @param col_var Independent (column) variable.
+#' @param ... Dependent (row) variables.
+#' @param add_total Logical indicating whether a 'Total' column should be
+#'   computed. Defaults to FALSE.
+#' @param percentages Logical indicating whether to output column-wise
+#'   percentages instead of absolute values. Defaults to FALSE.
+#' @param chisq Logical indicating whether a Chi-square test should be computed. Test
+#'   results will be reported via message(). Defaults to FALSE.
+#'
+#' @return a [tibble][tibble::tibble-package]
+#'
+#' @export
+crosstab <- function(data, col_var, ..., add_total = FALSE,
+                     percentages = FALSE, chi_square = FALSE) {
+
+  if(dplyr::is_grouped_df(data)) {
+    warning("Grouping variable(s) present in data will be ignored.",
+            call. = FALSE)
+  }
+
+  cross_vars <- length(rlang::quos(...))
+
+  if(cross_vars < 1) {
+    stop("Must provide at least one variable to crosstabulate.")
+  }
+
+  xt <- data %>%
+    dplyr::group_by({{ col_var }}, ...) %>%
+    dplyr::count() %>%
+    tidyr::spread({{ col_var }}, n) %>%
+    dplyr::ungroup()
+
+  xt_cross_vars <- xt %>%
+    select(c(1:cross_vars))
+
+  xt_col_vars <- xt %>%
+    select(-c(1:cross_vars))
+
+  if(chi_square) {
+    chi2 <- xt_col_vars %>%
+      as.matrix() %>%
+      chisq.test()
+
+    test_string <- "Chi² = %f, df = %f, p = %f"
+
+    message(sprintf(test_string, chi2$statistic, chi2$parameter, chi2$p.value))
+  }
+
+  if(add_total) {
+    xt_col_vars <- xt_col_vars %>%
+      dplyr::mutate(Total = rowSums(.))
+  }
+
+  if(percentages) {
+    xt_col_vars <- xt_col_vars %>%
+      dplyr::mutate_all(~ . / sum(., na.rm = TRUE))
+  }
+
+  xt_cross_vars %>%
+    dplyr::bind_cols(xt_col_vars)
+}
