@@ -12,8 +12,8 @@
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' describe(mtcars, disp, hp, mpg)
-#' describe(iris)
+#' iris %>% describe()
+#' mtcars %>% describe(mpg, am, cyl)
 #'
 #' @export
 describe <- function(data, ..., na.rm = TRUE) {
