@@ -30,3 +30,8 @@ a \link[tibble:tibble-package]{tibble}
 Computes contigency table for one independent (column) variable and one or
 more dependent (row) variables.
 }
+\examples{
+mtcars \%>\% crosstab(vs, am)
+mtcars \%>\% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
+
+}

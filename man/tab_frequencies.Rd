@@ -18,3 +18,8 @@ a \link[tibble:tibble-package]{tibble}
 Tabulates frequencies for one or more categorical variable, including relative,
 and cumulative frequencies.
 }
+\examples{
+iris \%>\% tab_frequencies(Species)
+mtcars \%>\% tab_frequencies(vs, am)
+
+}

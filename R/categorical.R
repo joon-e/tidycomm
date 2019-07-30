@@ -10,13 +10,17 @@
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
+#' @examples
+#' iris %>% tab_frequencies(Species)
+#' mtcars %>% tab_frequencies(vs, am)
+#'
 #' @export
 tab_frequencies <- function(data, ...) {
   grouping <- dplyr::groups(data)
 
   d <- data %>%
     dplyr::group_by(..., !!!grouping) %>%
-    dplyr::summarise(n = n()) %>%
+    dplyr::summarise(n = dplyr::n()) %>%
     dplyr::group_by(!!!grouping) %>%
     dplyr::mutate(percent = n / sum(n)) %>%
     dplyr::arrange(!!!grouping)
@@ -48,6 +52,10 @@ tab_frequencies <- function(data, ...) {
 #'   results will be reported via message(). Defaults to FALSE.
 #'
 #' @return a [tibble][tibble::tibble-package]
+#'
+#' @examples
+#' mtcars %>% crosstab(vs, am)
+#' mtcars %>% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
 #'
 #' @export
 crosstab <- function(data, col_var, ..., add_total = FALSE,
