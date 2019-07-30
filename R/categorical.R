@@ -68,13 +68,14 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     dplyr::group_by({{ col_var }}, ...) %>%
     dplyr::count() %>%
     tidyr::spread({{ col_var }}, n) %>%
-    dplyr::ungroup()
+    dplyr::ungroup() %>%
+    dplyr::mutate_if(is.numeric, ~replace(., is.na(.), 0))
 
   xt_cross_vars <- xt %>%
-    select(c(1:cross_vars))
+    dplyr::select(c(1:cross_vars))
 
   xt_col_vars <- xt %>%
-    select(-c(1:cross_vars))
+    dplyr::select(-c(1:cross_vars))
 
   if(chi_square) {
     chi2 <- xt_col_vars %>%
