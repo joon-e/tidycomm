@@ -35,3 +35,7 @@ mtcars \%>\% crosstab(vs, am)
 mtcars \%>\% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
 
 }
+\seealso{
+Other descriptives: \code{\link{describe}}
+}
+\concept{descriptives}

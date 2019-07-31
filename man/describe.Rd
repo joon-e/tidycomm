@@ -27,3 +27,7 @@ iris \%>\% describe()
 mtcars \%>\% describe(mpg, am, cyl)
 
 }
+\seealso{
+Other descriptives: \code{\link{crosstab}}
+}
+\concept{descriptives}

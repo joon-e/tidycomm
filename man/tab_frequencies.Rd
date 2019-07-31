@@ -23,3 +23,4 @@ iris \%>\% tab_frequencies(Species)
 mtcars \%>\% tab_frequencies(vs, am)
 
 }
+\concept{Descriptives}

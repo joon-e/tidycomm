@@ -14,6 +14,8 @@
 #' iris %>% tab_frequencies(Species)
 #' mtcars %>% tab_frequencies(vs, am)
 #'
+#' @family Descriptives
+#'
 #' @export
 tab_frequencies <- function(data, ...) {
   grouping <- dplyr::groups(data)
@@ -56,6 +58,8 @@ tab_frequencies <- function(data, ...) {
 #' @examples
 #' mtcars %>% crosstab(vs, am)
 #' mtcars %>% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
+#'
+#' @family descriptives
 #'
 #' @export
 crosstab <- function(data, col_var, ..., add_total = FALSE,
