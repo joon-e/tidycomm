@@ -19,3 +19,9 @@ in Krippendorff (2011), section E.
 Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
 Retrieved from http://repository.upenn.edu/asc_papers/43
 }
+\seealso{
+Other intercoder reliability: \code{\link{compute_icr}},
+  \code{\link{icr_agreement}}, \code{\link{icr_holsti}},
+  \code{\link{icr_test}}, \code{\link{unit_coder_matrix}}
+}
+\concept{intercoder reliability}

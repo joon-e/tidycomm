@@ -8,6 +8,8 @@
 #'
 #' @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
 #'   Retrieved from http://repository.upenn.edu/asc_papers/43
+#'
+#' @family intercoder reliability
 icr_kripp_alpha <- function(ucm, var_level = NULL) {
 
   if (missing(var_level)) {
@@ -60,7 +62,7 @@ count_value_in_unit <- function(val, tab_u) {
 #' @param vals Values to count
 values_in_unit <- function(u, vals) {
   tab_u <- table(u)
-  as_vector(map(vals, count_value_in_unit, tab_u))
+  purrr::as_vector(purrr::map(vals, count_value_in_unit, tab_u))
 }
 
 #' Compute value of difference function
