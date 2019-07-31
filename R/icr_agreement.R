@@ -3,7 +3,14 @@
 #' Computes simple percent agreement for a units-coders matrix
 #'
 #' @param ucm Units-coders matrix
+#'
+#' @family intercoder reliability
 icr_agreement <- function(ucm) {
+
+  if(any(is.na(ucm))) {
+    return(NA)
+  }
+
   sum(apply(ucm, 1, check_equal)) / dim(ucm)[1]
 }
 

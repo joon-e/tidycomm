@@ -12,3 +12,9 @@ icr_agreement(ucm)
 \description{
 Computes simple percent agreement for a units-coders matrix
 }
+\seealso{
+Other intercoder reliability: \code{\link{compute_icr}},
+  \code{\link{icr_holsti}}, \code{\link{icr_kripp_alpha}},
+  \code{\link{icr_test}}, \code{\link{unit_coder_matrix}}
+}
+\concept{intercoder reliability}
