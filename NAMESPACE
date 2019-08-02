@@ -3,6 +3,7 @@
 export("%>%")
 export(add_index)
 export(compute_icr)
+export(compute_reliability)
 export(crosstab)
 export(describe)
 export(tab_frequencies)
