@@ -25,15 +25,7 @@ describe <- function(data, ..., na.rm = TRUE) {
   grouping <- dplyr::groups(data)
 
   # Get describe vars
-  vars <- rlang::quos(...)
-
-  if (length(vars) == 0) {
-    vars <- data %>%
-      dplyr::ungroup() %>% # Deselect grouping variable
-      dplyr::select_if(is.numeric) %>%
-      names() %>%
-      rlang::syms()
-  }
+  vars <- grab_vars(data, rlang::enquos(...))
 
   # Check if vars is empty and all vars are numeric
   if (length(vars) == 0) {
