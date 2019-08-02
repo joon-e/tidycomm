@@ -9,7 +9,8 @@ describe(data, ..., na.rm = TRUE)
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}
 
-\item{...}{Variables to describe (column names)}
+\item{...}{Variables to describe (column names). Leave empty to describe all
+numeric variables in data.}
 
 \item{na.rm}{a logical value indicating whether NA values should be stripped
 before the computation proceeds. Defaults to TRUE.}

@@ -5,7 +5,8 @@
 #' all numeric (integer or double) variables are described.
 #'
 #' @param data a [tibble][tibble::tibble-package]
-#' @param ... Variables to describe (column names)
+#' @param ... Variables to describe (column names). Leave empty to describe all
+#'   numeric variables in data.
 #' @param na.rm a logical value indicating whether NA values should be stripped
 #'  before the computation proceeds. Defaults to TRUE.
 #'
