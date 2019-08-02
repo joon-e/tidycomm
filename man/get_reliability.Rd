@@ -7,6 +7,20 @@
 get_reliability(data, ..., type = "alpha", interval.type = NULL,
   bootstrap.samples = NULL, conf.level = NULL, progress = FALSE)
 }
+\arguments{
+\item{data}{a \link[tibble:tibble-package]{tibble}}
+
+\item{...}{Index variables created with \code{\link{add_index}}. Leave empty
+to get reliability estimates for all index variables.}
+
+\item{type}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+
+\item{interval.type}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+
+\item{bootstrap.samples}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+
+\item{conf.level}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+}
 \description{
 Get reliability estimates of index variables created with \code{\link{add_index}}.
 }
