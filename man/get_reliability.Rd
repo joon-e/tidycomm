@@ -20,7 +20,20 @@ to get reliability estimates for all index variables.}
 \item{bootstrap.samples}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
 
 \item{conf.level}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+
+\item{progress}{Show progress for reliability estimate computation. Useful
+if using computionally intense computations (e. g., many bootstrapping
+samples) and many index variables.}
+}
+\value{
+a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Get reliability estimates of index variables created with \code{\link{add_index}}.
 }
+\seealso{
+\code{\link[=add_index]{add_index()}} to create index variables
+
+Other reliability: \code{\link{compute_reliability}}
+}
+\concept{reliability}

@@ -27,4 +27,7 @@ a \link[tibble:tibble-package]{tibble}
 Computes reliability estimates of index/scale variables.
 Provides a wrapper for \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}.
 }
+\seealso{
+Other reliability: \code{\link{get_reliability}}
+}
 \concept{reliability}
