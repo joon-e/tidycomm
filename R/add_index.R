@@ -11,6 +11,9 @@
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
+#' @seealso [get_reliability()] to compute reliability estimates of added index
+#'   variables.
+#'
 #' @export
 add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
 

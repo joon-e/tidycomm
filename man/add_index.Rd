@@ -24,3 +24,7 @@ a \link[tibble:tibble-package]{tibble}
 \description{
 Add a rowwise mean or sum index of specific variables to the dataset.
 }
+\seealso{
+\code{\link[=get_reliability]{get_reliability()}} to compute reliability estimates of added index
+variables.
+}
