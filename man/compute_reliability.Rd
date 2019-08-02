@@ -12,19 +12,19 @@ compute_reliability(data, ..., type = "alpha", interval.type = NULL,
 
 \item{...}{Variables to compute reliability estimate for}
 
-\item{type}{See \code\link[MBESS]{ci.reliability}}
+\item{type}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
 
-\item{interval.type}{See \code\link[MBESS]{ci.reliability}}
+\item{interval.type}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
 
-\item{bootstrap.samples}{See \code\link[MBESS]{ci.reliability}}
+\item{bootstrap.samples}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
 
-\item{conf.level}{See \code\link[MBESS]{ci.reliability}}
+\item{conf.level}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
 }
 \description{
 Computes reliability estimates of index/scale variables.
-Provides a wrapper for \code\link[MBESS]{ci.reliability}.
+Provides a wrapper for \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}.
 }
 \concept{reliability}
