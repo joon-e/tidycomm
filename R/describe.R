@@ -55,8 +55,33 @@ describe <- function(data, ..., na.rm = TRUE) {
       Q75 = quantile(Value, .75, na.rm = na.rm),
       Max = max(Value, na.rm = na.rm),
       Range = Max - Min,
-      Skewness = moments::skewness(Value, na.rm = na.rm),
-      Kurtosis = moments::kurtosis(Value, na.rm = na.rm)
+      Skewness = skewness(Value),
+      Kurtosis = kurtosis(Value)
     )
 
+}
+
+
+#' Skewness
+#'
+#' Compute empirical skewness
+#'
+#' @param x a numerical vector
+#'
+#' @return a `dbl`
+skewness <- function(x) {
+  m <- mean(x, na.rm = TRUE)
+  sum((x - m)^3) / length(x) / ((sum((x - m)^2) / length(x))^(3/2))
+}
+
+#' Kurtosis
+#'
+#' Compute empirical kurtosis
+#'
+#' @param x a numerical vector
+#'
+#' @return a `dbl`
+kurtosis <- function(x) {
+  m <- mean(x, na.rm = TRUE)
+  sum((x - m)^4) / (sum((x - m)^2)^2) * length(x)
 }
