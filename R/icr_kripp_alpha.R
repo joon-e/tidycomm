@@ -71,6 +71,7 @@ values_in_unit <- function(u, vals) {
 #'
 #' @param c Value c
 #' @param k Value k
+#' @param vum A values-units matrix
 #' @param var_level Variable level
 #'
 #' @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.

@@ -11,6 +11,8 @@ delta_sq(c, k, vum, var_level)
 
 \item{k}{Value k}
 
+\item{vum}{A values-units matrix}
+
 \item{var_level}{Variable level}
 }
 \description{

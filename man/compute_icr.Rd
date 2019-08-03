@@ -17,6 +17,8 @@ compute_icr(data, unit_var, coder_var, ..., levels = NULL,
 
 \item{...}{Variables to compute intercoder reliability estimates for}
 
+\item{levels}{Optional named vector with levels of test variables}
+
 \item{na.omit}{Logical indicating whether \code{NA} values should be stripped
 before computation. Defaults to FALSE.}
 
@@ -28,8 +30,6 @@ be computed. Defaults to TRUE.}
 
 \item{kripp_alpha}{Logical indicating whether Krippendorff's Alpha should
 be computed. Defaults to TRUE.}
-
-\item{...}{Optional named vector with levels of test variables}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

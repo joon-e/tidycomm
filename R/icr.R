@@ -6,7 +6,7 @@
 #' @param unit_var Variable with unit identifiers
 #' @param coder_var Variable with coder identifiers
 #' @param ... Variables to compute intercoder reliability estimates for
-#' @param ... Optional named vector with levels of test variables
+#' @param levels Optional named vector with levels of test variables
 #' @param na.omit Logical indicating whether `NA` values should be stripped
 #'   before computation. Defaults to FALSE.
 #' @param agreement Logical indicating whether simple percent agreement should

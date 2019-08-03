@@ -16,6 +16,8 @@ icr_test(test_var, data, unit_var, coder_var, levels = c(), na.omit,
 
 \item{coder_var}{Variable with coder identifiers}
 
+\item{levels}{Optional named vector with levels of test variables}
+
 \item{na.omit}{Logical indicating whether \code{NA} values should be stripped
 before computation. Defaults to FALSE.}
 

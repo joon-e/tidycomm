@@ -20,7 +20,7 @@ computed. Defaults to FALSE.}
 \item{percentages}{Logical indicating whether to output column-wise
 percentages instead of absolute values. Defaults to FALSE.}
 
-\item{chisq}{Logical indicating whether a Chi-square test should be computed. Test
+\item{chi_square}{Logical indicating whether a Chi-square test should be computed. Test
 results will be reported via message(). Defaults to FALSE.}
 }
 \value{
