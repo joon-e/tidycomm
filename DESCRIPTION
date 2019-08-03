@@ -17,7 +17,8 @@ Imports:
     glue,
     magrittr,
     MBESS,
-    moments,
+    purrr,
+    rlang,
     tibble,
     tidyr
 Suggests: 
