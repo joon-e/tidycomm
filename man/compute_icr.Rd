@@ -6,7 +6,8 @@
 \usage{
 compute_icr(data, unit_var, coder_var, ..., levels = NULL,
   na.omit = FALSE, agreement = TRUE, holsti = TRUE,
-  kripp_alpha = TRUE)
+  kripp_alpha = TRUE, cohens_kappa = FALSE, fleiss_kappa = FALSE,
+  brennan_prediger = FALSE)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}
@@ -30,6 +31,15 @@ be computed. Defaults to TRUE.}
 
 \item{kripp_alpha}{Logical indicating whether Krippendorff's Alpha should
 be computed. Defaults to TRUE.}
+
+\item{cohens_kappa}{Logical indicating whether Cohen's Kappa should
+be computed. Defaults to FALSE.}
+
+\item{fleiss_kappa}{Logical indicating whether Fleiss' Kappa should
+be computed. Defaults to FALSE.}
+
+\item{brennan_prediger}{Logical indicating whether Brennan & Prediger's Kappa
+should be computed. Defaults to FALSE.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

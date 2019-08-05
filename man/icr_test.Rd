@@ -5,7 +5,8 @@
 \title{Compute intercoder reliability estimates for one test variable}
 \usage{
 icr_test(test_var, data, unit_var, coder_var, levels = c(), na.omit,
-  agreement, holsti, kripp_alpha)
+  agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa,
+  brennan_prediger)
 }
 \arguments{
 \item{test_var}{Variable to compute estimates for}
@@ -29,6 +30,15 @@ be computed. Defaults to TRUE.}
 
 \item{kripp_alpha}{Logical indicating whether Krippendorff's Alpha should
 be computed. Defaults to TRUE.}
+
+\item{cohens_kappa}{Logical indicating whether Cohen's Kappa should
+be computed. Defaults to FALSE.}
+
+\item{fleiss_kappa}{Logical indicating whether Fleiss' Kappa should
+be computed. Defaults to FALSE.}
+
+\item{brennan_prediger}{Logical indicating whether Brennan & Prediger's Kappa
+should be computed. Defaults to FALSE.}
 }
 \description{
 Computes intercoder reliability estimates for one test variable

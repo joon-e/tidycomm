@@ -15,6 +15,12 @@
 #'   (mean pairwise agreement) should be computed. Defaults to TRUE.
 #' @param kripp_alpha Logical indicating whether Krippendorff's Alpha should
 #'   be computed. Defaults to TRUE.
+#' @param cohens_kappa Logical indicating whether Cohen's Kappa should
+#'   be computed. Defaults to FALSE.
+#' @param fleiss_kappa Logical indicating whether Fleiss' Kappa should
+#'   be computed. Defaults to FALSE.
+#' @param brennan_prediger Logical indicating whether Brennan & Prediger's Kappa
+#'   should be computed. Defaults to FALSE.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
@@ -23,13 +29,14 @@
 #' @export
 compute_icr <- function(data, unit_var, coder_var, ...,
                         levels = NULL, na.omit = FALSE,
-                        agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE) {
+                        agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
+                        cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
 
   test_vars <- rlang::enquos(...)
 
   purrr::map_dfr(test_vars, icr_test, data, {{ unit_var }}, {{ coder_var }},
                  levels, na.omit,
-                 agreement, holsti, kripp_alpha)
+                 agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger)
 
 }
 
@@ -44,7 +51,8 @@ compute_icr <- function(data, unit_var, coder_var, ...,
 #' @family intercoder reliability
 icr_test <- function(test_var, data, unit_var, coder_var,
                      levels = c(), na.omit,
-                     agreement, holsti, kripp_alpha) {
+                     agreement, holsti, kripp_alpha,
+                     cohens_kappa, fleiss_kappa, brennan_prediger) {
 
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var}})
 
@@ -96,6 +104,27 @@ icr_test <- function(test_var, data, unit_var, coder_var,
     test_vals <- test_vals %>%
       dplyr::bind_cols(
         Kripp_Alpha = icr_kripp_alpha(ucm, var_level)
+      )
+  }
+
+  if (cohens_kappa) {
+    test_vals <- test_vals %>%
+      dplyr::bind_cols(
+        Cohens_Kappa = icr_cohens_kappa(ucm)
+      )
+  }
+
+  if (fleiss_kappa) {
+    test_vals <- test_vals %>%
+      dplyr::bind_cols(
+        Fleiss_Kappa = icr_fleiss_kappa(ucm)
+      )
+  }
+
+  if (brennan_prediger) {
+    test_vals <- test_vals %>%
+      dplyr::bind_cols(
+        Brennan_Prediger = icr_brennan_prediger(ucm)
       )
   }
 
