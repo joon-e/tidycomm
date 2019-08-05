@@ -19,6 +19,7 @@ Imports:
     MBESS,
     purrr,
     rlang,
+    stringr,
     tibble,
     tidyr
 Suggests: 
