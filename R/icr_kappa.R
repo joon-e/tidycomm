@@ -19,7 +19,7 @@ icr_cohens_kappa <- function(ucm) {
   }
 
   N <- dim(ucm)[1]
-  cm <- table(ucm_2[, 1], ucm_2[, 2])
+  cm <- table(ucm[, 1], ucm[, 2])
   pc <- sum(margin.table(cm, 1) * margin.table(cm, 2)) / N^2
   p0 <- sum(diag(cm)) / N
 
