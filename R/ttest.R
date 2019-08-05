@@ -1,58 +1,77 @@
-# TO-DO: define levels, paired ttest
-t_test <- function(data, group_var, ..., var.equal = TRUE) {
+t_test <- function(data, group_var, ...,
+                   var.equal = TRUE, paired = FALSE, pooled_sd = TRUE,
+                   levels = NULL, case_var = NULL) {
 
   # Get vars
   test_vars <- grab_vars(data, rlang::quos(...))
+  test_vars_string <- purrr::map_chr(test_vars, rlang::as_label)
 
   # Get group var name
   group_var_str <- rlang::as_label(rlang::quo({{ group_var }}))
+  if (group_var_str %in% test_vars_string) {
+    test_vars <- rlang::syms(test_vars_string[test_vars_string != group_var_str])
+  }
 
   # Drop unused levels (if data is filtered)
   data <- droplevels(data)
 
-  # Get levels
-  levels <- data %>%
-    dplyr::pull({{ group_var }}) %>%
-    unique()
+  if (missing(levels)) {
+    # Get levels
+    levels <- data %>%
+      dplyr::pull({{ group_var }}) %>%
+      unique() %>%
+      as.character()
 
-  # Check
-  if (length(levels) < 2) {
-    stop("Grouping variable must have more than one level", call. = FALSE)
-  } else if (length(levels) > 2) {
-    warning(glue::glue("{group_var_str} has more than 2 levels, defaulting to first two ",
-                       "({levels[1]} and {levels[2]}). ",
-                       "Consider filtering your data."), call. = FALSE)
-    data <- data %>%
-      dplyr::filter({{ group_var }} %in% levels[1:2]) %>%
-      droplevels()
+    # Check
+    if (length(levels) < 2) {
+      stop("Grouping variable must have more than one level", call. = FALSE)
+    } else if (length(levels) > 2) {
+      warning(glue::glue("{group_var_str} has more than 2 levels, defaulting to first two ",
+                         "({levels[1]} and {levels[2]}). ",
+                         "Consider filtering your data."), call. = FALSE)
+      data <- data %>%
+        dplyr::filter({{ group_var }} %in% levels[1:2]) %>%
+        droplevels()
+    }
+  } else if (length(levels) != 2) {
+    stop("If using the levels argument, please provide exactly two levels",
+         call. = FALSE)
+  } else if (!all(levels %in% unique(data[[group_var_str]]))) {
+    stop("At least one level specified in the levels argument not found in data",
+         call. = FALSE)
   }
-
-  # TO-DO: Check if group_var in test_vars
-
 
   # Prepare data
   levels <- levels[1:2]
+
+  if (!missing(case_var)) {
+    data <- data %>%
+      dplyr::arrange({{ group_var }}, {{ case_var }})
+  }
+
   data <- dplyr::select(data, {{ group_var }}, !!!test_vars)
 
   # Main function
   purrr::map_dfr(test_vars, compute_t_test, data, {{ group_var }},
-                 levels, var.equal)
+                 levels, var.equal, paired, pooled_sd)
 
 }
 
+
 #
-compute_t_test <- function(test_var, data, group_var, levels, var.equal) {
+compute_t_test <- function(test_var, data, group_var, levels,
+                           var.equal, paired, pooled_sd) {
 
   # Split data
   x <- data %>%
     dplyr::filter({{ group_var }} == levels[1]) %>%
-    pull({{ test_var }})
+    dplyr::pull({{ test_var }})
   y <- data %>%
     dplyr::filter({{ group_var }} == levels[2]) %>%
-    pull({{ test_var }})
+    dplyr::pull({{ test_var }})
 
   # Test
-  tt <- t.test(x, y, var.equal = var.equal)
+  tt <- t.test(x, y, var.equal = var.equal, paired = paired)
 
   # Get names
   level_names <- levels %>%
@@ -72,7 +91,7 @@ compute_t_test <- function(test_var, data, group_var, levels, var.equal) {
     t = tt$statistic,
     df = tt$parameter,
     p = tt$p.value,
-    d_pooled = cohens_d(x, y)
+    d = cohens_d(x, y, pooled_sd, na.rm = TRUE)
   )
 }
 
