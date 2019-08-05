@@ -25,3 +25,29 @@ icr_cohens_kappa <- function(ucm) {
 
   return((p0 - pc) / (1 - pc))
 }
+
+#' Compute Fleiss' Kappa
+#'
+#' Computes Fleiss' Kappa.
+#'
+#' @param ucm Units-coders matrix
+#'
+#' @family intercoder reliability
+icr_fleiss_kappa <- function(ucm) {
+
+  if(any(is.na(ucm))) {
+    return(NA)
+  }
+
+  vals <- unique(as.vector(ucm))
+  uvm <- t(as.matrix(apply(ucm, 1, values_in_unit, vals)))
+
+  n_u <- dim(uvm)[1]
+  n_cod <- sum(uvm[1, ])
+
+  pj <- apply(uvm, 2, sum) / (n_cod * n_u)
+  pc <- sum(pj * pj)
+  p0 <- icr_agreement(ucm)
+
+  return((p0 - pc) / (1 - pc))
+}
