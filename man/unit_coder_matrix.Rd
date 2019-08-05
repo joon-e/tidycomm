@@ -20,7 +20,8 @@ Generates a units-coders matrix for a test variable
 }
 \seealso{
 Other intercoder reliability: \code{\link{compute_icr}},
-  \code{\link{icr_agreement}}, \code{\link{icr_holsti}},
+  \code{\link{icr_agreement}},
+  \code{\link{icr_cohens_kappa}}, \code{\link{icr_holsti}},
   \code{\link{icr_kripp_alpha}}, \code{\link{icr_test}}
 }
 \concept{intercoder reliability}

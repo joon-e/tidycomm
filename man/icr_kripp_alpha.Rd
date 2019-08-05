@@ -21,7 +21,8 @@ Retrieved from http://repository.upenn.edu/asc_papers/43
 }
 \seealso{
 Other intercoder reliability: \code{\link{compute_icr}},
-  \code{\link{icr_agreement}}, \code{\link{icr_holsti}},
+  \code{\link{icr_agreement}},
+  \code{\link{icr_cohens_kappa}}, \code{\link{icr_holsti}},
   \code{\link{icr_test}}, \code{\link{unit_coder_matrix}}
 }
 \concept{intercoder reliability}
