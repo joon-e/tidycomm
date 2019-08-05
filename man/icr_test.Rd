@@ -36,6 +36,7 @@ Computes intercoder reliability estimates for one test variable
 \seealso{
 Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_agreement}},
+  \code{\link{icr_brennan_prediger}},
   \code{\link{icr_cohens_kappa}},
   \code{\link{icr_fleiss_kappa}}, \code{\link{icr_holsti}},
   \code{\link{icr_kripp_alpha}},

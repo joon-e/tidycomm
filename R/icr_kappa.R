@@ -51,3 +51,32 @@ icr_fleiss_kappa <- function(ucm) {
 
   return((p0 - pc) / (1 - pc))
 }
+
+#' Compute Brennan & Prediger's Kappa
+#'
+#' Computes Brennan & Prediger's Kappa (extension to 3+ coders as proposed by
+#' von Eye (2006).
+#'
+#' @param ucm Units-coders matrix
+#'
+#' @family intercoder reliability
+#'
+#' @references Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
+#'   Uses, Misuses, and Alternatives. Educational and Psychological Measurement,
+#'   41(3), 687-699. https://doi.org/10.1177/001316448104100307
+#'
+#'   von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),
+#'   12-24. https://doi.org/10.1027/1016-9040.11.1.12
+icr_brennan_prediger <- function(ucm) {
+
+  if(any(is.na(ucm))) {
+    return(NA)
+  }
+
+  p0 <- icr_agreement(ucm)
+  n_cat <- length(unique(as.vector(ucm)))
+  n_cod <- dim(ucm)[2]
+  pc <- (1 / (n_cat^(n_cod - 1)))
+
+  return((p0 - pc) / (1 - pc))
+}
