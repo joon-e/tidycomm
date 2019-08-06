@@ -94,7 +94,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
       as.matrix() %>%
       chisq.test()
 
-    test_string <- "Chi² = %f, df = %f, p = %f"
+    test_string <- "Chi-square = %f, df = %f, p = %f"
 
     message(sprintf(test_string, chi2$statistic, chi2$parameter, chi2$p.value))
   }
