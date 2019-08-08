@@ -8,19 +8,19 @@
 #' @param ... Variables to compute intercoder reliability estimates for
 #' @param levels Optional named vector with levels of test variables
 #' @param na.omit Logical indicating whether `NA` values should be stripped
-#'   before computation. Defaults to FALSE.
+#'   before computation. Defaults to `FALSE`.
 #' @param agreement Logical indicating whether simple percent agreement should
-#'   be computed. Defaults to TRUE.
+#'   be computed. Defaults to `TRUE`.
 #' @param holsti Logical indicating whether Holsti's reliability estimate
-#'   (mean pairwise agreement) should be computed. Defaults to TRUE.
+#'   (mean pairwise agreement) should be computed. Defaults to `TRUE`.
 #' @param kripp_alpha Logical indicating whether Krippendorff's Alpha should
-#'   be computed. Defaults to TRUE.
+#'   be computed. Defaults to `TRUE`.
 #' @param cohens_kappa Logical indicating whether Cohen's Kappa should
-#'   be computed. Defaults to FALSE.
+#'   be computed. Defaults to `FALSE`.
 #' @param fleiss_kappa Logical indicating whether Fleiss' Kappa should
-#'   be computed. Defaults to FALSE.
+#'   be computed. Defaults to `FALSE`.
 #' @param brennan_prediger Logical indicating whether Brennan & Prediger's Kappa
-#'   should be computed. Defaults to FALSE.
+#'   should be computed. Defaults to `FALSE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'

@@ -6,8 +6,8 @@
 #' @param name Name of the index column to compute.
 #' @param ... Variables used for the index.
 #' @param type Type of index to compute. Either "mean" (default) or "sum".
-#' @param na.rm a logical value indicating whether NA values should be stripped
-#'   before the computation proceeds. Defaults to TRUE.
+#' @param na.rm a logical value indicating whether `NA` values should be stripped
+#'   before the computation proceeds. Defaults to `TRUE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'

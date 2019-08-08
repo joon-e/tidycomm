@@ -49,11 +49,11 @@ tab_frequencies <- function(data, ...) {
 #' @param col_var Independent (column) variable.
 #' @param ... Dependent (row) variables.
 #' @param add_total Logical indicating whether a 'Total' column should be
-#'   computed. Defaults to FALSE.
+#'   computed. Defaults to `FALSE`.
 #' @param percentages Logical indicating whether to output column-wise
-#'   percentages instead of absolute values. Defaults to FALSE.
-#' @param chi_square Logical indicating whether a Chi-square test should be computed. Test
-#'   results will be reported via message(). Defaults to FALSE.
+#'   percentages instead of absolute values. Defaults to `FALSE`.
+#' @param chi_square Logical indicating whether a Chi-square test should be computed.
+#'   Test results will be reported via message(). Defaults to `FALSE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
