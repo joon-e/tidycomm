@@ -32,7 +32,9 @@ tab_frequencies <- function(data, ...) {
                 dplyr::select(!!!grouping,
                        cum_n = n,
                        cum_percent = percent) %>%
-                dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), cumsum)
+                dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), cumsum) %>%
+                dplyr::ungroup() %>%
+                dplyr::select(cum_n, cum_percent)
     )
 
 }
@@ -82,7 +84,6 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     tidyr::spread({{ col_var }}, n) %>%
     dplyr::ungroup() %>%
     dplyr::mutate_if(is.numeric, ~replace(., is.na(.), 0))
-
   xt_cross_vars <- xt %>%
     dplyr::select(c(1:cross_vars))
 
