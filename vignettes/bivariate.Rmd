@@ -1,0 +1,149 @@
+---
+title: "Bivariate analysis of continuous and/or categorical variables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{bivariate}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Tidycomm includes four functions for bivariate explorative data analysis:
+
+- `crosstab()` for both categorical independent and dependent variables
+- `t_test()` for dichotomous categorical independent and continuous dependent variables
+- `unianova()` for polytomous categorical independent and continuous dependent variables
+- `correlate()` for both continuous independent and dependent variables
+
+```{r setup, message = FALSE, warning = FALSE}
+library(tidycomm)
+library(tidyverse)
+```
+
+## Compute contigency tables and Chi-square tests with `crosstab()`
+
+`crosstab()` outputs a contigency table for one independent (column) variable and one or more dependent (row) variables:
+
+```{r}
+diamonds %>% 
+  crosstab(cut, clarity)
+```
+
+Additional options include `add_total` (adds a row-wise `Total` column if set to `TRUE`) and `percentages` (outputs column-wise percentages instead of absolute values if set to `TRUE`):
+
+```{r}
+diamonds %>% 
+  crosstab(cut, clarity, add_total = TRUE, percentages = TRUE)
+```
+
+Setting `chi_square = TRUE` computes a $\chi^2$ test and outputs the results in a console message:
+
+```{r}
+diamonds %>% 
+  crosstab(cut, clarity, chi_square = TRUE)
+```
+
+Finally, passing multiple row variables will treat all unique value combinations as a single variable for percentage and Chi-square computations:
+
+```{r}
+diamonds %>% 
+  crosstab(cut, clarity, color, percentages = TRUE)
+```
+
+## Compute t-Tests with `t_test()`
+
+Use `t_test()` to quickly compute t-Tests for a group variable and one or more test variables. Output includes test statistics, descriptive statistics and Cohen's $d$ effect size estimates: 
+
+```{r}
+mtcars %>% 
+  t_test(am, mpg, disp, hp)
+```
+
+Passing no test variables will compute t-Tests for all numerical variables in the data:
+
+```{r}
+mtcars %>% 
+  t_test(am)
+```
+
+If passing a group variable with more than two unique levels, `t_test()` will produce a `warning` and default to the first two unique values. You can manually define the levels by setting the `levels` argument:
+
+```{r}
+diamonds %>% 
+  t_test(cut, price, carat)
+
+diamonds %>% 
+  t_test(cut, price, carat, levels = c("Fair", "Good"))
+```
+
+Additional options include:
+
+- `var.equal`: By default, `t_test()` will assume equal variances for both groups. Set `var.equal = FALSE` to compute t-Tests with the Welch approximation to the degrees of freedom.
+- `pooled_sd`: By default, the pooled variance will be used the compute Cohen's $d$ effect size estimates ($s = \sqrt\frac{(n_1 - 1)s^2_1 + (n_2 - 1)s^2_2}{n_1 + n_2 - 2}$).
+Set `pooled_sd = FALSE` to use the simple variance estimation instead ($s = \sqrt\frac{(s^2_1 + s^2_2)}{2}$).
+- `paired`: Set `paired = TRUE` to compute a paired t-Test instead. It is advisable to specify the case-identifying variable with `case_var` when computing paired t-Tests, as this will make sure that data are properly sorted.
+
+## Compute one-way ANOVAs with `unianova()`
+
+`unianova()` will compute one-way ANOVAs for one group variable and one or more test variables. Output includes test statistics and $\eta^2$ effect size estimates.
+
+```{r}
+mtcars %>% 
+  unianova(cyl, mpg, disp, hp)
+```
+
+Descriptives can be added by setting `descriptives = TRUE`. If no test variables are passed, all numerical variables in the data will be used:
+
+```{r}
+mtcars %>% 
+  unianova(cyl, descriptives = TRUE)
+```
+
+You can also compute _Tukey's HSD_ post-hoc tests by setting `post_hoc = TRUE`. Results will be added as a `tibble` in a list column `post_hoc`.
+
+```{r}
+mtcars %>% 
+  unianova(cyl, mpg, disp, hp, post_hoc = TRUE)
+```
+
+These can then be unnested with `tidyr::unnest()`:
+
+```{r}
+mtcars %>% 
+  unianova(cyl, mpg, disp, hp, post_hoc = TRUE) %>% 
+  select(Var, post_hoc) %>% 
+  unnest(post_hoc)
+```
+
+## Compute correlation tables and matrices with `correlate()`
+
+`correlate()` will compute correlations for all combinations of the passed variables:
+
+```{r}
+mtcars %>% 
+  correlate(mpg, disp, hp)
+```
+
+If no variables passed, correlations for all combinations of numerical variables will be computed:
+
+```{r}
+mtcars %>% 
+  correlate()
+```
+
+By default, Pearson's product-moment correlations coefficients ($r$) will be computed. Set `method` to `"kendall"` to obtain Kendall's $\tau$ or to `"spearman"` to obtain Spearman's $\rho$ instead.
+
+To obtain a correlation matrix, pass the output of `correlate()` to `to_correlation_matrix()`:
+
+```{r}
+mtcars %>% 
+  correlate() %>% 
+  to_correlation_matrix()
+```
+
