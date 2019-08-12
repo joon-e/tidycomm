@@ -26,6 +26,7 @@ describe <- function(data, ..., na.rm = TRUE) {
 
   # Get describe vars
   vars <- grab_vars(data, rlang::enquos(...))
+  vars_str <- purrr::map_chr(vars, rlang::as_label)
 
   # Check if vars is empty and all vars are numeric
   if (length(vars) == 0) {
@@ -57,7 +58,8 @@ describe <- function(data, ..., na.rm = TRUE) {
       Range = Max - Min,
       Skewness = skewness(Value),
       Kurtosis = kurtosis(Value)
-    )
+    ) %>%
+    dplyr::arrange(match(Variable, vars_str))
 
 }
 
