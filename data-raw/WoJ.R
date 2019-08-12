@@ -33,7 +33,7 @@ WoJ <- WoJ_full %>% select(
   mutate(ethics_1 = 6 - ethics_1, # reverse item
          employment = stringr::str_extract(employment, "([^\\s]+)")) %>%
   filter(country %in% c(countries),
-         emplyoment != "Other")
+         employment != "Other")
 
 
 ## Take Sample
