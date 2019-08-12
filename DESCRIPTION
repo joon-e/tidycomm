@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Julian",
            family = "Unkel",
            role = c("aut", "cre"),
-           email = "julianunkel@gmail.com",
+           email = "julian.unkel@gmail.com",
            comment = c(ORCID = "0000-0001-9568-7041"))
 Description: tidycomm provides convenience functions for
     day-to-day communication research tasks.
