@@ -12,8 +12,8 @@ describe(data, ..., na.rm = TRUE)
 \item{...}{Variables to describe (column names). Leave empty to describe all
 numeric variables in data.}
 
-\item{na.rm}{a logical value indicating whether NA values should be stripped
-before the computation proceeds. Defaults to TRUE.}
+\item{na.rm}{a logical value indicating whether \code{NA} values should be stripped
+before the computation proceeds. Defaults to \code{TRUE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

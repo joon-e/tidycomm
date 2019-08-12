@@ -15,13 +15,13 @@ crosstab(data, col_var, ..., add_total = FALSE, percentages = FALSE,
 \item{...}{Dependent (row) variables.}
 
 \item{add_total}{Logical indicating whether a 'Total' column should be
-computed. Defaults to FALSE.}
+computed. Defaults to \code{FALSE}.}
 
 \item{percentages}{Logical indicating whether to output column-wise
-percentages instead of absolute values. Defaults to FALSE.}
+percentages instead of absolute values. Defaults to \code{FALSE}.}
 
-\item{chi_square}{Logical indicating whether a Chi-square test should be computed. Test
-results will be reported via message(). Defaults to FALSE.}
+\item{chi_square}{Logical indicating whether a Chi-square test should be computed.
+Test results will be reported via message(). Defaults to \code{FALSE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

@@ -15,8 +15,8 @@ add_index(data, name, ..., type = "mean", na.rm = TRUE)
 
 \item{type}{Type of index to compute. Either "mean" (default) or "sum".}
 
-\item{na.rm}{a logical value indicating whether NA values should be stripped
-before the computation proceeds. Defaults to TRUE.}
+\item{na.rm}{a logical value indicating whether \code{NA} values should be stripped
+before the computation proceeds. Defaults to \code{TRUE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

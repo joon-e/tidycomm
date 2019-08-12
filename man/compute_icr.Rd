@@ -21,25 +21,25 @@ compute_icr(data, unit_var, coder_var, ..., levels = NULL,
 \item{levels}{Optional named vector with levels of test variables}
 
 \item{na.omit}{Logical indicating whether \code{NA} values should be stripped
-before computation. Defaults to FALSE.}
+before computation. Defaults to \code{FALSE}.}
 
 \item{agreement}{Logical indicating whether simple percent agreement should
-be computed. Defaults to TRUE.}
+be computed. Defaults to \code{TRUE}.}
 
 \item{holsti}{Logical indicating whether Holsti's reliability estimate
-(mean pairwise agreement) should be computed. Defaults to TRUE.}
+(mean pairwise agreement) should be computed. Defaults to \code{TRUE}.}
 
 \item{kripp_alpha}{Logical indicating whether Krippendorff's Alpha should
-be computed. Defaults to TRUE.}
+be computed. Defaults to \code{TRUE}.}
 
 \item{cohens_kappa}{Logical indicating whether Cohen's Kappa should
-be computed. Defaults to FALSE.}
+be computed. Defaults to \code{FALSE}.}
 
 \item{fleiss_kappa}{Logical indicating whether Fleiss' Kappa should
-be computed. Defaults to FALSE.}
+be computed. Defaults to \code{FALSE}.}
 
 \item{brennan_prediger}{Logical indicating whether Brennan & Prediger's Kappa
-should be computed. Defaults to FALSE.}
+should be computed. Defaults to \code{FALSE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
