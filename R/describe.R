@@ -35,15 +35,15 @@ describe <- function(data, ..., na.rm = TRUE) {
 
   if (!all(purrr::map_lgl(data %>%
                           dplyr::ungroup() %>%
-                          dplyr::select(!!! vars),
+                          dplyr::select(!!!vars),
                           is.numeric))) {
     stop("... must only contain numeric variables.")
   }
 
   # Describe
   data %>%
-    dplyr::select(!!! vars, !!!grouping) %>%
-    tidyr::gather(Variable, Value, !!! vars) %>%
+    dplyr::select(!!!vars, !!!grouping) %>%
+    tidyr::gather(Variable, Value, !!!vars) %>%
     dplyr::group_by(Variable, add = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n(),
