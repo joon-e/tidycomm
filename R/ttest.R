@@ -48,6 +48,7 @@ t_test <- function(data, group_var, ...,
     # Get levels
     levels <- data %>%
       dplyr::pull({{ group_var }}) %>%
+      na.omit() %>%
       unique() %>%
       as.character()
 
