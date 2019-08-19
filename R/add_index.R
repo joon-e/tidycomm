@@ -18,7 +18,8 @@
 add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
 
   name <- rlang::as_label(rlang::enquo(name))
-  index_vars <- rlang::enquos(...)
+  index_vars <- grab_vars(data, rlang::enquos(...), alternative = "none")
+  index_vars_str <- purrr::map_chr(index_vars, rlang::as_label)
 
   # Add index column
   index_df <- data %>%
@@ -31,8 +32,7 @@ add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
     dplyr::ungroup()
 
   # Add index_of attribute
-  index_vars_vec <- purrr::map_chr(index_vars, rlang::as_label)
-  attributes(index_df[[name]]) <- list(index_of = index_vars_vec)
+  attributes(index_df[[name]]) <- list(index_of = index_vars_str)
 
   return(index_df)
 }
