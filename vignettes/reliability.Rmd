@@ -1,0 +1,66 @@
+---
+title: "Adding indices and computing reliability estimates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{reliability}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include = FALSE}
+library(tidycomm)
+```
+
+Once again, we will again sample data from the [Worlds of Journalism]("https://worldsofjournalism.org/") 2012-16 study for demonstration purposes: 
+
+```{r}
+WoJ
+```
+
+## Adding indices with `add_index()`
+
+`add_index()` adds a mean index of specified variables to the data. The second (or first, if used in a pipe) argument is the name of index variable to be created:
+
+```{r}
+WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) %>%
+  # Select variables of relevance for output
+  dplyr::select(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
+```
+
+To create a sum index instead, set `type = "sum"`:
+
+```{r}
+WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4, type = "sum") %>%
+  # Select variables of relevance for output
+  dplyr::select(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
+```
+
+## Computing reliability estimates of created indices with `get_reliability()`
+
+Use `get_reliability()` to compute reliability/internal consistency estimates for indices created with `add_index()`. Passing no further arguments to the function will automatically compute reliability estimates for all indices created with `add_index()` found in the data and output Cronbach's $\alpha$ along with descriptives and index information.
+
+```{r}
+WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) %>%
+  add_index(trust_in_politics, trust_parliament, trust_government, trust_parties, trust_politicians) %>% 
+  get_reliability()
+```
+
+If you only want reliability estimates for specific indices, pass their names as function arguments.
+
+```{r}
+WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) %>%
+  add_index(trust_in_politics, trust_parliament, trust_government, trust_parties, trust_politicians) %>% 
+  get_reliability(trust_in_politics)
+```
+
