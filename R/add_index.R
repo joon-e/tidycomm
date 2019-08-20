@@ -18,20 +18,22 @@
 add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
 
   name <- rlang::as_label(rlang::enquo(name))
-  index_vars <- grab_vars(data, rlang::enquos(...), alternative = "none")
-  index_vars_str <- purrr::map_chr(index_vars, rlang::as_label)
 
   # Add index column
+  i <- data %>%
+    dplyr::select(...)
+
+  if (type == "sum") {
+    index_col <- rowSums(i, na.rm = na.rm)
+  } else {
+    index_col <- rowMeans(i, na.rm = na.rm)
+  }
+
   index_df <- data %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(
-      !!name := ifelse(type == "sum",
-                       sum(c(!!!index_vars), na.rm = na.rm),
-                       mean(c(!!!index_vars), na.rm = na.rm))
-    ) %>%
-    dplyr::ungroup()
+    dplyr::mutate(!!name := index_col)
 
   # Add index_of attribute
+  index_vars_str <- names(i)
   attributes(index_df[[name]]) <- list(index_of = index_vars_str)
 
   return(index_df)
