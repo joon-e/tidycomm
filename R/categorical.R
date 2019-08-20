@@ -14,7 +14,7 @@
 #' iris %>% tab_frequencies(Species)
 #' mtcars %>% tab_frequencies(vs, am)
 #'
-#' @family Descriptives
+#' @family categorical
 #'
 #' @export
 tab_frequencies <- function(data, ...) {
@@ -61,7 +61,7 @@ tab_frequencies <- function(data, ...) {
 #' mtcars %>% crosstab(vs, am)
 #' mtcars %>% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
 #'
-#' @family descriptives
+#' @family categorical
 #'
 #' @export
 crosstab <- function(data, col_var, ..., add_total = FALSE,
@@ -95,9 +95,10 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
       as.matrix() %>%
       chisq.test()
 
-    test_string <- "Chi-square = %f, df = %f, p = %f"
+    test_string <- "Chi² = %f, df = %f, p = %f, V = %f"
 
-    message(sprintf(test_string, chi2$statistic, chi2$parameter, chi2$p.value))
+    message(sprintf(test_string,
+                    chi2$statistic, chi2$parameter, chi2$p.value, cramer_V(chi2)))
   }
 
   if(add_total) {
@@ -112,4 +113,22 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
 
   xt_cross_vars %>%
     dplyr::bind_cols(xt_col_vars)
+}
+
+#' Compute Cramer's V
+#'
+#' Computes Cramer's V
+#'
+#' @param chi2 Output from a `chisq.test()`.
+#'
+#' @return a `dbl`
+#'
+#' @family categorical
+cramer_V <- function(chi2) {
+
+  X2 <- chi2$statistic
+  N <- sum(chi2$observed)
+  k = min(dim(chi2$observed))
+
+  unname(sqrt(X2 / (N * (k - 1))))
 }

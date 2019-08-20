@@ -23,4 +23,8 @@ iris \%>\% tab_frequencies(Species)
 mtcars \%>\% tab_frequencies(vs, am)
 
 }
-\concept{Descriptives}
+\seealso{
+Other categorical: \code{\link{cramer_V}},
+  \code{\link{crosstab}}
+}
+\concept{categorical}

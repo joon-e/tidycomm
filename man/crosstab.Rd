@@ -36,6 +36,7 @@ mtcars \%>\% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square =
 
 }
 \seealso{
-Other descriptives: \code{\link{describe}}
+Other categorical: \code{\link{cramer_V}},
+  \code{\link{tab_frequencies}}
 }
-\concept{descriptives}
+\concept{categorical}
