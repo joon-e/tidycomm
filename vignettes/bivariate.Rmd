@@ -47,7 +47,7 @@ WoJ %>%
   crosstab(reach, employment, add_total = TRUE, percentages = TRUE)
 ```
 
-Setting `chi_square = TRUE` computes a $\chi^2$ test and outputs the results in a console message:
+Setting `chi_square = TRUE` computes a $\chi^2$ test including Cramer's $V$ and outputs the results in a console message:
 
 ```{r}
 WoJ %>% 
