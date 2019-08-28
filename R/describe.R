@@ -72,6 +72,7 @@ describe <- function(data, ..., na.rm = TRUE) {
 #'
 #' @return a `dbl`
 skewness <- function(x) {
+  x <- x[!is.na(x)]
   m <- mean(x, na.rm = TRUE)
   sum((x - m)^3) / length(x) / ((sum((x - m)^2) / length(x))^(3/2))
 }
@@ -84,6 +85,7 @@ skewness <- function(x) {
 #'
 #' @return a `dbl`
 kurtosis <- function(x) {
+  x <- x[!is.na(x)]
   m <- mean(x, na.rm = TRUE)
   sum((x - m)^4) / (sum((x - m)^2)^2) * length(x)
 }
