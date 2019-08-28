@@ -93,8 +93,6 @@ to_correlation_matrix <- function(data) {
     dplyr::pull(x) %>%
     unique()
 
-  print(var_order)
-
   data %>%
     dplyr::select(x = 1, y = 2, cor = 3) %>%
     dplyr::bind_rows(
@@ -103,7 +101,7 @@ to_correlation_matrix <- function(data) {
         dplyr::rename(x = y, y = x)
     ) %>%
     tidyr::spread(y, cor, fill = 1) %>%
+    dplyr::arrange(match(x, var_order)) %>%
     dplyr::rename(!!estimate := x) %>%
-    dplyr::arrange(match(r, var_order)) %>%
     dplyr::select(estimate, var_order, dplyr::everything())
 }
