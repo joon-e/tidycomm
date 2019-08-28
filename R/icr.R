@@ -32,7 +32,7 @@ compute_icr <- function(data, unit_var, coder_var, ...,
                         agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
                         cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
 
-  test_vars <- rlang(...)
+  test_vars <- quos(...)
 
   purrr::map_dfr(test_vars, icr_test, data, {{ unit_var }}, {{ coder_var }},
                  levels, na.omit,
