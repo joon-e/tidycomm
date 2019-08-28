@@ -40,3 +40,32 @@
 #' }
 #' @source \url{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
 "WoJ"
+
+#' Facebook posts reliability test
+#'
+#' 45 political facebook posts coded by 6 coders for an intercoder reliability test,
+#' focused on populist messages.
+#'
+#' @format A data frame with 270 rows and 7 variables
+#' \describe{
+#'   \item{post_id}{Numeric id of the coded Facebook post}
+#'   \item{coder_od}{Numeric id of the coder}
+#'   \item{type}{Type of Facebook post, one of "link", "photo", "status", or "video}
+#'   \item{n_pictures}{Amount of pictures attached to the post, ranges from 0 to 6}
+#'   \item{pop_elite}{Populism indicator: Does the Facebook post attack elites?,
+#'     0 = "no attacks on elites",
+#'     1 = "attacks political actors",
+#'     2 = "attacks public administration actors",
+#'     3 = "attacks economical actors",
+#'     4 = "attacks media actors/journalists",
+#'     9 = "attacks other elites"}
+#'   \item{pop_people}{Populism indicator: Does the Facebook refer to 'the people'?,
+#'     0 = "does not refer to 'the people'",
+#'     1 = "refers to 'the people'"}
+#'   \item{pop_othering}{Populism indicator: Does the Facebook attack 'others'?,
+#'     0 = "no attacks on 'others'",
+#'     1 = "attacks other cultures",
+#'     2 = "attacks other political stances",
+#'     3 = "attacks other 'others'"}
+#' }
+"fbposts"
