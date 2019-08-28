@@ -72,7 +72,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
             call. = FALSE)
   }
 
-  cross_vars <- length(rlang::quos(...))
+  cross_vars <- length(quos(...))
 
   if(cross_vars < 1) {
     stop("Must provide at least one variable to crosstabulate.")

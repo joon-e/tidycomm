@@ -66,9 +66,9 @@ correlate <- function(data, ..., method = "pearson") {
          call. = FALSE)
   }
 
-  vars <- grab_vars(data, rlang::enquos(...))
+  vars <- grab_vars(data, enquos(...))
 
-  var_strings <- purrr::map_chr(vars, rlang::as_label)
+  var_strings <- purrr::map_chr(vars, as_label)
   var_combs <- combn(var_strings, 2, simplify = FALSE)
   purrr::map_dfr(var_combs, correlation_test, data, method)
 }

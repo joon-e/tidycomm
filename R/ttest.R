@@ -32,13 +32,13 @@ t_test <- function(data, group_var, ...,
                    levels = NULL, case_var = NULL) {
 
   # Get vars
-  test_vars <- grab_vars(data, rlang::quos(...))
-  test_vars_string <- purrr::map_chr(test_vars, rlang::as_label)
+  test_vars <- grab_vars(data, quos(...))
+  test_vars_string <- purrr::map_chr(test_vars, as_label)
 
   # Get group var name
-  group_var_str <- rlang::as_label(rlang::quo({{ group_var }}))
+  group_var_str <- as_label(quo({{ group_var }}))
   if (group_var_str %in% test_vars_string) {
-    test_vars <- rlang::syms(test_vars_string[test_vars_string != group_var_str])
+    test_vars <- syms(test_vars_string[test_vars_string != group_var_str])
   }
 
   # Drop unused levels (if data is filtered)
@@ -118,7 +118,7 @@ compute_t_test <- function(test_var, data, group_var, levels,
     stringr::str_sub(1, 10)
   M_str <- paste("M", level_names, sep = "_")
   SD_str <- paste("SD", level_names, sep = "_")
-  test_var_str <- rlang::as_label(rlang::quo({{ test_var }}))
+  test_var_str <- as_label(quo({{ test_var }}))
 
   tibble::tibble(
     Variable = test_var_str,

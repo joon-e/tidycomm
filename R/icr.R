@@ -32,7 +32,7 @@ compute_icr <- function(data, unit_var, coder_var, ...,
                         agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
                         cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
 
-  test_vars <- rlang::enquos(...)
+  test_vars <- rlang(...)
 
   purrr::map_dfr(test_vars, icr_test, data, {{ unit_var }}, {{ coder_var }},
                  levels, na.omit,
@@ -57,7 +57,7 @@ icr_test <- function(test_var, data, unit_var, coder_var,
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var}})
 
   # Get variable level
-  var_string <- rlang::as_name(rlang::enquo(test_var))
+  var_string <- as_name(enquo(test_var))
   if (hasName(levels, var_string)) {
     var_level <- levels[[var_string]]
   } else {

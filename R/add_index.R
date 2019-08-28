@@ -17,7 +17,7 @@
 #' @export
 add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
 
-  name <- rlang::as_label(rlang::enquo(name))
+  name <- as_label(enquo(name))
 
   # Add index column
   i <- data %>%

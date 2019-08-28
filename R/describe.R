@@ -25,8 +25,8 @@ describe <- function(data, ..., na.rm = TRUE) {
   grouping <- dplyr::groups(data)
 
   # Get describe vars
-  vars <- grab_vars(data, rlang::enquos(...))
-  vars_str <- purrr::map_chr(vars, rlang::as_label)
+  vars <- grab_vars(data, enquos(...))
+  vars_str <- purrr::map_chr(vars, as_label)
 
   # Check if vars is empty and all vars are numeric
   if (length(vars) == 0) {

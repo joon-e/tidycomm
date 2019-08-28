@@ -93,14 +93,14 @@ get_reliability <- function(data, ..., type = "alpha",
                             conf.level = NULL,
                             progress = FALSE) {
 
-  test_vars <- rlang::quos(...)
+  test_vars <- quos(...)
 
   # Checks
   if (length(test_vars) == 0) {
     test_vars <- data %>%
       dplyr::select_if(~ !is.null(attr(., "index_of"))) %>%
       names() %>%
-      rlang::syms()
+      syms()
   }
 
   if (length(test_vars) == 0) {
@@ -129,7 +129,7 @@ get_reliability <- function(data, ..., type = "alpha",
   # Iterate over test variables
   for (test_var in test_vars) {
 
-    test_var_str <- rlang::as_name(test_var)
+    test_var_str <- as_name(test_var)
     index_vars <- attr(data[[test_var_str]], "index_of")
 
     if (is.null(index_vars)) {
@@ -152,7 +152,7 @@ get_reliability <- function(data, ..., type = "alpha",
       M = mean(data[[test_var_str]], na.rm = TRUE),
       SD = sd(data[[test_var_str]], na.rm = TRUE)) %>%
       dplyr::bind_cols(
-        compute_reliability(data, !!!rlang::syms(index_vars),
+        compute_reliability(data, !!!syms(index_vars),
                             type = type,
                             interval.type = interval.type,
                             bootstrap.samples = bootstrap.samples,

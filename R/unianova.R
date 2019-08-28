@@ -23,13 +23,13 @@
 unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALSE) {
 
   # Get vars
-  test_vars <- grab_vars(data, rlang::quos(...))
-  test_vars_string <- purrr::map_chr(test_vars, rlang::as_label)
+  test_vars <- grab_vars(data, quos(...))
+  test_vars_string <- purrr::map_chr(test_vars, as_label)
 
   # Get group var name
-  group_var_str <- rlang::as_label(rlang::quo({{ group_var }}))
+  group_var_str <- as_label(quo({{ group_var }}))
   if (group_var_str %in% test_vars_string) {
-    test_vars <- rlang::syms(test_vars_string[test_vars_string != group_var_str])
+    test_vars <- syms(test_vars_string[test_vars_string != group_var_str])
   }
 
   # To factor if not factor
@@ -54,8 +54,8 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
 #'
 #' @family ANOVA
 compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
-  group_var_string <- rlang::as_label(rlang::enquo(group_var))
-  test_var_string <- rlang::as_label(rlang::enquo(test_var))
+  group_var_string <- as_label(enquo(group_var))
+  test_var_string <- as_label(enquo(test_var))
 
   formula <- as.formula(paste(test_var_string, group_var_string, sep = " ~ "))
 

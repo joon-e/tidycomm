@@ -16,7 +16,7 @@ grab_vars <- function(data, vars, alternative = "numeric") {
         dplyr::ungroup() %>%
         dplyr::select_if(is.numeric) %>%
         names() %>%
-        rlang::syms()
+        syms()
     }
 
     # Add other possible grab alternatives
