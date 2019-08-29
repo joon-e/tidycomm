@@ -13,13 +13,16 @@ get_reliability(data, ..., type = "alpha", interval.type = NULL,
 \item{...}{Index variables created with \code{\link{add_index}}. Leave empty
 to get reliability estimates for all index variables.}
 
-\item{type}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+\item{type}{Type of reliability estimate. See \code{\link[MBESS]{ci.reliability}}}
 
-\item{interval.type}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+\item{interval.type}{Type of reliability estimate confidence interval.
+See \code{\link[MBESS]{ci.reliability}}}
 
-\item{bootstrap.samples}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+\item{bootstrap.samples}{Number of bootstrap samples for CI calculation.
+See \code{\link[MBESS]{ci.reliability}}}
 
-\item{conf.level}{See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}}
+\item{conf.level}{Confidence level for estimate CI.
+See \code{\link[MBESS]{ci.reliability}}}
 
 \item{progress}{Show progress for reliability estimate computation. Useful
 if using computionally intense computations (e. g., many bootstrapping

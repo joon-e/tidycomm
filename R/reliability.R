@@ -1,14 +1,17 @@
 #' Compute reliability
 #'
 #' Computes reliability estimates of index/scale variables.
-#' Provides a wrapper for \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}.
+#' Provides a wrapper for \code{\link[MBESS]{ci.reliability}}.
 #'
 #' @param data a [tibble][tibble::tibble-package]
 #' @param ... Variables to compute reliability estimate for
-#' @param type See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}
-#' @param interval.type See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}
-#' @param bootstrap.samples See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}
-#' @param conf.level See \code\link[MBESS::ci.reliability]{MBESS::ci.reliability}
+#' @param type Type of reliability estimate. See \code{\link[MBESS]{ci.reliability}}
+#' @param interval.type Type of reliability estimate confidence interval.
+#'   See \code{\link[MBESS]{ci.reliability}}
+#' @param bootstrap.samples Number of bootstrap samples for CI calculation.
+#'   See \code{\link[MBESS]{ci.reliability}}
+#' @param conf.level Confidence level for estimate CI.
+#'   See \code{\link[MBESS]{ci.reliability}}
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
