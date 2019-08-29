@@ -43,23 +43,23 @@ describe <- function(data, ..., na.rm = TRUE) {
   # Describe
   data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
-    tidyr::gather(Variable, Value, !!!vars) %>%
-    dplyr::group_by(Variable, add = TRUE) %>%
+    tidyr::gather("Variable", "Value", !!!vars) %>%
+    dplyr::group_by(.data$Variable, add = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n(),
-      Missing = sum(is.na(Value)),
-      M = mean(Value, na.rm = na.rm),
-      SD = sd(Value, na.rm = na.rm),
-      Min = min(Value, na.rm = na.rm),
-      Q25 = quantile(Value, .25, na.rm = na.rm),
-      Mdn = median(Value, na.rm = na.rm),
-      Q75 = quantile(Value, .75, na.rm = na.rm),
-      Max = max(Value, na.rm = na.rm),
-      Range = Max - Min,
-      Skewness = skewness(Value),
-      Kurtosis = kurtosis(Value)
+      Missing = sum(is.na(.data$Value)),
+      M = mean(.data$Value, na.rm = na.rm),
+      SD = sd(.data$Value, na.rm = na.rm),
+      Min = min(.data$Value, na.rm = na.rm),
+      Q25 = quantile(.data$Value, .25, na.rm = na.rm),
+      Mdn = median(.data$Value, na.rm = na.rm),
+      Q75 = quantile(.data$Value, .75, na.rm = na.rm),
+      Max = max(.data$Value, na.rm = na.rm),
+      Range = .data$Max - .data$Min,
+      Skewness = skewness(.data$Value),
+      Kurtosis = kurtosis(.data$Value)
     ) %>%
-    dplyr::arrange(match(Variable, vars_str))
+    dplyr::arrange(match(.data$Variable, vars_str))
 
 }
 

@@ -24,17 +24,17 @@ tab_frequencies <- function(data, ...) {
     dplyr::group_by(..., !!!grouping) %>%
     dplyr::summarise(n = dplyr::n()) %>%
     dplyr::group_by(!!!grouping) %>%
-    dplyr::mutate(percent = n / sum(n)) %>%
+    dplyr::mutate(percent = .data$n / sum(.data$n)) %>%
     dplyr::arrange(!!!grouping)
 
   d %>%
     dplyr::bind_cols(d %>%
                 dplyr::select(!!!grouping,
-                       cum_n = n,
-                       cum_percent = percent) %>%
+                       cum_n = .data$n,
+                       cum_percent = .data$percent) %>%
                 dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), cumsum) %>%
                 dplyr::ungroup() %>%
-                dplyr::select(cum_n, cum_percent)
+                dplyr::select(.data$cum_n, .data$cum_percent)
     )
 
 }
@@ -81,9 +81,9 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
   xt <- data %>%
     dplyr::group_by({{ col_var }}, ...) %>%
     dplyr::count() %>%
-    tidyr::spread({{ col_var }}, n) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate_if(is.numeric, ~replace(., is.na(.), 0))
+    tidyr::spread({{ col_var }}, .data$n, fill = 0) %>%
+    dplyr::ungroup()
+
   xt_cross_vars <- xt %>%
     dplyr::select(c(1:cross_vars))
 
@@ -103,12 +103,12 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
 
   if(add_total) {
     xt_col_vars <- xt_col_vars %>%
-      dplyr::mutate(Total = rowSums(.))
+      dplyr::mutate(Total = rowSums(xt_col_vars))
   }
 
   if(percentages) {
     xt_col_vars <- xt_col_vars %>%
-      dplyr::mutate_all(~ . / sum(., na.rm = TRUE))
+      dplyr::mutate_all(col_percs)
   }
 
   xt_cross_vars %>%
@@ -131,4 +131,15 @@ cramer_V <- function(chi2) {
   k = min(dim(chi2$observed))
 
   unname(sqrt(X2 / (N * (k - 1))))
+}
+
+#' Compute column percentages
+#'
+#' Computes column percentages
+#'
+#' @param x Numeric vector
+#'
+#' @return a `dbl`
+col_percs <- function(x) {
+  x / sum(x, na.rm = TRUE)
 }
