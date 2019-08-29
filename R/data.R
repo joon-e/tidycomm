@@ -49,7 +49,7 @@
 #' @format A data frame with 270 rows and 7 variables
 #' \describe{
 #'   \item{post_id}{Numeric id of the coded Facebook post}
-#'   \item{coder_od}{Numeric id of the coder}
+#'   \item{coder_id}{Numeric id of the coder}
 #'   \item{type}{Type of Facebook post, one of "link", "photo", "status", or "video}
 #'   \item{n_pictures}{Amount of pictures attached to the post, ranges from 0 to 6}
 #'   \item{pop_elite}{Populism indicator: Does the Facebook post attack elites?,
