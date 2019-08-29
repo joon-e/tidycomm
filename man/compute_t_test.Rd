@@ -8,6 +8,8 @@ compute_t_test(test_var, data, group_var, levels, var.equal, paired,
   pooled_sd)
 }
 \arguments{
+\item{test_var}{Test variable}
+
 \item{data}{a \link[tibble:tibble-package]{tibble}}
 
 \item{group_var}{group variable (column name)}

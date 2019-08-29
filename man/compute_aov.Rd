@@ -7,6 +7,8 @@
 compute_aov(test_var, data, group_var, descriptives, post_hoc)
 }
 \arguments{
+\item{test_var}{Test variable}
+
 \item{data}{a \link[tibble:tibble-package]{tibble}}
 
 \item{group_var}{group variable (column name)}

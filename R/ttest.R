@@ -94,6 +94,7 @@ t_test <- function(data, group_var, ...,
 #' Computes and outputs a t-test for one test variable
 #'
 #' @inheritParams t_test
+#' @param test_var Test variable
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'

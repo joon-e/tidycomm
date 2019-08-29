@@ -49,6 +49,7 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
 #' Computes and outputs a one-way ANOVA for one test variable
 #'
 #' @inheritParams unianova
+#' @param test_var Test variable
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
