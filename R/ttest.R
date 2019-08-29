@@ -56,7 +56,7 @@ t_test <- function(data, group_var, ...,
     if (length(levels) < 2) {
       stop("Grouping variable must have more than one level", call. = FALSE)
     } else if (length(levels) > 2) {
-      warning(glue::glue("{group_var_str} has more than 2 levels, defaulting to first two ",
+      warning(glue("{group_var_str} has more than 2 levels, defaulting to first two ",
                          "({levels[1]} and {levels[2]}). ",
                          "Consider filtering your data ",
                          "or setting levels with the levels argument"),

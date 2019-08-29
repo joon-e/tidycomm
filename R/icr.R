@@ -69,7 +69,7 @@ icr_test <- function(test_var, data, unit_var, coder_var,
     if (na.omit) {
       ucm <- na.omit(ucm)
     } else {
-      warning(glue::glue("Variable '{var_string}' contains missing values.",
+      warning(glue("Variable '{var_string}' contains missing values.",
                          "Consider setting na.omit = TRUE or recoding missing values",
                          .sep = " "),
               call. = FALSE)

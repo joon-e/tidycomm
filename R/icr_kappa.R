@@ -12,7 +12,7 @@ icr_cohens_kappa <- function(ucm) {
   }
 
   if (dim(ucm)[2] > 2) {
-    warning(glue::glue("Cohen's Kappa is only available for two coders. ",
+    warning(glue("Cohen's Kappa is only available for two coders. ",
                        "Try Fleiss' Kappa (fleiss_kappa = TRUE) instead."),
             call. = FALSE)
     return(NA)

@@ -107,7 +107,7 @@ get_reliability <- function(data, ..., type = "alpha",
   }
 
   if (length(test_vars) == 0) {
-    stop(glue::glue("No variables with attribute 'index_of' found in data. ",
+    stop(glue("No variables with attribute 'index_of' found in data. ",
                     "Use add_index() to create variables for get_reliability()",
                     ", or use compute_reliability() to directly add reliability variables."),
          call. = FALSE)
@@ -136,7 +136,7 @@ get_reliability <- function(data, ..., type = "alpha",
     index_vars <- attr(data[[test_var_str]], "index_of")
 
     if (is.null(index_vars)) {
-      stop(glue::glue("No attribute 'index_of' found for variable {test_var_str}. ",
+      stop(glue("No attribute 'index_of' found for variable {test_var_str}. ",
                       "Use add_index() to create variables for get_reliability()",
                       ", or use compute_reliability() to directly add reliability variables."),
            call. = FALSE)
@@ -145,7 +145,7 @@ get_reliability <- function(data, ..., type = "alpha",
     if (progress) {
       i <- i + 1
       j <- length(test_vars)
-      message(glue::glue("{Sys.time()}: Starting reliability computation for ",
+      message(glue("{Sys.time()}: Starting reliability computation for ",
                          "{test_var_str} (variable {i} of {j})."))
     }
 
@@ -166,7 +166,7 @@ get_reliability <- function(data, ..., type = "alpha",
       dplyr::bind_rows(var_df)
 
     if (progress) {
-      message(glue::glue("{Sys.time()}: Finished reliability computation for ",
+      message(glue("{Sys.time()}: Finished reliability computation for ",
                          "{test_var_str}"))
     }
 

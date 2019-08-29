@@ -17,7 +17,7 @@ correlation_test <- function(var_comb, data, method) {
   yvar <- data[[y]]
 
   if (any(!is.numeric(xvar), !is.numeric(yvar))) {
-    warning(glue::glue("At least one of {x} and {y} is not numeric, skipping computation."),
+    warning(glue("At least one of {x} and {y} is not numeric, skipping computation."),
             call. = FALSE)
     return()
   }
