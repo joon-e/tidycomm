@@ -21,6 +21,11 @@ icr_kripp_alpha <- function(ucm, var_level = NULL) {
 
   # Get all unique values
   vals <- unique(na.omit(as.vector(cum)))
+
+  if (!is.numeric(vals) & var_level != "nominal") {
+    stop("Non-numeric variables must use variable level 'nominal'", call. = FALSE)
+  }
+
   if (is.numeric(vals)) {
     vals <- sort(vals)
   }
@@ -56,7 +61,7 @@ count_value_in_unit <- function(val, tab_u) {
 
 #' Count values in unit
 #'
-#' Counts occurences of valuea in a single unit of a units-coders matrix.
+#' Counts occurences of values in a single unit of a units-coders matrix.
 #'
 #' @param u Unit of a unit-coders matrix
 #' @param vals Values to count
