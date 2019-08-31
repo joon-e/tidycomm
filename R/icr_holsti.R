@@ -7,8 +7,12 @@
 #' @family intercoder reliability
 icr_holsti <- function(ucm) {
 
-  if(any(is.na(ucm))) {
+  if (any(is.na(ucm))) {
     return(NA)
+  }
+
+  if (is.null(colnames(ucm))) {
+    colnames(ucm) <- 1:ncol(ucm)
   }
 
   pair_agrees <- c()
