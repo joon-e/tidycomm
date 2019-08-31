@@ -90,6 +90,9 @@ delta_sq <- function(c, k, vum, var_level) {
   }
 
   if (var_level == "ordinal") {
+    if (c == k) {
+      return(0)
+    }
     g = vum[c:k, ]
     ng = sum(apply(g, 1, sum))
     nc = sum(vum[c, ])
