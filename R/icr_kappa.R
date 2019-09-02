@@ -19,11 +19,23 @@ icr_cohens_kappa <- function(ucm) {
   }
 
   N <- dim(ucm)[1]
-  cm <- table(ucm[, 1], ucm[, 2])
-  pc <- sum(margin.table(cm, 1) * margin.table(cm, 2)) / N^2
-  p0 <- sum(diag(cm)) / N
 
-  return((p0 - pc) / (1 - pc))
+  vals <- unique(as.vector(ucm))
+  nvals <- length(vals)
+
+  cm <- matrix(rep(0, nvals * nvals), ncol = nvals)
+
+  for (i in 1:nvals) {
+    for (j in 1:nvals) {
+      cm[i, j] <- sum(ucm[, 1] == vals[i] & ucm[, 2] == vals[j])
+    }
+  }
+
+  pcm <- cm / N
+  p0 <- sum(diag(pcm))
+  pc <- sum(margin.table(pcm, 1) * margin.table(pcm, 2))
+
+  (p0 - pc) / (1 - pc)
 }
 
 #' Compute Fleiss' Kappa
