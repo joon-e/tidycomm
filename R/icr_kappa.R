@@ -1,3 +1,11 @@
+# Functions for various Kappa coefficients of the formula (p0 - pe) / (1 - pe),
+# where p0 is the overall agreement between the coders/raters, and pe is the
+# chance agreement.
+#
+# n = Number of items/subjects coded
+# r = Number of coders/raters
+# q = Number of categories
+
 #' Compute Cohen's Kappa
 #'
 #' Computes Cohen's Kappa.
@@ -7,7 +15,7 @@
 #' @family intercoder reliability
 icr_cohens_kappa <- function(ucm) {
 
-  if(any(is.na(ucm))) {
+  if (any(is.na(ucm))) {
     return(NA)
   }
 
@@ -18,24 +26,25 @@ icr_cohens_kappa <- function(ucm) {
     return(NA)
   }
 
-  N <- dim(ucm)[1]
+  n <- dim(ucm)[1]
 
   vals <- unique(as.vector(ucm))
-  nvals <- length(vals)
+  q <- length(vals)
 
-  cm <- matrix(rep(0, nvals * nvals), ncol = nvals)
+  cm <- matrix(rep(0, q * q), ncol = q)
 
-  for (i in 1:nvals) {
-    for (j in 1:nvals) {
+  for (i in 1:q) {
+    for (j in 1:q) {
       cm[i, j] <- sum(ucm[, 1] == vals[i] & ucm[, 2] == vals[j])
     }
   }
 
-  pcm <- cm / N
+  pcm <- cm / n
   p0 <- sum(diag(pcm))
-  pc <- sum(margin.table(pcm, 1) * margin.table(pcm, 2))
+  pe <- sum(margin.table(pcm, 1) * margin.table(pcm, 2))
 
-  (p0 - pc) / (1 - pc)
+  # Output
+  (p0 - pe) / (1 - pe)
 }
 
 #' Compute Fleiss' Kappa
@@ -47,21 +56,34 @@ icr_cohens_kappa <- function(ucm) {
 #' @family intercoder reliability
 icr_fleiss_kappa <- function(ucm) {
 
-  if(any(is.na(ucm))) {
+  if (any(is.na(ucm))) {
     return(NA)
   }
 
+  # Overall agreement
+  p0 <- icr_holstis_CR(ucm)
+
+  # Chance agreement
+  n <- dim(ucm)[1]
+  r <- dim(ucm)[2]
+
   vals <- unique(as.vector(ucm))
-  uvm <- t(as.matrix(apply(ucm, 1, values_in_unit, vals)))
+  q <- length(vals)
 
-  n_u <- dim(uvm)[1]
-  n_cod <- sum(uvm[1, ])
+  pj <- c()
 
-  pj <- apply(uvm, 2, sum) / (n_cod * n_u)
-  pc <- sum(pj * pj)
-  p0 <- icr_agreement(ucm)
+  for (j in 1:q) {
+    rij <- c()
+    for (i in 1:n) {
+      rij <- c(rij, sum(ucm[i, ] == vals[j]))
+    }
+    pj <- c(pj, sum(rij) / (n * r))
+  }
 
-  return((p0 - pc) / (1 - pc))
+  pe <- sum(pj^2)
+
+  # Output
+  (p0 - pe) / (1 - pe)
 }
 
 #' Compute Brennan & Prediger's Kappa
@@ -81,14 +103,18 @@ icr_fleiss_kappa <- function(ucm) {
 #'   12-24. https://doi.org/10.1027/1016-9040.11.1.12
 icr_brennan_prediger <- function(ucm) {
 
-  if(any(is.na(ucm))) {
+  if (any(is.na(ucm))) {
     return(NA)
   }
 
+  # Overall agreement
   p0 <- icr_agreement(ucm)
-  n_cat <- length(unique(as.vector(ucm)))
-  n_cod <- dim(ucm)[2]
-  pc <- (1 / (n_cat^(n_cod - 1)))
 
-  return((p0 - pc) / (1 - pc))
+  # Chance agreement
+  q <- length(unique(as.vector(ucm)))
+  r <- dim(ucm)[2]
+  pe <- (1 / (q^(r - 1)))
+
+  # Output
+  (p0 - pe) / (1 - pe)
 }
