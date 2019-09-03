@@ -25,7 +25,8 @@ von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1
 Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_agreement}},
   \code{\link{icr_cohens_kappa}},
-  \code{\link{icr_fleiss_kappa}}, \code{\link{icr_holsti}},
+  \code{\link{icr_fleiss_kappa}},
+  \code{\link{icr_holstis_CR}},
   \code{\link{icr_kripp_alpha}}, \code{\link{icr_test}},
   \code{\link{unit_coder_matrix}}
 }

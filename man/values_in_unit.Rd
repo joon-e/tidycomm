@@ -12,5 +12,5 @@ values_in_unit(u, vals)
 \item{vals}{Values to count}
 }
 \description{
-Counts occurences of valuea in a single unit of a units-coders matrix.
+Counts occurences of values in a single unit of a units-coders matrix.
 }
