@@ -18,7 +18,7 @@ Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_brennan_prediger}},
   \code{\link{icr_cohens_kappa}},
   \code{\link{icr_holstis_CR}},
-  \code{\link{icr_kripp_alpha}}, \code{\link{icr_test}},
+  \code{\link{icr_kripp_alpha}}, \code{\link{test_icr}},
   \code{\link{unit_coder_matrix}}
 }
 \concept{intercoder reliability}

@@ -19,7 +19,13 @@ grab_vars <- function(data, vars, alternative = "numeric") {
         syms()
     }
 
-    # Add other possible grab alternatives
+    if (alternative == "all") {
+      vars <- data %>%
+        dplyr::ungroup() %>%
+        names() %>%
+        syms()
+    }
+
     if (alternative == "none") {
       return(vars)
     }

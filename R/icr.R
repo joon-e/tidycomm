@@ -1,11 +1,14 @@
-#' Compute intercoder reliability estimates
+#' Perform an intercoder reliability test
 #'
-#' Computes various intercoder reliability estimates
+#' Performs an intercoder reliability test by computing various intercoder
+#' reliability estimates for the included variables
 #'
 #' @param data a [tibble][tibble::tibble-package]
 #' @param unit_var Variable with unit identifiers
 #' @param coder_var Variable with coder identifiers
-#' @param ... Variables to compute intercoder reliability estimates for
+#' @param ... Variables to compute intercoder reliability estimates for. Leave
+#'   empty to compute for all variables (excluding `unit_var` and `coder_var``)
+#'   in data.
 #' @param levels Optional named vector with levels of test variables
 #' @param na.omit Logical indicating whether `NA` values should be stripped
 #'   before computation. Defaults to `FALSE`.
@@ -27,14 +30,21 @@
 #' @family intercoder reliability
 #'
 #' @export
-compute_icr <- function(data, unit_var, coder_var, ...,
+test_icr <- function(data, unit_var, coder_var, ...,
                         levels = NULL, na.omit = FALSE,
                         agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
                         cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
 
-  test_vars <- quos(...)
+  test_vars <- grab_vars(data, enquos(...), alternative = "all")
 
-  purrr::map_dfr(test_vars, icr_test, data, {{ unit_var }}, {{ coder_var }},
+  # Remove unit_var and coder_var from test vars
+  test_vars_str <- purrr::map_chr(test_vars, as_label)
+  exclude_vars <- c(as_label(expr({{ unit_var }})), as_label(expr({{ coder_var }})))
+  test_vars_str <- test_vars_str[!test_vars_str %in% exclude_vars]
+  test_vars <- syms(test_vars_str)
+
+  # Map icr computation over test_vars
+  purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},
                  levels, na.omit,
                  agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger)
 
@@ -46,10 +56,10 @@ compute_icr <- function(data, unit_var, coder_var, ...,
 #' Computes intercoder reliability estimates for one test variable
 #'
 #' @param test_var Variable to compute estimates for
-#' @inheritParams compute_icr
+#' @inheritParams test_icr
 #'
 #' @family intercoder reliability
-icr_test <- function(test_var, data, unit_var, coder_var,
+compute_icr <- function(test_var, data, unit_var, coder_var,
                      levels = c(), na.omit,
                      agreement, holsti, kripp_alpha,
                      cohens_kappa, fleiss_kappa, brennan_prediger) {
@@ -96,14 +106,14 @@ icr_test <- function(test_var, data, unit_var, coder_var,
   if (holsti) {
     test_vals <- test_vals %>%
       dplyr::bind_cols(
-        Holsti = icr_holsti(ucm)
+        Holstis_CR = icr_holstis_CR(ucm)
       )
   }
 
   if (kripp_alpha) {
     test_vals <- test_vals %>%
       dplyr::bind_cols(
-        Kripp_Alpha = icr_kripp_alpha(ucm, var_level)
+        Krippendorffs_Alpha = icr_kripp_alpha(ucm, var_level)
       )
   }
 
@@ -124,7 +134,7 @@ icr_test <- function(test_var, data, unit_var, coder_var,
   if (brennan_prediger) {
     test_vals <- test_vals %>%
       dplyr::bind_cols(
-        Brennan_Prediger = icr_brennan_prediger(ucm)
+        Brennan_Predigers_Kappa = icr_brennan_prediger(ucm)
       )
   }
 
@@ -135,7 +145,7 @@ icr_test <- function(test_var, data, unit_var, coder_var,
 #'
 #' Generates a units-coders matrix for a test variable
 #'
-#' @inheritParams icr_test
+#' @inheritParams test_icr
 #'
 #' @family intercoder reliability
 unit_coder_matrix <- function(data, unit_var, coder_var, test_var) {

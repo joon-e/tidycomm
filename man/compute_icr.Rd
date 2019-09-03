@@ -2,21 +2,20 @@
 % Please edit documentation in R/icr.R
 \name{compute_icr}
 \alias{compute_icr}
-\title{Compute intercoder reliability estimates}
+\title{Compute intercoder reliability estimates for one test variable}
 \usage{
-compute_icr(data, unit_var, coder_var, ..., levels = NULL,
-  na.omit = FALSE, agreement = TRUE, holsti = TRUE,
-  kripp_alpha = TRUE, cohens_kappa = FALSE, fleiss_kappa = FALSE,
-  brennan_prediger = FALSE)
+compute_icr(test_var, data, unit_var, coder_var, levels = c(), na.omit,
+  agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa,
+  brennan_prediger)
 }
 \arguments{
+\item{test_var}{Variable to compute estimates for}
+
 \item{data}{a \link[tibble:tibble-package]{tibble}}
 
 \item{unit_var}{Variable with unit identifiers}
 
 \item{coder_var}{Variable with coder identifiers}
-
-\item{...}{Variables to compute intercoder reliability estimates for}
 
 \item{levels}{Optional named vector with levels of test variables}
 
@@ -41,11 +40,8 @@ be computed. Defaults to \code{FALSE}.}
 \item{brennan_prediger}{Logical indicating whether Brennan & Prediger's Kappa
 should be computed. Defaults to \code{FALSE}.}
 }
-\value{
-a \link[tibble:tibble-package]{tibble}
-}
 \description{
-Computes various intercoder reliability estimates
+Computes intercoder reliability estimates for one test variable
 }
 \seealso{
 Other intercoder reliability: \code{\link{icr_agreement}},
@@ -53,7 +49,7 @@ Other intercoder reliability: \code{\link{icr_agreement}},
   \code{\link{icr_cohens_kappa}},
   \code{\link{icr_fleiss_kappa}},
   \code{\link{icr_holstis_CR}},
-  \code{\link{icr_kripp_alpha}}, \code{\link{icr_test}},
+  \code{\link{icr_kripp_alpha}}, \code{\link{test_icr}},
   \code{\link{unit_coder_matrix}}
 }
 \concept{intercoder reliability}

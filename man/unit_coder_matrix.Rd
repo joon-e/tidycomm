@@ -12,8 +12,6 @@ unit_coder_matrix(data, unit_var, coder_var, test_var)
 \item{unit_var}{Variable with unit identifiers}
 
 \item{coder_var}{Variable with coder identifiers}
-
-\item{test_var}{Variable to compute estimates for}
 }
 \description{
 Generates a units-coders matrix for a test variable
@@ -25,6 +23,6 @@ Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_cohens_kappa}},
   \code{\link{icr_fleiss_kappa}},
   \code{\link{icr_holstis_CR}},
-  \code{\link{icr_kripp_alpha}}, \code{\link{icr_test}}
+  \code{\link{icr_kripp_alpha}}, \code{\link{test_icr}}
 }
 \concept{intercoder reliability}
