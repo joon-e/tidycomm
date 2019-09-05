@@ -46,7 +46,7 @@ fbposts %>%
 
 ## Reliability estimates
 
-Currently, `test_icr` supports the following reliability estimates:
+Currently, `test_icr()` supports the following reliability estimates:
 
 - `agreement`: Simple percent agreement.
 - `holsti`: Holsti's $CR$ (mean pairwise percent agreement).
@@ -55,7 +55,7 @@ Currently, `test_icr` supports the following reliability estimates:
 - `fleiss_kappa`: Fleiss' $\kappa$.
 - `brennan_prediger`: Brennan & Prediger's $\kappa$ (for more than two coders, [von Eye's (2006)](https://doi.org/10.1027/1016-9040.11.1.12) proposed extension to multiple coders is computed).
 
-By default, `test_icr` will output simple percent agreement, Holsti's $CR$, and Krippendorff's $\alpha$ as reliability estimates. You can add other estimates by setting their name to `TRUE` in the function call (and remove the default ones by setting them to `FALSE`):
+By default, `test_icr()` will output simple percent agreement, Holsti's $CR$, and Krippendorff's $\alpha$ as reliability estimates. You can add other estimates by setting their name to `TRUE` in the function call (and remove the default ones by setting them to `FALSE`):
 
 ```{r}
 fbposts %>% 
@@ -73,7 +73,7 @@ fbposts %>%
 
 Nominal test variables can be represented by either integer codes or string labels, whereas ordinal variables must be represented by integer codes, and interval/ratio variables must be numeric (integer or float).
 
-Please note that currenlty, only the computation of Krippendorff's $\alpha$ is influenced by the variable level.
+Please note that currenlty only the computation of Krippendorff's $\alpha$ is influenced by the variable level.
 
 ## Missing values
 
@@ -97,5 +97,3 @@ You can set `na.omit = TRUE` to exclude all units with `NA` values for a specifi
 fbposts %>% 
   test_icr(post_id, coder_id, na.omit = TRUE)
 ```
-
-
