@@ -34,6 +34,12 @@ a \link[tibble:tibble-package]{tibble}
 \description{
 Get reliability estimates of index variables created with \code{\link{add_index}}.
 }
+\examples{
+WoJ \%>\%
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) \%>\%
+  get_reliability()
+
+}
 \seealso{
 \code{\link[=add_index]{add_index()}} to create index variables
 

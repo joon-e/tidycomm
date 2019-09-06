@@ -2,7 +2,6 @@
 
 export("%>%")
 export(add_index)
-export(compute_reliability)
 export(correlate)
 export(crosstab)
 export(describe)

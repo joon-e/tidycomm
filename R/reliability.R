@@ -16,8 +16,6 @@
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @family reliability
-#'
-#' @export
 compute_reliability <- function(data, ..., type = "alpha",
                                 interval.type = NULL,
                                 bootstrap.samples = NULL,
@@ -87,7 +85,13 @@ compute_reliability <- function(data, ..., type = "alpha",
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @family reliability
+#'
 #' @seealso [add_index()] to create index variables
+#'
+#' @examples
+#' WoJ %>%
+#'   add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) %>%
+#'   get_reliability()
 #'
 #' @export
 get_reliability <- function(data, ..., type = "alpha",

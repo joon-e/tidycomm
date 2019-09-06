@@ -24,6 +24,11 @@ a \link[tibble:tibble-package]{tibble}
 \description{
 Add a rowwise mean or sum index of specific variables to the dataset.
 }
+\examples{
+WoJ \%>\% add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
+WoJ \%>\% add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4, type = "sum")
+
+}
 \seealso{
 \code{\link[=get_reliability]{get_reliability()}} to compute reliability estimates of added index
 variables.

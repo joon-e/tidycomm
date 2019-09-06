@@ -11,6 +11,10 @@
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
+#' @examples
+#' WoJ %>% add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
+#' WoJ %>% add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4, type = "sum")
+#'
 #' @seealso [get_reliability()] to compute reliability estimates of added index
 #'   variables.
 #'
