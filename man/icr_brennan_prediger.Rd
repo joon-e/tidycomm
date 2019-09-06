@@ -15,7 +15,7 @@ von Eye (2006).
 }
 \references{
 Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
-Uses, Misuses, and Alternatives. Educational and Psychological Measurement,
+uses, misuses, and alternatives. Educational and Psychological Measurement,
 41(3), 687-699. https://doi.org/10.1177/001316448104100307
 
 von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),

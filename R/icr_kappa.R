@@ -13,6 +13,10 @@
 #' @param ucm Units-coders matrix
 #'
 #' @family intercoder reliability
+#'
+#' @references Cohen, J. (1960). A coefficient of agreement for nominal scales.
+#'   Educational and Psychological Measurement, 20(1), 37-46.
+#'   https://doi.org/10.1177/001316446002000104
 icr_cohens_kappa <- function(ucm) {
 
   if (any(is.na(ucm))) {
@@ -54,6 +58,11 @@ icr_cohens_kappa <- function(ucm) {
 #' @param ucm Units-coders matrix
 #'
 #' @family intercoder reliability
+#'
+#' @references Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
+#'   Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
+
+
 icr_fleiss_kappa <- function(ucm) {
 
   if (any(is.na(ucm))) {
@@ -96,7 +105,7 @@ icr_fleiss_kappa <- function(ucm) {
 #' @family intercoder reliability
 #'
 #' @references Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
-#'   Uses, Misuses, and Alternatives. Educational and Psychological Measurement,
+#'   uses, misuses, and alternatives. Educational and Psychological Measurement,
 #'   41(3), 687-699. https://doi.org/10.1177/001316448104100307
 #'
 #'   von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),

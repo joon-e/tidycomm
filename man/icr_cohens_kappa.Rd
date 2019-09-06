@@ -12,6 +12,11 @@ icr_cohens_kappa(ucm)
 \description{
 Computes Cohen's Kappa.
 }
+\references{
+Cohen, J. (1960). A coefficient of agreement for nominal scales.
+Educational and Psychological Measurement, 20(1), 37-46.
+https://doi.org/10.1177/001316446002000104
+}
 \seealso{
 Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_agreement}},

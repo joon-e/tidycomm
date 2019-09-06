@@ -12,6 +12,10 @@ icr_fleiss_kappa(ucm)
 \description{
 Computes Fleiss' Kappa.
 }
+\references{
+Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
+Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
+}
 \seealso{
 Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_agreement}},
