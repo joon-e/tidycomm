@@ -27,6 +27,10 @@
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
+#' @examples
+#' fbposts %>% test_icr(post_id, coder_id, pop_elite, pop_othering)
+#' fbposts %>% test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
+#'
 #' @family intercoder reliability
 #'
 #' @export
@@ -145,7 +149,7 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
 #'
 #' Generates a units-coders matrix for a test variable
 #'
-#' @inheritParams test_icr
+#' @inheritParams compute_icr
 #'
 #' @family intercoder reliability
 unit_coder_matrix <- function(data, unit_var, coder_var, test_var) {

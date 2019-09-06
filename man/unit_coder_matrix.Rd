@@ -12,6 +12,8 @@ unit_coder_matrix(data, unit_var, coder_var, test_var)
 \item{unit_var}{Variable with unit identifiers}
 
 \item{coder_var}{Variable with coder identifiers}
+
+\item{test_var}{Variable to compute estimates for}
 }
 \description{
 Generates a units-coders matrix for a test variable

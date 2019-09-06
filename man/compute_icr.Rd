@@ -4,9 +4,10 @@
 \alias{compute_icr}
 \title{Compute intercoder reliability estimates for one test variable}
 \usage{
-compute_icr(test_var, data, unit_var, coder_var, levels = c(), na.omit,
-  agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa,
-  brennan_prediger)
+compute_icr(test_var, data, unit_var, coder_var, levels = c(),
+  na.omit = FALSE, agreement = TRUE, holsti = TRUE,
+  kripp_alpha = TRUE, cohens_kappa = FALSE, fleiss_kappa = FALSE,
+  brennan_prediger = FALSE)
 }
 \arguments{
 \item{test_var}{Variable to compute estimates for}

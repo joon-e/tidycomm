@@ -50,6 +50,11 @@ a \link[tibble:tibble-package]{tibble}
 Performs an intercoder reliability test by computing various intercoder
 reliability estimates for the included variables
 }
+\examples{
+fbposts \%>\% test_icr(post_id, coder_id, pop_elite, pop_othering)
+fbposts \%>\% test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
+
+}
 \seealso{
 Other intercoder reliability: \code{\link{compute_icr}},
   \code{\link{icr_agreement}},
