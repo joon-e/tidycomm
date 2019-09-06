@@ -60,9 +60,9 @@ test_icr <- function(data, unit_var, coder_var, ...,
 #'
 #' @family intercoder reliability
 compute_icr <- function(test_var, data, unit_var, coder_var,
-                     levels = c(), na.omit,
-                     agreement, holsti, kripp_alpha,
-                     cohens_kappa, fleiss_kappa, brennan_prediger) {
+                     levels = c(), na.omit = FALSE,
+                     agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
+                     cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
 
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var}})
 
