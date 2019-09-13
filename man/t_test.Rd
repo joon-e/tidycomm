@@ -41,6 +41,13 @@ Computes t-tests for one group variable and specified test variables.
 If no variables are specified, all numeric (integer or double) variables are
 used.
 }
+\examples{
+WoJ \%>\% t_test(temp_contract, autonomy_selection, autonomy_emphasis)
+WoJ \%>\% t_test(temp_contract)
+WoJ \%>\% t_test(employment, autonomy_selection, autonomy_emphasis,
+  levels = c("Full-time", "Freelancer"))
+
+}
 \seealso{
 Other t-test: \code{\link{cohens_d}},
   \code{\link{compute_t_test}}

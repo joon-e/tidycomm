@@ -26,6 +26,12 @@
 #'
 #' @family t-test
 #'
+#' @examples
+#' WoJ %>% t_test(temp_contract, autonomy_selection, autonomy_emphasis)
+#' WoJ %>% t_test(temp_contract)
+#' WoJ %>% t_test(employment, autonomy_selection, autonomy_emphasis,
+#'   levels = c("Full-time", "Freelancer"))
+#'
 #' @export
 t_test <- function(data, group_var, ...,
                    var.equal = TRUE, paired = FALSE, pooled_sd = TRUE,
@@ -159,7 +165,7 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
   vary <- var(y, na.rm = na.rm)
 
   if (pooled_sd) {
-    s <- sqrt(((nx-1)*varx + (ny-1)*vary) / (nx + ny - 2))
+    s <- sqrt(((nx - 1) * varx + (ny - 1) * vary) / (nx + ny - 2))
   } else {
     s <- sqrt((varx + vary) / 2)
   }
