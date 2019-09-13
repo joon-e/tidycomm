@@ -19,8 +19,8 @@ Tabulates frequencies for one or more categorical variable, including relative,
 and cumulative frequencies.
 }
 \examples{
-iris \%>\% tab_frequencies(Species)
-mtcars \%>\% tab_frequencies(vs, am)
+WoJ \%>\% tab_frequencies(employment)
+WoJ \%>\% tab_frequencies(employment, country)
 
 }
 \seealso{

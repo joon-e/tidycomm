@@ -11,8 +11,8 @@
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' iris %>% tab_frequencies(Species)
-#' mtcars %>% tab_frequencies(vs, am)
+#' WoJ %>% tab_frequencies(employment)
+#' WoJ %>% tab_frequencies(employment, country)
 #'
 #' @family categorical
 #'
@@ -58,8 +58,8 @@ tab_frequencies <- function(data, ...) {
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' mtcars %>% crosstab(vs, am)
-#' mtcars %>% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
+#' WoJ %>% crosstab(reach, employment)
+#' WoJ %>% crosstab(reach, employment, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
 #'
 #' @family categorical
 #'
@@ -67,14 +67,14 @@ tab_frequencies <- function(data, ...) {
 crosstab <- function(data, col_var, ..., add_total = FALSE,
                      percentages = FALSE, chi_square = FALSE) {
 
-  if(dplyr::is_grouped_df(data)) {
+  if (dplyr::is_grouped_df(data)) {
     warning("Grouping variable(s) present in data will be ignored.",
             call. = FALSE)
   }
 
   cross_vars <- length(quos(...))
 
-  if(cross_vars < 1) {
+  if (cross_vars < 1) {
     stop("Must provide at least one variable to crosstabulate.")
   }
 
@@ -90,7 +90,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
   xt_col_vars <- xt %>%
     dplyr::select(-c(1:cross_vars))
 
-  if(chi_square) {
+  if (chi_square) {
     chi2 <- xt_col_vars %>%
       as.matrix() %>%
       chisq.test()
@@ -101,12 +101,12 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
                     chi2$statistic, chi2$parameter, chi2$p.value, cramer_V(chi2)))
   }
 
-  if(add_total) {
+  if (add_total) {
     xt_col_vars <- xt_col_vars %>%
       dplyr::mutate(Total = rowSums(xt_col_vars))
   }
 
-  if(percentages) {
+  if (percentages) {
     xt_col_vars <- xt_col_vars %>%
       dplyr::mutate_all(col_percs)
   }

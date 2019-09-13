@@ -31,8 +31,8 @@ Computes contigency table for one independent (column) variable and one or
 more dependent (row) variables.
 }
 \examples{
-mtcars \%>\% crosstab(vs, am)
-mtcars \%>\% crosstab(vs, am, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
+WoJ \%>\% crosstab(reach, employment)
+WoJ \%>\% crosstab(reach, employment, add_total = TRUE, percentages = TRUE, chi_square = TRUE)
 
 }
 \seealso{
