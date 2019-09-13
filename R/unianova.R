@@ -19,6 +19,11 @@
 #'
 #' @family ANOVA
 #'
+#' @examples
+#' WoJ %>% unianova(employment, autonomy_selection, autonomy_emphasis)
+#' WoJ %>% unianova(employment)
+#' WoJ %>% unianova(employment, descriptives = TRUE, post_hoc = TRUE)
+#'
 #' @export
 unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALSE) {
 

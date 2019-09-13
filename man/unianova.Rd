@@ -30,6 +30,12 @@ Computes one-way ANOVAS for one group variable and specified test variables.
 If no variables are specified, all numeric (integer or double) variables are
 used.
 }
+\examples{
+WoJ \%>\% unianova(employment, autonomy_selection, autonomy_emphasis)
+WoJ \%>\% unianova(employment)
+WoJ \%>\% unianova(employment, descriptives = TRUE, post_hoc = TRUE)
+
+}
 \seealso{
 Other ANOVA: \code{\link{compute_aov}}
 }
