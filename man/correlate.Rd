@@ -23,6 +23,11 @@ Computes correlation coefficients for all combinations of the specified
 variables. If no variables are specified, all numeric (integer or double)
 variables are used.
 }
+\examples{
+WoJ \%>\% correlate(ethics_1, ethics_2, ethics_3)
+WoJ \%>\% correlate()
+
+}
 \seealso{
 Other correlations: \code{\link{correlation_test}}
 }

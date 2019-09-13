@@ -16,4 +16,8 @@ a \link[tibble:tibble-package]{tibble}
 Turns the tibble exported from \code{\link{correlate}} into a correlation
 matrix.
 }
+\examples{
+WoJ \%>\% correlate() \%>\% to_correlation_matrix()
+
+}
 \concept{correlation}

@@ -58,6 +58,10 @@ correlation_test <- function(var_comb, data, method) {
 #'
 #' @family correlations
 #'
+#' @examples
+#' WoJ %>% correlate(ethics_1, ethics_2, ethics_3)
+#' WoJ %>% correlate()
+#'
 #' @export
 correlate <- function(data, ..., method = "pearson") {
 
@@ -68,7 +72,9 @@ correlate <- function(data, ..., method = "pearson") {
 
   vars <- grab_vars(data, enquos(...))
 
-  var_strings <- purrr::map_chr(vars, as_label)
+  var_strings <- data %>%
+    dplyr::select(!!!vars) %>%
+    names()
   var_combs <- combn(var_strings, 2, simplify = FALSE)
   purrr::map_dfr(var_combs, correlation_test, data, method)
 }
@@ -83,6 +89,9 @@ correlate <- function(data, ..., method = "pearson") {
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @family correlation
+#'
+#' @examples
+#' WoJ %>% correlate() %>% to_correlation_matrix()
 #'
 #' @export
 to_correlation_matrix <- function(data) {
