@@ -15,9 +15,13 @@ matrix:
       addons:
         apt:
           packages:
-            - libgsl0-dev
+            - libgsl23
     - os: osx
       r: release
+      addons:
+        homebrew:
+          packages:
+            - gsl
       r_binary_packages:
         - gsl
 
