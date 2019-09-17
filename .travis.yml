@@ -6,7 +6,6 @@ cache: packages
 matrix:
   include:
     - os: linux
-      dist: trusty
       r: release
       r_binary_packages:
         - gsl
@@ -16,11 +15,6 @@ matrix:
         apt:
           packages:
             - libgsl23
-            - g++
-      env:
-        - COMPILER=g++
-        - CC=gcc
-        - CXX=g++
     - os: osx
       r: release
       addons:
