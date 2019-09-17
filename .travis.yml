@@ -8,6 +8,8 @@ matrix:
     - os: linux
       dist: trusty
       r: release
+      r_binary_packages:
+        - gsl
       r_github_packages:
         - r-lib/covr
       addons:
@@ -15,6 +17,9 @@ matrix:
           packages:
             - libgsl0-dev
     - os: osx
+      r: release
+      r_binary_packages:
+        - gsl
 
 
 notifications:
