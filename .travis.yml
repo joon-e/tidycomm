@@ -17,6 +17,10 @@ matrix:
           packages:
             - libgsl23
             - g++
+      env:
+        - COMPILER=g++
+        - CC=gcc
+        - CXX=g++
     - os: osx
       r: release
       addons:
