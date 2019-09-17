@@ -11,46 +11,17 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
 <!-- badges: end -->
 
-The goal of tidycomm is to …
+Tidycomm provides convenience functions for common tasks in
+communication research. Currently, tidycomm includes functions for
+various methods of univariate and bivariate data description and
+analysis, data modification, and intercoder reliability tests. All
+functions follow the style and syntax of the
+[tidyverse](https://www.tidyverse.org/).
 
 ## Installation
 
-You can install the released version of tidycomm from
-[CRAN](https://CRAN.R-project.org) with:
+Install the most recent development version of tidycomm with:
 
 ``` r
-#install.packages("tidycomm")
+devtools::install_github("joon-e/tidycomm")
 ```
-
-## Example
-
-This is a basic example which shows you how to solve a common problem:
-
-``` r
-#library(tidycomm)
-## basic example code
-```
-
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
-
-``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
-```
-
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date.
-
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub\!
-
-Please note that the ‘tidycomm’ project is released with a [Contributor
-Code of Conduct](.github/CODE_OF_CONDUCT.md). By contributing to this
-project, you agree to abide by its terms.
