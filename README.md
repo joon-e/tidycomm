@@ -9,6 +9,8 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
+[![Travis build
+status](https://travis-ci.org/joon-e/tidycomm.svg?branch=master)](https://travis-ci.org/joon-e/tidycomm)
 <!-- badges: end -->
 
 Tidycomm provides convenience functions for common tasks in
