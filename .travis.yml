@@ -3,11 +3,25 @@
 language: R
 cache: packages
 
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+    - os: osx
+      r_build_args: '--no-build-vignettes'
+      r_check_args: '--ignore-vignettes --no-examples'
+
 r_binary_packages:
   - gsl
 
 r_github_packages:
   - r-lib/covr
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
 
 after_success:
     - Rscript -e 'covr::codecov()'
