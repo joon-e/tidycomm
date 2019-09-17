@@ -5,3 +5,9 @@ cache: packages
 
 r_binary_packages:
   - gsl
+
+r_github_packages:
+  - r-lib/covr
+
+after_success:
+    - Rscript -e 'covr::codecov()'
