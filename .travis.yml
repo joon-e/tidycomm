@@ -16,6 +16,7 @@ matrix:
         apt:
           packages:
             - libgsl23
+            - g++-6
     - os: osx
       r: release
       addons:
