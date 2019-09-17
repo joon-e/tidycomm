@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# tidycomm
+# tidycomm <img src='man/figures/logo.png' align="right" height="138.5" />
 
 <!-- badges: start -->
 
@@ -16,11 +16,12 @@ coverage](https://codecov.io/gh/joon-e/tidycomm/branch/master/graph/badge.svg)](
 <!-- badges: end -->
 
 Tidycomm provides convenience functions for common tasks in
-communication research. Currently, tidycomm includes functions for
-various methods of univariate and bivariate data description and
-analysis, data modification, and intercoder reliability tests. All
-functions follow the style and syntax of the
+communication research. All functions follow the style and syntax of the
 [tidyverse](https://www.tidyverse.org/).
+
+Currently, tidycomm includes functions for various methods of univariate
+and bivariate data description and analysis, data modification, and
+intercoder reliability tests.
 
 ## Installation
 
