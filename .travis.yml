@@ -17,6 +17,9 @@ addons:
     packages:
     - libcurl4-openssl-dev
 
+r_binary_packages:
+  - gsl
+
 r_github_packages:
   - r-lib/covr
 
