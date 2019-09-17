@@ -12,8 +12,10 @@ matrix:
       r_build_args: '--no-build-vignettes'
       r_check_args: '--ignore-vignettes --no-examples'
 
-r_binary_packages:
-  - gsl
+addons:
+  apt:
+    packages:
+    - libcurl4-openssl-dev
 
 r_github_packages:
   - r-lib/covr
