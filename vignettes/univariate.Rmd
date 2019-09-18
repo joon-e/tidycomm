@@ -24,7 +24,7 @@ The first step in data exploration usually consists of univariate, descriptive a
 library(tidycomm)
 ```
 
-For demonstration purposes, we will use sample data from the [Worlds of Journalism]("https://worldsofjournalism.org/") 2012-16 study included in tidycomm. 
+For demonstration purposes, we will use sample data from the [Worlds of Journalism](https://worldsofjournalism.org/) 2012-16 study included in tidycomm. 
 
 ```{r}
 WoJ

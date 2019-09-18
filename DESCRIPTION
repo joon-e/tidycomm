@@ -1,14 +1,14 @@
 Package: tidycomm
-Title: tidycomm: Covenience Functions for Communication Research
-Version: 0.0.0.9000
+Title: Tidycomm: Convenience Functions for Communication Research
+Version: 0.0.1
 Authors@R: 
     person(given = "Julian",
            family = "Unkel",
            role = c("aut", "cre"),
            email = "julian.unkel@gmail.com",
            comment = c(ORCID = "0000-0001-9568-7041"))
-Description: Tidycomm provides convenience functions for common tasks in 
-  communication research. Currently, tidycomm includes functions for various
+Description: Provides convenience functions for common tasks in 
+  communication research. Currently includes functions for various
   methods of univariate and bivariate data description and analysis, data 
   modification, and intercoder reliability tests. All functions follow the 
   style and syntax of the tidyverse.

@@ -24,7 +24,7 @@ Tidycomm provides a workflow to quickly add mean/sum indices of several variable
 library(tidycomm)
 ```
 
-Once again, we will again sample data from the [Worlds of Journalism]("https://worldsofjournalism.org/") 2012-16 study for demonstration purposes.  
+Once again, we will again sample data from the [Worlds of Journalism](https://worldsofjournalism.org/) 2012-16 study for demonstration purposes.  
 
 ```{r}
 WoJ

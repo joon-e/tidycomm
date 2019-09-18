@@ -26,7 +26,7 @@ Tidycomm includes four functions for bivariate explorative data analysis:
 library(tidycomm)
 ```
 
-We will again use sample data from the [Worlds of Journalism]("https://worldsofjournalism.org/") 2012-16 study for demonstration purposes: 
+We will again use sample data from the [Worlds of Journalism](https://worldsofjournalism.org/) 2012-16 study for demonstration purposes: 
 
 ```{r}
 WoJ
