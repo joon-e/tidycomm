@@ -30,7 +30,7 @@ WoJ
 ```
 
 
-## Describe continuous variables with `describe()`
+## Describe continuous variables
 
 `describe()` outputs several measures of central tendency and variability for all variables named in the function call:
 
@@ -54,7 +54,7 @@ WoJ %>%
   describe(autonomy_emphasis, autonomy_selection)
 ```
 
-## Tabulate frequencies of categorical variables with `tab_frequencies()`
+## Tabulate frequencies of categorical variables
 
 `tab_frequencies()` outputs absolute and relative frequencies of all unique values of one or more categorical variables:
 
