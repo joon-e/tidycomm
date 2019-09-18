@@ -22,3 +22,19 @@ test_that("get_reliability picks all available indices", {
 
   expect_equal(nrow(rel), 2)
 })
+
+test_that("get_reliability produces error if no index variables are found", {
+
+  expect_error(get_reliability(WoJ))
+
+})
+
+test_that("get_reliability outputs progess if specified", {
+  df <- WoJ %>%
+    add_index(trust_politics,
+              tidyselect::starts_with('trust')) %>%
+    add_index(ethical_flexbility,
+              tidyselect::starts_with('ethics'))
+
+  expect_message(get_reliability(df, progress = TRUE))
+})

@@ -9,7 +9,16 @@ test_that("add_index adds variable", {
               trust_parties,
               trust_politicians)
 
+  WoJ_is <- WoJ %>%
+    add_index(trust_politics,
+              trust_parliament,
+              trust_government,
+              trust_parties,
+              trust_politicians,
+              type = "sum")
+
     expect_equal(ncol(WoJ) + 1, ncol(WoJ_i))
+    expect_equal(ncol(WoJ) + 1, ncol(WoJ_is))
 })
 
 test_that("add_index adds attribute 'index_of'", {
