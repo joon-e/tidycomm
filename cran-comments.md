@@ -1,7 +1,13 @@
 ## Test environments
-* local OS X install, R 3.6.1
-* ubuntu 14.04 (on travis-ci), R 3.6.1
-* win-builder (devel and release)
+* local Win 10 install, R 3.6.1
+* OS X (on travis-ci), release
+* Linux (on travis-ci), release
+* Linux (on travis-ci), devel
+* win-builder, devel
+
+Test environment config on travis-ci included installing the 'libgsl23' (linux)/
+'gsl' (osx) packages, which are needed for R package 'gsl', which is a dependency
+of the 'MBESS' package.
 
 ## R CMD check results
 
