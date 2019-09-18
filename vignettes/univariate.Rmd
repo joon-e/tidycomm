@@ -1,8 +1,9 @@
 ---
 title: "Univariate analysis of continuous and categorical variables"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{univariate}
+  %\VignetteIndexEntry{Univariate analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

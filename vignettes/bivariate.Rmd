@@ -1,8 +1,9 @@
 ---
 title: "Bivariate analysis of continuous and/or categorical variables"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{bivariate}
+  %\VignetteIndexEntry{Bivariate analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -7,3 +7,5 @@
 ^data-raw$
 ^\.travis\.yml$
 ^codecov\.yml$
+^doc$
+^Meta$

@@ -1,8 +1,9 @@
 ---
 title: "Intercoder reliability tests"
+date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{icr}
+  %\VignetteIndexEntry{Intercoder reliability tests}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

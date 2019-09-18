@@ -33,3 +33,39 @@ Install the most recent development version of tidycomm with:
 devtools::install_github("joon-e/tidycomm")
 ```
 
+## Usage
+
+```{r}
+library(tidycomm)
+```
+
+tidycomm functions follow the style and syntax of the [tidyverse](https://www.tidyverse.org/) functions:
+
+- they always assume a `tibble` as their first argument
+- they will always return a `tibble` as well, so they can be easily integrated into pipes
+- data variables (`tibble` columns) are passed to function calls directly as symbols
+
+```{r}
+WoJ %>% # Worlds of Journalism sample data
+  describe(autonomy_selection, autonomy_emphasis)
+```
+
+Most functions will automatically use all relevant variables in the data if no variables are specified in the function call. For example, to compute descriptive statistics for all numeric variables in the data, just call `describe()` without further arguments:
+
+```{r}
+WoJ %>% 
+  describe()
+```
+
+Likewise, compute intercoder reliability tests for all variables by only specifying the post and coder ID variables:
+
+```{r}
+fbposts %>% # Facebook post codings sample data
+  test_icr(post_id, coder_id)
+```
+
+For detailed examples, see the vignettes:
+
+```{r eval = FALSE}
+browseVignettes("tidycomm")
+```
