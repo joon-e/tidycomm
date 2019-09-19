@@ -73,11 +73,11 @@ WoJ %>%
   get_reliability(trust_in_politics)
 ```
 
-Essentially, `get_reliability()` provides a wrapper for [the ci.reliability function from the MBESS package](https://cran.r-project.org/web/packages/MBESS/index.html). Thus, all arguments of `MBESS::ci.reliability()` can be passed to `get_reliability()`. For example, to output  $\omega$ instead of Cronbach's $\alpha$ including robust maximum likelihood confidence intervals, you can type:
+Essentially, `get_reliability()` provides a wrapper for [the ci.reliability function from the MBESS package](https://cran.r-project.org/package=MBESS). Thus, all arguments of `MBESS::ci.reliability()` can be passed to `get_reliability()`. For example, to output  $\omega$ instead of Cronbach's $\alpha$ including robust maximum likelihood confidence intervals, you can type:
 
 ```{r}
 WoJ %>% 
   get_reliability(type = 'omega', interval.type = 'mlr')
 ```
 
-See the [function documentation](https://cran.r-project.org/web/packages/MBESS/MBESS.pdf) for more info (and don't forget to cite the `MBESS` package if using `get_reliability()`).
+See the [function documentation](https://cran.r-project.org/package=MBESS) for more info (and don't forget to cite the `MBESS` package if using `get_reliability()`).

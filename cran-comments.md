@@ -1,3 +1,9 @@
+## Resubmission
+
+* Removed package name from title
+* Updated package title
+* Expanded package description
+
 ## Test environments
 * local Win 10 install, R 3.6.1
 * OS X (on travis-ci), release
