@@ -1,1 +1,27 @@
 destination: docs
+
+template:
+  params:
+    bootswatch: lumen
+
+reference:
+  - title: "Univariate analysis"
+    contents:
+      - describe
+      - tab_frequencies
+  - title: "Bivariate analysis"
+    contents:
+      - crosstab
+      - t_test
+      - unianova
+      - correlate
+      - to_correlation_matrix
+  - title: "Data modification"
+    contents:
+      - add_index
+  - title: "Reliability tests"
+    contents:
+      - get_reliability
+  - title: "Intercoder reliability"
+    contents:
+      - test_icr
