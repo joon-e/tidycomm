@@ -63,27 +63,32 @@ describe <- function(data, ..., na.rm = TRUE) {
 
 }
 
+### Internal functions ###
 
-#' Skewness
-#'
-#' Compute empirical skewness
-#'
-#' @param x a numerical vector
-#'
-#' @return a `dbl`
+## Skewness
+##
+## Compute empirical skewness
+##
+## @param x a numerical vector
+##
+## @return a `dbl`
+##
+## @keywords internal
 skewness <- function(x) {
   x <- x[!is.na(x)]
   m <- mean(x, na.rm = TRUE)
   sum((x - m)^3) / length(x) / ((sum((x - m)^2) / length(x))^(3/2))
 }
 
-#' Kurtosis
-#'
-#' Compute empirical kurtosis
-#'
-#' @param x a numerical vector
-#'
-#' @return a `dbl`
+## Kurtosis
+##
+## Compute empirical kurtosis
+##
+## @param x a numerical vector
+##
+## @return a `dbl`
+##
+## @keywords internal
 kurtosis <- function(x) {
   x <- x[!is.na(x)]
   m <- mean(x, na.rm = TRUE)

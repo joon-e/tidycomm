@@ -1,15 +1,19 @@
-#' Compute Krippendorff's Alpha
-#'
-#' Computers Krippendorff's Alpha intercoder reliability estimate as detailed
-#' in Krippendorff (2011), section E.
-#'
-#' @param ucm A units-coders matrix
-#' @param var_level Variable level
-#'
-#' @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
-#'   Retrieved from http://repository.upenn.edu/asc_papers/43
-#'
-#' @family intercoder reliability
+### Internal functions ###
+
+## Compute Krippendorff's Alpha
+##
+## Computers Krippendorff's Alpha intercoder reliability estimate as detailed
+## in Krippendorff (2011), section E.
+##
+## @param ucm A units-coders matrix
+## @param var_level Variable level
+##
+## @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
+##   Retrieved from http://repository.upenn.edu/asc_papers/43
+##
+## @family intercoder reliability
+##
+## @keywords internal
 icr_kripp_alpha <- function(ucm, var_level = NULL) {
 
   if (missing(var_level)) {
@@ -46,12 +50,14 @@ icr_kripp_alpha <- function(ucm, var_level = NULL) {
 
 }
 
-#' Count specific value in unit
-#'
-#' Counts occurrences of a specific value in a single unit of a units-coders matrix.
-#'
-#' @param val Value to count
-#' @param tab_u A frequency table of values in the unit
+## Count specific value in unit
+##
+## Counts occurrences of a specific value in a single unit of a units-coders matrix.
+##
+## @param val Value to count
+## @param tab_u A frequency table of values in the unit
+##
+## @keywords internal
 count_value_in_unit <- function(val, tab_u) {
   if (as.character(val) %in% names(tab_u)) {
     return(tab_u[[as.character(val)]])
@@ -59,28 +65,32 @@ count_value_in_unit <- function(val, tab_u) {
   return(0)
 }
 
-#' Count values in unit
-#'
-#' Counts occurrences of values in a single unit of a units-coders matrix.
-#'
-#' @param u Unit of a unit-coders matrix
-#' @param vals Values to count
+## Count values in unit
+##
+## Counts occurrences of values in a single unit of a units-coders matrix.
+##
+## @param u Unit of a unit-coders matrix
+## @param vals Values to count
+##
+## @keywords internal
 values_in_unit <- function(u, vals) {
   tab_u <- table(u)
   purrr::as_vector(purrr::map(vals, count_value_in_unit, tab_u))
 }
 
-#' Compute value of difference function
-#'
-#' Computes value of the difference function
-#'
-#' @param c Value c
-#' @param k Value k
-#' @param vum A values-units matrix
-#' @param var_level Variable level
-#'
-#' @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
-#'   Retrieved from http://repository.upenn.edu/asc_papers/43
+## Compute value of difference function
+##
+## Computes value of the difference function
+##
+## @param c Value c
+## @param k Value k
+## @param vum A values-units matrix
+## @param var_level Variable level
+##
+## @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
+##   Retrieved from http://repository.upenn.edu/asc_papers/43
+##
+## @keywords internal
 delta_sq <- function(c, k, vum, var_level) {
   if (var_level == "nominal") {
     if (c == k) {
@@ -112,17 +122,19 @@ delta_sq <- function(c, k, vum, var_level) {
   }
 }
 
-#' Compute Krippendorff's Alpha numerator values
-#'
-#' Computes the values in the numerator in Krippendorff's Alpha formula
-#'
-#' @param u Unit of a values-units matrix
-#' @param numvals Amount of unique values in codings (categories)
-#' @param vum Values-units matrix
-#' @param var_level Variable level
-#'
-#' @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
-#'   Retrieved from http://repository.upenn.edu/asc_papers/43
+## Compute Krippendorff's Alpha numerator values
+##
+## Computes the values in the numerator in Krippendorff's Alpha formula
+##
+## @param u Unit of a values-units matrix
+## @param numvals Amount of unique values in codings (categories)
+## @param vum Values-units matrix
+## @param var_level Variable level
+##
+## @keywords internal
+##
+## @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
+##   Retrieved from http://repository.upenn.edu/asc_papers/43
 kalpha_num_values <- function(u, numvals, vum, var_level) {
 
   o <- c()
@@ -141,16 +153,18 @@ kalpha_num_values <- function(u, numvals, vum, var_level) {
   return(0)
 }
 
-#' Compute Krippendorff's Alpha denominator
-#'
-#' Computes the denominator in Krippendorff's Alpha formula
-#'
-#' @param vum Values-units matrix
-#' @param numvals Amount of unique values in codings (categories)
-#' @param var_level Variable level
-#'
-#' @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
-#'   Retrieved from http://repository.upenn.edu/asc_papers/43
+## Compute Krippendorff's Alpha denominator
+##
+## Computes the denominator in Krippendorff's Alpha formula
+##
+## @param vum Values-units matrix
+## @param numvals Amount of unique values in codings (categories)
+## @param var_level Variable level
+##
+## @keywords internal
+##
+## @references Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
+##   Retrieved from http://repository.upenn.edu/asc_papers/43
 kalpha_denom <- function(vum, numvals, var_level) {
 
   e <- c()

@@ -1,5 +1,3 @@
-# Contains functions for the description of categorical variables
-
 #' Tabulate frequencies
 #'
 #' Tabulates frequencies for one or more categorical variable, including relative,
@@ -38,7 +36,6 @@ tab_frequencies <- function(data, ...) {
     )
 
 }
-
 
 #' Crosstab variables
 #'
@@ -115,15 +112,19 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     dplyr::bind_cols(xt_col_vars)
 }
 
-#' Compute Cramer's V
-#'
-#' Computes Cramer's V
-#'
-#' @param chi2 Output from a `chisq.test()`.
-#'
-#' @return a `dbl`
-#'
-#' @family categorical
+### Internal functions ###
+
+## Compute Cramer's V
+##
+## Computes Cramer's V
+##
+## @param chi2 Output from a `chisq.test()`.
+##
+## @return a `dbl`
+##
+## @family categorical
+##
+## @keywords internal
 cramer_V <- function(chi2) {
 
   X2 <- chi2$statistic
@@ -133,13 +134,13 @@ cramer_V <- function(chi2) {
   unname(sqrt(X2 / (N * (k - 1))))
 }
 
-#' Compute column percentages
-#'
-#' Computes column percentages
-#'
-#' @param x Numeric vector
-#'
-#' @return a `dbl`
+## Compute column percentages
+##
+## Computes column percentages
+##
+## @param x Numeric vector
+##
+## @return a `dbl`
 col_percs <- function(x) {
   x / sum(x, na.rm = TRUE)
 }

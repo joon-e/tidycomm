@@ -41,7 +41,8 @@ be computed. Defaults to \code{FALSE}.}
 be computed. Defaults to \code{FALSE}.}
 
 \item{brennan_prediger}{Logical indicating whether Brennan & Prediger's Kappa
-should be computed. Defaults to \code{FALSE}.}
+should be computed (extension to 3+ coders as proposed by von Eye (2006)).
+Defaults to \code{FALSE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
@@ -55,14 +56,22 @@ fbposts \%>\% test_icr(post_id, coder_id, pop_elite, pop_othering)
 fbposts \%>\% test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
 
 }
-\seealso{
-Other intercoder reliability: \code{\link{compute_icr}},
-  \code{\link{icr_agreement}},
-  \code{\link{icr_brennan_prediger}},
-  \code{\link{icr_cohens_kappa}},
-  \code{\link{icr_fleiss_kappa}},
-  \code{\link{icr_holstis_CR}},
-  \code{\link{icr_kripp_alpha}},
-  \code{\link{unit_coder_matrix}}
+\references{
+Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
+uses, misuses, and alternatives. Educational and Psychological Measurement,
+41(3), 687-699. https://doi.org/10.1177/001316448104100307
+
+Cohen, J. (1960). A coefficient of agreement for nominal scales.
+Educational and Psychological Measurement, 20(1), 37-46.
+https://doi.org/10.1177/001316446002000104
+
+Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
+Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
+
+Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
+Retrieved from http://repository.upenn.edu/asc_papers/43
+
+von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),
+12-24. https://doi.org/10.1027/1016-9040.11.1.12
 }
 \concept{intercoder reliability}

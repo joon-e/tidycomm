@@ -28,7 +28,4 @@ WoJ \%>\% correlate(ethics_1, ethics_2, ethics_3)
 WoJ \%>\% correlate()
 
 }
-\seealso{
-Other correlations: \code{\link{correlation_test}}
-}
 \concept{correlations}

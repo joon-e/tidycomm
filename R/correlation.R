@@ -1,47 +1,3 @@
-#' Compute correlation test
-#'
-#' Computes a correlation test for a two variables
-#'
-#' @param var_comb A character vector containing the name of two variables
-#' @param data a [tibble][tibble::tibble-package]
-#' @param method a character string indicating which correlation coefficient
-#'   is to be computed. One of "pearson" (default), "kendall", or "spearman"
-#'
-#' @return a [tibble][tibble::tibble-package]
-#'
-#' @family correlations
-correlation_test <- function(var_comb, data, method) {
-  x <- var_comb[[1]]
-  y <- var_comb[[2]]
-  xvar <- data[[x]]
-  yvar <- data[[y]]
-
-  if (any(!is.numeric(xvar), !is.numeric(yvar))) {
-    warning(glue("At least one of {x} and {y} is not numeric, skipping computation."),
-            call. = FALSE)
-    return()
-  }
-
-  cor_test <- cor.test(xvar, yvar, method = method)
-
-  if (method == "pearson") {
-    name <- "r"
-  } else if (method == "kendall") {
-    name <- "tau"
-  } else if (method == "spearman") {
-    name <- "rho"
-  }
-
-  tibble(
-    x = x,
-    y = y,
-    !!name := cor_test$estimate,
-    df = ifelse(is.null(cor_test$parameter),
-                NA, cor_test$parameter),
-    p = cor_test$p.value
-  )
-}
-
 #' Compute correlation coefficients
 #'
 #' Computes correlation coefficients for all combinations of the specified
@@ -113,4 +69,52 @@ to_correlation_matrix <- function(data) {
     dplyr::arrange(match(.data$x, var_order)) %>%
     dplyr::rename(!!estimate := .data$x) %>%
     dplyr::select(estimate, var_order, dplyr::everything())
+}
+
+### Internal functions ###
+
+## Compute correlation test
+##
+## Computes a correlation test for a two variables
+##
+## @param var_comb A character vector containing the name of two variables
+## @param data a [tibble][tibble::tibble-package]
+## @param method a character string indicating which correlation coefficient
+##   is to be computed. One of "pearson" (default), "kendall", or "spearman"
+##
+## @return a [tibble][tibble::tibble-package]
+##
+## @family correlations
+##
+## @keywords internal
+correlation_test <- function(var_comb, data, method) {
+  x <- var_comb[[1]]
+  y <- var_comb[[2]]
+  xvar <- data[[x]]
+  yvar <- data[[y]]
+
+  if (any(!is.numeric(xvar), !is.numeric(yvar))) {
+    warning(glue("At least one of {x} and {y} is not numeric, skipping computation."),
+            call. = FALSE)
+    return()
+  }
+
+  cor_test <- cor.test(xvar, yvar, method = method)
+
+  if (method == "pearson") {
+    name <- "r"
+  } else if (method == "kendall") {
+    name <- "tau"
+  } else if (method == "spearman") {
+    name <- "rho"
+  }
+
+  tibble(
+    x = x,
+    y = y,
+    !!name := cor_test$estimate,
+    df = ifelse(is.null(cor_test$parameter),
+                NA, cor_test$parameter),
+    p = cor_test$p.value
+  )
 }

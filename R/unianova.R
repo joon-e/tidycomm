@@ -49,16 +49,20 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
 
 }
 
-#' Compute one-way ANOVA
-#'
-#' Computes and outputs a one-way ANOVA for one test variable
-#'
-#' @inheritParams unianova
-#' @param test_var Test variable
-#'
-#' @return a [tibble][tibble::tibble-package]
-#'
-#' @family ANOVA
+### Internal functions ###
+
+## Compute one-way ANOVA
+##
+## Computes and outputs a one-way ANOVA for one test variable
+##
+## @inheritParams unianova
+## @param test_var Test variable
+##
+## @return a [tibble][tibble::tibble-package]
+##
+## @family ANOVA
+##
+## @keywords internal
 compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
   group_var_string <- as_label(enquo(group_var))
   test_var_string <- as_label(enquo(test_var))

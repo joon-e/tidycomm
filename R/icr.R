@@ -23,7 +23,8 @@
 #' @param fleiss_kappa Logical indicating whether Fleiss' Kappa should
 #'   be computed. Defaults to `FALSE`.
 #' @param brennan_prediger Logical indicating whether Brennan & Prediger's Kappa
-#'   should be computed. Defaults to `FALSE`.
+#'   should be computed (extension to 3+ coders as proposed by von Eye (2006)).
+#'   Defaults to `FALSE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
@@ -34,6 +35,23 @@
 #' @family intercoder reliability
 #'
 #' @export
+#'
+#' @references Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
+#'   uses, misuses, and alternatives. Educational and Psychological Measurement,
+#'   41(3), 687-699. https://doi.org/10.1177/001316448104100307
+#'
+#'   Cohen, J. (1960). A coefficient of agreement for nominal scales.
+#'   Educational and Psychological Measurement, 20(1), 37-46.
+#'   https://doi.org/10.1177/001316446002000104
+#'
+#'   Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
+#'   Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
+#'
+#'   Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
+#'   Retrieved from http://repository.upenn.edu/asc_papers/43
+#'
+#'   von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),
+#'   12-24. https://doi.org/10.1027/1016-9040.11.1.12
 test_icr <- function(data, unit_var, coder_var, ...,
                         levels = NULL, na.omit = FALSE,
                         agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
@@ -54,15 +72,18 @@ test_icr <- function(data, unit_var, coder_var, ...,
 
 }
 
+### Internal functions ###
 
-#' Compute intercoder reliability estimates for one test variable
-#'
-#' Computes intercoder reliability estimates for one test variable
-#'
-#' @param test_var Variable to compute estimates for
-#' @inheritParams test_icr
-#'
-#' @family intercoder reliability
+## Compute intercoder reliability estimates for one test variable
+##
+## Computes intercoder reliability estimates for one test variable
+##
+## @param test_var Variable to compute estimates for
+## @inheritParams test_icr
+##
+## @family intercoder reliability
+##
+## @keywords internal
 compute_icr <- function(test_var, data, unit_var, coder_var,
                      levels = c(), na.omit = FALSE,
                      agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
@@ -145,13 +166,15 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
   test_vals
 }
 
-#' Generate units-coders matrix
-#'
-#' Generates a units-coders matrix for a test variable
-#'
-#' @inheritParams compute_icr
-#'
-#' @family intercoder reliability
+## Generate units-coders matrix
+##
+## Generates a units-coders matrix for a test variable
+##
+## @inheritParams compute_icr
+##
+## @family intercoder reliability
+##
+## @keywords internal
 unit_coder_matrix <- function(data, unit_var, coder_var, test_var) {
 
   data %>%
