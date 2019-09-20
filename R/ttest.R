@@ -95,16 +95,20 @@ t_test <- function(data, group_var, ...,
 
 }
 
-#' Compute t-test
-#'
-#' Computes and outputs a t-test for one test variable
-#'
-#' @inheritParams t_test
-#' @param test_var Test variable
-#'
-#' @return a [tibble][tibble::tibble-package]
-#'
-#' @family t-test
+### Internal functions ###
+
+## Compute t-test
+##
+## Computes and outputs a t-test for one test variable
+##
+## @inheritParams t_test
+## @param test_var Test variable
+##
+## @return a [tibble][tibble::tibble-package]
+##
+## @family t-test
+##
+## @keywords internal
 compute_t_test <- function(test_var, data, group_var, levels,
                            var.equal, paired, pooled_sd) {
 
@@ -141,20 +145,22 @@ compute_t_test <- function(test_var, data, group_var, levels,
   )
 }
 
-#' Compute Cohen's d
-#'
-#' Computes the effect size estimate Cohen's d for two sets of numerical values
-#'
-#' @param x a (non-empty) numeric vector of data values.
-#' @param y a (non-empty) numeric vector of data values.
-#' @param pooled_sd a logical indicating whether to use the pooled standard
-#'   deviation in the calculation of Cohen's d. Defaults to `TRUE`.
-#' @param na.rm a logical value indicating whether NA values should be stripped
-#'  before the computation proceeds. Defaults to `TRUE`.
-#'
-#' @return a `dbl`
-#'
-#' @family t-test
+## Compute Cohen's d
+##
+## Computes the effect size estimate Cohen's d for two sets of numerical values
+##
+## @param x a (non-empty) numeric vector of data values.
+## @param y a (non-empty) numeric vector of data values.
+## @param pooled_sd a logical indicating whether to use the pooled standard
+##   deviation in the calculation of Cohen's d. Defaults to `TRUE`.
+## @param na.rm a logical value indicating whether NA values should be stripped
+##  before the computation proceeds. Defaults to `TRUE`.
+##
+## @return a `dbl`
+##
+## @family t-test
+##
+## @keywords internal
 cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
 
   nx <- length(!is.na(x))

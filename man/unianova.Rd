@@ -36,7 +36,4 @@ WoJ \%>\% unianova(employment)
 WoJ \%>\% unianova(employment, descriptives = TRUE, post_hoc = TRUE)
 
 }
-\seealso{
-Other ANOVA: \code{\link{compute_aov}}
-}
 \concept{ANOVA}

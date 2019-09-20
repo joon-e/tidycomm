@@ -1,10 +1,14 @@
-#' Compute Holsti's reliability estimate
-#'
-#' Computes Holsti's reliability estimate (mean pairwise agreement).
-#'
-#' @param ucm Units-coders matrix
-#'
-#' @family intercoder reliability
+### Internal functions ###
+
+## Compute Holsti's reliability estimate
+##
+## Computes Holsti's reliability estimate (mean pairwise agreement).
+##
+## @param ucm Units-coders matrix
+##
+## @family intercoder reliability
+##
+## @keywords internal
 icr_holstis_CR <- function(ucm) {
 
   if (any(is.na(ucm))) {
@@ -24,13 +28,15 @@ icr_holstis_CR <- function(ucm) {
   mean(pair_agrees)
 }
 
-#' Compute simple percent agreement
-#'
-#' Computes simple percent agreement for a units-coders matrix
-#'
-#' @param ucm Units-coders matrix
-#'
-#' @family intercoder reliability
+## Compute simple percent agreement
+##
+## Computes simple percent agreement for a units-coders matrix
+##
+## @param ucm Units-coders matrix
+##
+## @family intercoder reliability
+##
+## @keywords internal
 icr_agreement <- function(ucm) {
 
   if (any(is.na(ucm))) {
@@ -40,12 +46,13 @@ icr_agreement <- function(ucm) {
   sum(apply(ucm, 1, check_equal)) / dim(ucm)[1]
 }
 
-#' Check if all values in a vector are the same
-#'
-#' Checks if all values in a vector are the same
-#'
-#' @param x A vector
+## Check if all values in a vector are the same
+##
+## Checks if all values in a vector are the same
+##
+## @param x A vector
+##
+## @keywords internal
 check_equal <- function(x) {
   length(x) - 1 == sum(duplicated(x))
 }
-

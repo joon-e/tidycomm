@@ -36,7 +36,6 @@ WoJ \%>\% crosstab(reach, employment, add_total = TRUE, percentages = TRUE, chi_
 
 }
 \seealso{
-Other categorical: \code{\link{cramer_V}},
-  \code{\link{tab_frequencies}}
+Other categorical: \code{\link{tab_frequencies}}
 }
 \concept{categorical}

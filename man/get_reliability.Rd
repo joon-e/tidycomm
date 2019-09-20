@@ -42,7 +42,5 @@ WoJ \%>\%
 }
 \seealso{
 \code{\link[=add_index]{add_index()}} to create index variables
-
-Other reliability: \code{\link{compute_reliability}}
 }
 \concept{reliability}

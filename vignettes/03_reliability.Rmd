@@ -1,0 +1,83 @@
+---
+title: "Adding indices and computing reliability estimates"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Indices and reliability estimates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Tidycomm provides a workflow to quickly add mean/sum indices of several variables to the dataset and compute reliability estimates for those added indices:
+
+- `add_index()` adds a mean or sum index of the specified variables
+- `get_reliability()` computes reliability estimates for all added indices
+
+```{r setup, include = FALSE}
+library(tidycomm)
+```
+
+Once again, we will again sample data from the [Worlds of Journalism](https://worldsofjournalism.org/) 2012-16 study for demonstration purposes.  
+
+```{r}
+WoJ
+```
+
+`ethics_1` to `ethics_4` measure agreement with statements concerning ethics in journalism and may be combined into an index of 'ethical flexbility', while the items starting with `trust_` measure trust in various political institutions and thus may be combined into an index of trust in politics.
+
+## Add mean and sum indices
+
+`add_index()` adds a mean index of specified variables to the data. The second (or first, if used in a pipe) argument is the name of index variable to be created:
+
+```{r}
+WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) %>%
+  # Select variables of relevance for output
+  dplyr::select(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
+```
+
+To create a sum index instead, set `type = "sum"`:
+
+```{r}
+WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4, type = "sum") %>%
+  # Select variables of relevance for output
+  dplyr::select(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
+```
+
+## Compute reliability estimates of created indices
+
+Use `get_reliability()` to compute reliability/internal consistency estimates for indices created with `add_index()`. Passing no further arguments to the function will automatically compute reliability estimates for all indices created with `add_index()` found in the data and output Cronbach's $\alpha$ along with descriptives and index information.
+
+```{r}
+# Add two indices to data
+WoJ <- WoJ %>% 
+  add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4) %>%
+  add_index(trust_in_politics, trust_parliament, trust_government, trust_parties, trust_politicians)
+
+WoJ %>% 
+  get_reliability()
+```
+
+If you only want reliability estimates for specific indices, pass their names as function arguments.
+
+```{r}
+WoJ %>% 
+  get_reliability(trust_in_politics)
+```
+
+Essentially, `get_reliability()` provides a wrapper for [the ci.reliability function from the MBESS package](https://cran.r-project.org/package=MBESS). Thus, all arguments of `MBESS::ci.reliability()` can be passed to `get_reliability()`. For example, to output  $\omega$ instead of Cronbach's $\alpha$ including robust maximum likelihood confidence intervals, you can type:
+
+```{r}
+WoJ %>% 
+  get_reliability(type = 'omega', interval.type = 'mlr')
+```
+
+See the [function documentation](https://cran.r-project.org/package=MBESS) for more info (and don't forget to cite the `MBESS` package if using `get_reliability()`).
