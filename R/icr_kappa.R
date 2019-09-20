@@ -1,3 +1,5 @@
+### Internal functions ###
+
 # Functions for various Kappa coefficients of the formula (p0 - pe) / (1 - pe),
 # where p0 is the overall agreement between the coders/raters, and pe is the
 # chance agreement.
@@ -6,17 +8,19 @@
 # r = Number of coders/raters
 # q = Number of categories
 
-#' Compute Cohen's Kappa
-#'
-#' Computes Cohen's Kappa.
-#'
-#' @param ucm Units-coders matrix
-#'
-#' @family intercoder reliability
-#'
-#' @references Cohen, J. (1960). A coefficient of agreement for nominal scales.
-#'   Educational and Psychological Measurement, 20(1), 37-46.
-#'   https://doi.org/10.1177/001316446002000104
+## Compute Cohen's Kappa
+##
+## Computes Cohen's Kappa.
+##
+## @param ucm Units-coders matrix
+##
+## @family intercoder reliability
+##
+## @keywords internal
+##
+## @references Cohen, J. (1960). A coefficient of agreement for nominal scales.
+##   Educational and Psychological Measurement, 20(1), 37-46.
+##   https://doi.org/10.1177/001316446002000104
 icr_cohens_kappa <- function(ucm) {
 
   if (any(is.na(ucm))) {
@@ -51,17 +55,18 @@ icr_cohens_kappa <- function(ucm) {
   (p0 - pe) / (1 - pe)
 }
 
-#' Compute Fleiss' Kappa
-#'
-#' Computes Fleiss' Kappa.
-#'
-#' @param ucm Units-coders matrix
-#'
-#' @family intercoder reliability
-#'
-#' @references Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
-#'   Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
-
+## Compute Fleiss' Kappa
+##
+## Computes Fleiss' Kappa.
+##
+## @param ucm Units-coders matrix
+##
+## @family intercoder reliability
+##
+## @keywords internal
+##
+## @references Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
+##   Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
 
 icr_fleiss_kappa <- function(ucm) {
 
@@ -95,21 +100,23 @@ icr_fleiss_kappa <- function(ucm) {
   (p0 - pe) / (1 - pe)
 }
 
-#' Compute Brennan & Prediger's Kappa
-#'
-#' Computes Brennan & Prediger's Kappa (extension to 3+ coders as proposed by
-#' von Eye (2006).
-#'
-#' @param ucm Units-coders matrix
-#'
-#' @family intercoder reliability
-#'
-#' @references Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
-#'   uses, misuses, and alternatives. Educational and Psychological Measurement,
-#'   41(3), 687-699. https://doi.org/10.1177/001316448104100307
-#'
-#'   von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),
-#'   12-24. https://doi.org/10.1027/1016-9040.11.1.12
+## Compute Brennan & Prediger's Kappa
+##
+## Computes Brennan & Prediger's Kappa (extension to 3+ coders as proposed by
+## von Eye (2006).
+##
+## @param ucm Units-coders matrix
+##
+## @family intercoder reliability
+##
+## @keywords internal
+##
+## @references Brennan, R. L., & Prediger, D. J. (1981). Coefficient Kappa: Some
+##   uses, misuses, and alternatives. Educational and Psychological Measurement,
+##   41(3), 687-699. https://doi.org/10.1177/001316448104100307
+##
+##   von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),
+##   12-24. https://doi.org/10.1027/1016-9040.11.1.12
 icr_brennan_prediger <- function(ucm) {
 
   if (any(is.na(ucm))) {
