@@ -2,6 +2,8 @@
 
 * Fixed typos
 * Included references for intercoder reliability coefficients
+* Package 'tidyselect' has been moved to 'Suggests' instead of 'Imports',
+  as it is only used for tests and vignettes
 
 ## Test environments
 * local Win 10 install, R 3.6.1
