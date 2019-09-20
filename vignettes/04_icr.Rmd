@@ -1,0 +1,100 @@
+---
+title: "Intercoder reliability tests"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intercoder reliability tests}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Tidycomm provides the `test_icr()` function to conveniently compute intercoder reliability tests for several variables and reliability estimates at the same time.
+
+Test data has to be structured in a long format, with one column indicating the unit (e.g., article 1, article 2, etc.), one column indicating the coder (either by a string or a numeric ID), and one column each per coded variable to test. 
+
+```{r setup, message = FALSE, warning = FALSE, include = FALSE}
+library(tidycomm)
+```
+
+For demonstration purposes, we will use the `fbposts` data included in Tidycomm that consists of 45 political Facebook posts (identified by `post_id`) coded by six coders (identified by `coder_id`) for various formal (post type, number of pictures used in post) and populism-related (attacks on elites, references to 'the people', othering) features:
+
+```{r}
+fbposts
+```
+
+## Basic use
+
+`test_icr()` computes various intercoder reliability estimates for all specified variables. The first two arguments (in a pipe) are the unit-identifying variable and the coder-identifying variable, followed by the test variables:
+
+```{r}
+fbposts %>% 
+  test_icr(post_id, coder_id, pop_elite, pop_people, pop_othering)
+```
+
+If no test variables are specified, all variables in the dataset (excluding the unit and coder variables) will be tested:
+
+```{r}
+fbposts %>% 
+  test_icr(post_id, coder_id)
+```
+
+## Reliability estimates
+
+Currently, `test_icr()` supports the following reliability estimates:
+
+- `agreement`: Simple percent agreement.
+- `holsti`: Holsti's $CR$ (mean pairwise percent agreement).
+- `kripp_alpha`: Krippendorff's $\alpha$.
+- `cohens_kappa`: Cohen's $\kappa$ (only available for two coders).
+- `fleiss_kappa`: Fleiss' $\kappa$.
+- `brennan_prediger`: Brennan & Prediger's $\kappa$ (for more than two coders, [von Eye's (2006)](https://doi.org/10.1027/1016-9040.11.1.12) proposed extension to multiple coders is computed).
+
+By default, `test_icr()` will output simple percent agreement, Holsti's $CR$, and Krippendorff's $\alpha$ as reliability estimates. You can add other estimates by setting their name to `TRUE` in the function call (and remove the default ones by setting them to `FALSE`):
+
+```{r}
+fbposts %>% 
+  test_icr(post_id, coder_id, fleiss_kappa = TRUE, agreement = FALSE)
+```
+
+## Variable levels
+
+By default, `test_icr()` assumes all test variables to be nominal. You can set other variable levels by passing a named vector of the form `c(variable_name = "variable_level")` to the `levels` argument.
+
+```{r}
+fbposts %>% 
+  test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"))
+```
+
+Nominal test variables can be represented by either integer codes or string labels, whereas ordinal variables must be represented by integer codes, and interval/ratio variables must be numeric (integer or float).
+
+Please note that currently only the computation of Krippendorff's $\alpha$ is influenced by the variable level.
+
+## Missing values
+
+Missing values in intercoder reliability tests can be ambiguous (did the coder forget to code this variable for this unit, or does the missing value indicate that none of the categories was deemed fitting?) and present an obstacle to several reliability estimates (of the currently implemented estimates, only Krippendorff's $\alpha$ can deal with missing values). 
+
+Thus, `test_icr()` will by default respond with a warning when `NA` values are present in the test variables and output `NA` for all reliability estimates but Krippendorff's $\alpha$:
+
+```{r}
+# Introduce some missing values
+fbposts$type[1] <- NA
+fbposts$type[2] <- NA
+fbposts$pop_elite[5] <- NA
+
+fbposts %>% 
+  test_icr(post_id, coder_id)
+```
+
+You can set `na.omit = TRUE` to exclude all units with `NA` values for a specific test variable from the computation for this variable:
+
+```{r}
+fbposts %>% 
+  test_icr(post_id, coder_id, na.omit = TRUE)
+```
