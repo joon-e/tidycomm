@@ -1,8 +1,7 @@
 ## Resubmission
 
-* Removed package name from title
-* Updated package title
-* Expanded package description
+* Fixed typos
+* Included references for intercoder reliability coefficients
 
 ## Test environments
 * local Win 10 install, R 3.6.1
