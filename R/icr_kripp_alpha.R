@@ -48,7 +48,7 @@ icr_kripp_alpha <- function(ucm, var_level = NULL) {
 
 #' Count specific value in unit
 #'
-#' Counts occurences of a specific value in a single unit of a units-coders matrix.
+#' Counts occurrences of a specific value in a single unit of a units-coders matrix.
 #'
 #' @param val Value to count
 #' @param tab_u A frequency table of values in the unit
@@ -61,7 +61,7 @@ count_value_in_unit <- function(val, tab_u) {
 
 #' Count values in unit
 #'
-#' Counts occurences of values in a single unit of a units-coders matrix.
+#' Counts occurrences of values in a single unit of a units-coders matrix.
 #'
 #' @param u Unit of a unit-coders matrix
 #' @param vals Values to count
@@ -112,7 +112,7 @@ delta_sq <- function(c, k, vum, var_level) {
   }
 }
 
-#' Compute Krippendorffs's Alpha numerator values
+#' Compute Krippendorff's Alpha numerator values
 #'
 #' Computes the values in the numerator in Krippendorff's Alpha formula
 #'
@@ -141,7 +141,7 @@ kalpha_num_values <- function(u, numvals, vum, var_level) {
   return(0)
 }
 
-#' Compute Krippendorffs's Alpha denominator
+#' Compute Krippendorff's Alpha denominator
 #'
 #' Computes the denominator in Krippendorff's Alpha formula
 #'

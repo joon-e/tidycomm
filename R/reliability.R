@@ -79,7 +79,7 @@ compute_reliability <- function(data, ..., type = "alpha",
 #' @param ... Index variables created with \code{\link{add_index}}. Leave empty
 #'   to get reliability estimates for all index variables.
 #' @param progress Show progress for reliability estimate computation. Useful
-#'   if using computionally intense computations (e. g., many bootstrapping
+#'   if using computationally intense computations (e. g., many bootstrapping
 #'   samples) and many index variables.
 #'
 #' @return a [tibble][tibble::tibble-package]

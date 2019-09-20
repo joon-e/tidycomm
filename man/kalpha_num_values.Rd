@@ -2,7 +2,7 @@
 % Please edit documentation in R/icr_kripp_alpha.R
 \name{kalpha_num_values}
 \alias{kalpha_num_values}
-\title{Compute Krippendorffs's Alpha numerator values}
+\title{Compute Krippendorff's Alpha numerator values}
 \usage{
 kalpha_num_values(u, numvals, vum, var_level)
 }

@@ -12,5 +12,5 @@ count_value_in_unit(val, tab_u)
 \item{tab_u}{A frequency table of values in the unit}
 }
 \description{
-Counts occurences of a specific value in a single unit of a units-coders matrix.
+Counts occurrences of a specific value in a single unit of a units-coders matrix.
 }

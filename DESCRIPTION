@@ -1,5 +1,5 @@
 Package: tidycomm
-Title: Data Modifcation and Analysis for Communication Research
+Title: Data Modification and Analysis for Communication Research
 Version: 0.0.1
 Authors@R: 
     person(given = "Julian",
@@ -14,13 +14,16 @@ Description: Provides convenience functions for common data
     tests. All functions follow the style and syntax of the tidyverse, and
     are construed to perform their computations on multiple variables at
     once. Functions for univariate and bivariate data analysis comprise
-    summary statistics for continouos and categorical variables, as well
+    summary statistics for continuous and categorical variables, as well
     as several tests of bivariate association including effect sizes.
     Functions for data modification comprise index generation and
     automated reliability analysis of index variables. Functions for
     intercoder reliability comprise tests of several intercoder
     reliability estimates, including simple and mean pairwise percent
-    agreement, Krippendorff's Alpha, and various Kappa coefficients.
+    agreement, Krippendorff's Alpha (Krippendorff 2004, ISBN:
+    9780761915454), and various Kappa coefficients (Brennan & Prediger
+    1981 <doi: 10.1177/001316448104100307>; Cohen 1960 <doi:
+    10.1177/001316446002000104>; Fleiss 1971 <doi: 10.1037/h0031619>).
 License: GPL-3
 URL: https://github.com/joon-e/tidycomm
 BugReports: https://github.com/joon-e/tidycomm/issues

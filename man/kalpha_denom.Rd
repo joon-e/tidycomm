@@ -2,7 +2,7 @@
 % Please edit documentation in R/icr_kripp_alpha.R
 \name{kalpha_denom}
 \alias{kalpha_denom}
-\title{Compute Krippendorffs's Alpha denominator}
+\title{Compute Krippendorff's Alpha denominator}
 \usage{
 kalpha_denom(vum, numvals, var_level)
 }

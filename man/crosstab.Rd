@@ -27,7 +27,7 @@ Test results will be reported via message(). Defaults to \code{FALSE}.}
 a \link[tibble:tibble-package]{tibble}
 }
 \description{
-Computes contigency table for one independent (column) variable and one or
+Computes contingency table for one independent (column) variable and one or
 more dependent (row) variables.
 }
 \examples{

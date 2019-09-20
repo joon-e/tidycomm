@@ -42,7 +42,7 @@ tab_frequencies <- function(data, ...) {
 
 #' Crosstab variables
 #'
-#' Computes contigency table for one independent (column) variable and one or
+#' Computes contingency table for one independent (column) variable and one or
 #' more dependent (row) variables.
 #'
 #' @param data a [tibble][tibble::tibble-package]

@@ -74,7 +74,7 @@ fbposts %>%
 
 Nominal test variables can be represented by either integer codes or string labels, whereas ordinal variables must be represented by integer codes, and interval/ratio variables must be numeric (integer or float).
 
-Please note that currenlty only the computation of Krippendorff's $\alpha$ is influenced by the variable level.
+Please note that currently only the computation of Krippendorff's $\alpha$ is influenced by the variable level.
 
 ## Missing values
 

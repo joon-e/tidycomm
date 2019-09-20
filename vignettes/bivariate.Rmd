@@ -32,9 +32,9 @@ We will again use sample data from the [Worlds of Journalism](https://worldsofjo
 WoJ
 ```
 
-## Compute contigency tables and Chi-square tests
+## Compute contingency tables and Chi-square tests
 
-`crosstab()` outputs a contigency table for one independent (column) variable and one or more dependent (row) variables:
+`crosstab()` outputs a contingency table for one independent (column) variable and one or more dependent (row) variables:
 
 ```{r}
 WoJ %>% 
