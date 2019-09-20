@@ -25,7 +25,13 @@ intercoder reliability tests.
 
 ## Installation
 
-Install the most recent development version of tidycomm with:
+Install tidycomm from CRAN:
+
+``` r
+install.packages("tidycomm")
+```
+
+Or install the most recent development version of tidycomm with:
 
 ``` r
 devtools::install_github("joon-e/tidycomm")

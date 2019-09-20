@@ -27,7 +27,13 @@ Currently, tidycomm includes functions for various methods of univariate and biv
 
 ## Installation
 
-Install the most recent development version of tidycomm with:
+Install tidycomm from CRAN:
+
+```{r eval = FALSE}
+install.packages("tidycomm")
+```
+
+Or install the most recent development version of tidycomm with:
 
 ```{r eval = FALSE}
 devtools::install_github("joon-e/tidycomm")

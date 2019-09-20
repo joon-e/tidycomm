@@ -1,0 +1,155 @@
+---
+title: "Bivariate analysis of continuous and/or categorical variables"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bivariate analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Tidycomm includes four functions for bivariate explorative data analysis:
+
+- `crosstab()` for both categorical independent and dependent variables
+- `t_test()` for dichotomous categorical independent and continuous dependent variables
+- `unianova()` for polytomous categorical independent and continuous dependent variables
+- `correlate()` for both continuous independent and dependent variables
+
+```{r setup, message = FALSE, warning = FALSE, include = FALSE}
+library(tidycomm)
+```
+
+We will again use sample data from the [Worlds of Journalism](https://worldsofjournalism.org/) 2012-16 study for demonstration purposes: 
+
+```{r}
+WoJ
+```
+
+## Compute contingency tables and Chi-square tests
+
+`crosstab()` outputs a contingency table for one independent (column) variable and one or more dependent (row) variables:
+
+```{r}
+WoJ %>% 
+  crosstab(reach, employment)
+```
+
+Additional options include `add_total` (adds a row-wise `Total` column if set to `TRUE`) and `percentages` (outputs column-wise percentages instead of absolute values if set to `TRUE`):
+
+```{r}
+WoJ %>% 
+  crosstab(reach, employment, add_total = TRUE, percentages = TRUE)
+```
+
+Setting `chi_square = TRUE` computes a $\chi^2$ test including Cramer's $V$ and outputs the results in a console message:
+
+```{r}
+WoJ %>% 
+  crosstab(reach, employment, chi_square = TRUE)
+```
+
+Finally, passing multiple row variables will treat all unique value combinations as a single variable for percentage and Chi-square computations:
+
+```{r}
+WoJ %>% 
+  crosstab(reach, employment, country, percentages = TRUE)
+```
+
+## Compute t-Tests
+
+Use `t_test()` to quickly compute t-Tests for a group variable and one or more test variables. Output includes test statistics, descriptive statistics and Cohen's $d$ effect size estimates: 
+
+```{r}
+WoJ %>% 
+  t_test(temp_contract, autonomy_selection, autonomy_emphasis)
+```
+
+Passing no test variables will compute t-Tests for all numerical variables in the data:
+
+```{r}
+WoJ %>% 
+  t_test(temp_contract)
+```
+
+If passing a group variable with more than two unique levels, `t_test()` will produce a `warning` and default to the first two unique values. You can manually define the levels by setting the `levels` argument:
+
+```{r}
+WoJ %>% 
+  t_test(employment, autonomy_selection, autonomy_emphasis)
+
+WoJ %>% 
+  t_test(employment, autonomy_selection, autonomy_emphasis, levels = c("Full-time", "Freelancer"))
+```
+
+Additional options include:
+
+- `var.equal`: By default, `t_test()` will assume equal variances for both groups. Set `var.equal = FALSE` to compute t-Tests with the Welch approximation to the degrees of freedom.
+- `pooled_sd`: By default, the pooled variance will be used the compute Cohen's $d$ effect size estimates ($s = \sqrt\frac{(n_1 - 1)s^2_1 + (n_2 - 1)s^2_2}{n_1 + n_2 - 2}$).
+Set `pooled_sd = FALSE` to use the simple variance estimation instead ($s = \sqrt\frac{(s^2_1 + s^2_2)}{2}$).
+- `paired`: Set `paired = TRUE` to compute a paired t-Test instead. It is advisable to specify the case-identifying variable with `case_var` when computing paired t-Tests, as this will make sure that data are properly sorted.
+
+## Compute one-way ANOVAs
+
+`unianova()` will compute one-way ANOVAs for one group variable and one or more test variables. Output includes test statistics and $\eta^2$ effect size estimates.
+
+```{r}
+WoJ %>% 
+  unianova(employment, autonomy_selection, autonomy_emphasis)
+```
+
+Descriptives can be added by setting `descriptives = TRUE`. If no test variables are passed, all numerical variables in the data will be used:
+
+```{r}
+WoJ %>% 
+  unianova(employment, descriptives = TRUE)
+```
+
+You can also compute _Tukey's HSD_ post-hoc tests by setting `post_hoc = TRUE`. Results will be added as a `tibble` in a list column `post_hoc`.
+
+```{r}
+WoJ %>% 
+  unianova(employment, autonomy_selection, autonomy_emphasis, post_hoc = TRUE)
+```
+
+These can then be unnested with `tidyr::unnest()`:
+
+```{r}
+WoJ %>% 
+  unianova(employment, autonomy_selection, autonomy_emphasis, post_hoc = TRUE) %>% 
+  dplyr::select(Var, post_hoc) %>% 
+  tidyr::unnest(post_hoc)
+```
+
+## Compute correlation tables and matrices
+
+`correlate()` will compute correlations for all combinations of the passed variables:
+
+```{r}
+WoJ %>% 
+  correlate(work_experience, autonomy_selection, autonomy_emphasis)
+```
+
+If no variables passed, correlations for all combinations of numerical variables will be computed:
+
+```{r}
+WoJ %>% 
+  correlate()
+```
+
+By default, Pearson's product-moment correlations coefficients ($r$) will be computed. Set `method` to `"kendall"` to obtain Kendall's $\tau$ or to `"spearman"` to obtain Spearman's $\rho$ instead.
+
+To obtain a correlation matrix, pass the output of `correlate()` to `to_correlation_matrix()`:
+
+```{r}
+WoJ %>% 
+  correlate(work_experience, autonomy_selection, autonomy_emphasis) %>% 
+  to_correlation_matrix()
+```
+
