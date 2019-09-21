@@ -1,4 +1,4 @@
-This update addresses the NOTEs raised by CRAN checks of binary builds
+This update addresses NOTEs raised by CRAN checks of binary builds
 and the issues raised by the submission handler
 
 * Fixed typos
@@ -20,5 +20,3 @@ of the 'MBESS' package.
 ## R CMD check results
 
 0 errors | 0 warnings | 0 note
-
-* This is a new release.
