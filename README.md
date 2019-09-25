@@ -107,7 +107,8 @@ fbposts %>% # Facebook post codings sample data
 #> # ... with 1 more variable: Krippendorffs_Alpha <dbl>
 ```
 
-For detailed examples, see the vignettes:
+For detailed examples of all available functions, see the [documentation
+website](https://joon-e.github.io/tidycomm/) or read the vignettes:
 
 ``` r
 browseVignettes("tidycomm")
