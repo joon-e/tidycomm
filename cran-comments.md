@@ -1,4 +1,5 @@
-## Resubmission
+This update addresses NOTEs raised by CRAN checks of binary builds
+and the issues raised by the submission handler
 
 * Fixed typos
 * Included references for intercoder reliability coefficients
@@ -18,6 +19,4 @@ of the 'MBESS' package.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-* This is a new release.
+0 errors | 0 warnings | 0 note

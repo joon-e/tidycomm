@@ -1,6 +1,6 @@
 Package: tidycomm
 Title: Data Modification and Analysis for Communication Research
-Version: 0.0.1
+Version: 0.1.0.9000
 Authors@R: 
     person(given = "Julian",
            family = "Unkel",
@@ -25,7 +25,7 @@ Description: Provides convenience functions for common data
     1981 <doi: 10.1177/001316448104100307>; Cohen 1960 <doi:
     10.1177/001316446002000104>; Fleiss 1971 <doi: 10.1037/h0031619>).
 License: GPL-3
-URL: https://github.com/joon-e/tidycomm
+URL: https://joon-e.github.io/tidycomm/
 BugReports: https://github.com/joon-e/tidycomm/issues
 Depends:
     R (>= 2.10)
