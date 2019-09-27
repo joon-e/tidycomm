@@ -108,9 +108,10 @@ fbposts %>% # Facebook post codings sample data
 For detailed examples, see the following articles:
 
   - [Univariate analysis of continuous and categorical
-    variables](/articles/01_univariate.html)
+    variables](https://joon-e.github.io/tidycomm/articles/01_univariate.html)
   - [Bivariate analysis of continuous and/or categorical
-    variables](/articles/02_bivariate.html)
+    variables](https://joon-e.github.io/tidycomm/articles/02_bivariate.html)
   - [Adding indices and computing reliability
-    estimates](/articles/03_reliability.html)
-  - [Intercoder reliability tests](/articles/04_icr.html)
+    estimates](https://joon-e.github.io/tidycomm/articles/03_reliability.html)
+  - [Intercoder reliability
+    tests](https://joon-e.github.io/tidycomm/articles/04_icr.html)
