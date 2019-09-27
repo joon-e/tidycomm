@@ -282,11 +282,11 @@
 <span id="cb11-5"><a href="#cb11-5"></a><span class="co">#&gt;   &lt;chr&gt;            &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;       &lt;dbl&gt; &lt;list&gt;        </span></span>
 <span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; 1 autonomy_select~  2.42      2     1194 0.0896      0.00403 &lt;tibble [3 x ~</span></span>
 <span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt; 2 autonomy_emphas~  5.86      2     1192 0.00293     0.00974 &lt;tibble [3 x ~</span></span></code></pre></div>
-<p>These can then be unnested with <code><a href="https://tidyr.tidyverse.org/reference/nest.html">tidyr::unnest()</a></code>:</p>
+<p>These can then be unnested with <code><a href="https://rdrr.io/pkg/tidyr/man/nest.html">tidyr::unnest()</a></code>:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw"><a href="../reference/unianova.html">unianova</a></span>(employment, autonomy_selection, autonomy_emphasis, <span class="dt">post_hoc =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(Var, post_hoc) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb12-4"><a href="#cb12-4"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw"><a href="https://tidyr.tidyverse.org/reference/nest.html">unnest</a></span>(post_hoc)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(Var, post_hoc) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/tidyr/man/nest.html">unnest</a></span>(post_hoc)</span>
 <span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; # A tibble: 6 x 7</span></span>
 <span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt;   Var         term    comparison    estimate conf.low conf.high adj.p.value</span></span>
 <span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;   &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;</span></span>

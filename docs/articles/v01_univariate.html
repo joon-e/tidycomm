@@ -158,7 +158,7 @@
 <span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; # ... with 2 more variables: Skewness &lt;dbl&gt;, Kurtosis &lt;dbl&gt;</span></span></code></pre></div>
 <p>Data can be grouped before describing:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(country) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html">group_by</a></span>(country) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="st">  </span><span class="kw"><a href="../reference/describe.html">describe</a></span>(autonomy_emphasis, autonomy_selection)</span>
 <span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; # A tibble: 10 x 14</span></span>
 <span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; # Groups:   country [5]</span></span>
@@ -211,7 +211,7 @@
 <span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; 15 Part-time  UK             10 0.00833  1200      1</span></span></code></pre></div>
 <p>You can also group your data before. This will lead to within-group relative frequencies:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(country) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/group_by.html">group_by</a></span>(country) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="st">  </span><span class="kw"><a href="../reference/tab_frequencies.html">tab_frequencies</a></span>(employment)</span>
 <span id="cb7-4"><a href="#cb7-4"></a><span class="co">#&gt; # A tibble: 15 x 6</span></span>
 <span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; # Groups:   country [5]</span></span>
