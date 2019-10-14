@@ -26,6 +26,10 @@ icr_kripp_alpha <- function(ucm, var_level = NULL) {
   # Get all unique values
   vals <- unique(na.omit(as.vector(cum)))
 
+  if (length(vals) == 1) {
+    return(1)
+  }
+
   if (!is.numeric(vals) & var_level != "nominal") {
     stop("Non-numeric variables must use variable level 'nominal'", call. = FALSE)
   }

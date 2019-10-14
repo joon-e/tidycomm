@@ -41,6 +41,14 @@ test_that("Krippendorff's Alpha returns correct result with nominal string data"
   expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0005)
 })
 
+test_that("Krippendorff's Alüha returns 1 for variables with one category", {
+
+  icr_mat <- matrix(rep(1, 30), nrow = 10)
+
+  expect_equal(icr_kripp_alpha(icr_mat), 1)
+
+})
+
 # Helper functions
 
 test_that("Count value in unit works", {
