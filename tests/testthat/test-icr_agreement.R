@@ -8,6 +8,11 @@ test_that("Check equal works", {
   expect_false(check_equal(c("zero", "one", "one", "one", "one")))
 })
 
+test_that("Check equal works with tolerances", {
+  expect_false(check_equal(c(0.9, 1, 1.1), tol = 0.1))
+  expect_true(check_equal(c(0.9, 1, 1.1), tol = 0.2))
+})
+
 test_that("Agreement computes correct result", {
   m1n <- matrix(c(1, 2, 4, 1, 2, 1, 1, 1, 2,
                   1, 2, 3, 1, 2, 2, 1, 1, 2),
