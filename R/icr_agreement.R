@@ -54,12 +54,14 @@ icr_agreement <- function(ucm) {
 ## @param tol A numeric indicating the tolerance of the check
 ##
 ## @keywords internal
-check_equal <- function(x, tol = 0) {
+check_equal <- function(x, tol = NULL) {
+
+  if (missing(tol)) {
+    tol <- 0
+  }
 
   if (is.numeric(x)) {
-    m <- mean(x)
-    isTRUE(all.equal(rep(m, length(x)), x, tolerance = tol,
-                     check.attributes = FALSE, use.names = FALSE))
+    abs(max(x) - min(x)) <= tol + 1e-12
   } else {
     length(x) - 1 == sum(duplicated(x))
   }
