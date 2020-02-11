@@ -43,10 +43,10 @@ describe <- function(data, ..., na.rm = TRUE) {
   # Describe
   data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
-    tidyr::gather("Variable", "Value", !!!vars, na.rm = TRUE) %>%
+    tidyr::gather("Variable", "Value", !!!vars, na.rm = FALSE) %>%
     dplyr::group_by(.data$Variable, add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
-      N = dplyr::n(),
+      N = dplyr::n() - sum(is.na(.data$Value)),
       Missing = sum(is.na(.data$Value)),
       M = mean(.data$Value, na.rm = na.rm),
       SD = sd(.data$Value, na.rm = na.rm),
