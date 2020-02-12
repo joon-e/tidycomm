@@ -95,6 +95,11 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
   var_string <- as_name(enquo(test_var))
   if (hasName(levels, var_string)) {
     var_level <- levels[[var_string]]
+
+    if (!var_level %in% c("nominal", "ordinal", "interval", "ratio")) {
+      stop("Variable level must be one of 'nominal', 'ordinal', 'interval', or 'ratio'.")
+    }
+
   } else {
     var_level <- "nominal"
   }
