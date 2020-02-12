@@ -4,8 +4,16 @@
 \alias{t_test}
 \title{Compute t-tests}
 \usage{
-t_test(data, group_var, ..., var.equal = TRUE, paired = FALSE,
-  pooled_sd = TRUE, levels = NULL, case_var = NULL)
+t_test(
+  data,
+  group_var,
+  ...,
+  var.equal = TRUE,
+  paired = FALSE,
+  pooled_sd = TRUE,
+  levels = NULL,
+  case_var = NULL
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}

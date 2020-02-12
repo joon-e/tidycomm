@@ -4,10 +4,22 @@
 \alias{test_icr}
 \title{Perform an intercoder reliability test}
 \usage{
-test_icr(data, unit_var, coder_var, ..., levels = NULL,
-  na.omit = FALSE, agreement = TRUE, holsti = TRUE,
-  kripp_alpha = TRUE, cohens_kappa = FALSE, fleiss_kappa = FALSE,
-  brennan_prediger = FALSE)
+test_icr(
+  data,
+  unit_var,
+  coder_var,
+  ...,
+  levels = NULL,
+  na.omit = FALSE,
+  agreement = TRUE,
+  holsti = TRUE,
+  kripp_alpha = TRUE,
+  cohens_kappa = FALSE,
+  fleiss_kappa = FALSE,
+  brennan_prediger = FALSE,
+  lotus = FALSE,
+  s_lotus = FALSE
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}
@@ -43,6 +55,12 @@ be computed. Defaults to \code{FALSE}.}
 \item{brennan_prediger}{Logical indicating whether Brennan & Prediger's Kappa
 should be computed (extension to 3+ coders as proposed by von Eye (2006)).
 Defaults to \code{FALSE}.}
+
+\item{lotus}{Logical indicating whether Fretwurst's Lotus should be
+computed. Defaults to \code{FALSE}}
+
+\item{s_lotus}{Logical indicating whether Fretwurst's standardized Lotus
+(S-Lotus) should be computed. Defaults to \code{FALSE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}
@@ -67,6 +85,11 @@ https://doi.org/10.1177/001316446002000104
 
 Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
 Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
+
+Fretwurst, B. (2015). Reliabilität und Validität von Inhaltsanalysen.
+Mit Erläuterungen zur Berechnung des Reliabilitätskoeffizienten „Lotus“ mit SPSS.
+In W. Wirth, K. Sommer, M. Wettstein, & J. Matthes (Ed.),
+Qualitätskriterien in der Inhaltsanalyse (S. 176–203). Herbert von Halem.
 
 Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
 Retrieved from http://repository.upenn.edu/asc_papers/43

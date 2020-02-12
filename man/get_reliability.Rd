@@ -4,8 +4,15 @@
 \alias{get_reliability}
 \title{Get reliability estimates of index variables}
 \usage{
-get_reliability(data, ..., type = "alpha", interval.type = NULL,
-  bootstrap.samples = NULL, conf.level = NULL, progress = FALSE)
+get_reliability(
+  data,
+  ...,
+  type = "alpha",
+  interval.type = NULL,
+  bootstrap.samples = NULL,
+  conf.level = NULL,
+  progress = FALSE
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}

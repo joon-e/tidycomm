@@ -4,8 +4,14 @@
 \alias{crosstab}
 \title{Crosstab variables}
 \usage{
-crosstab(data, col_var, ..., add_total = FALSE, percentages = FALSE,
-  chi_square = FALSE)
+crosstab(
+  data,
+  col_var,
+  ...,
+  add_total = FALSE,
+  percentages = FALSE,
+  chi_square = FALSE
+)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}
@@ -36,6 +42,7 @@ WoJ \%>\% crosstab(reach, employment, add_total = TRUE, percentages = TRUE, chi_
 
 }
 \seealso{
-Other categorical: \code{\link{tab_frequencies}}
+Other categorical: 
+\code{\link{tab_frequencies}()}
 }
 \concept{categorical}
