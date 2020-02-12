@@ -25,6 +25,10 @@
 #' @param brennan_prediger Logical indicating whether Brennan & Prediger's Kappa
 #'   should be computed (extension to 3+ coders as proposed by von Eye (2006)).
 #'   Defaults to `FALSE`.
+#' @param lotus Logical indicating whether Fretwurst's Lotus should be
+#'   computed. Defaults to `FALSE`
+#' @param s_lotus Logical indicating whether Fretwurst's standardized Lotus
+#'   (S-Lotus) should be computed. Defaults to `FALSE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
@@ -47,15 +51,22 @@
 #'   Fleiss, J. L. (1971). Measuring nominal scale agreement among many raters.
 #'   Psychological Bulletin, 76(5), 378-382. https://doi.org/10.1037/h0031619
 #'
+#'   Fretwurst, B. (2015). Reliabilität und Validität von Inhaltsanalysen.
+#'   Mit Erläuterungen zur Berechnung des Reliabilitätskoeffizienten „Lotus“ mit SPSS.
+#'   In W. Wirth, K. Sommer, M. Wettstein, & J. Matthes (Ed.),
+#'   Qualitätskriterien in der Inhaltsanalyse (S. 176–203). Herbert von Halem.
+#'
 #'   Krippendorff, K. (2011). Computing Krippendorff's Alpha-Reliability.
 #'   Retrieved from http://repository.upenn.edu/asc_papers/43
 #'
 #'   von Eye, A. (2006). An Alternative to Cohen's Kappa. European Psychologist, 11(1),
 #'   12-24. https://doi.org/10.1027/1016-9040.11.1.12
 test_icr <- function(data, unit_var, coder_var, ...,
-                        levels = NULL, na.omit = FALSE,
-                        agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
-                        cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
+                     levels = NULL, na.omit = FALSE,
+                     agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
+                     cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE,
+                     lotus = FALSE, s_lotus = FALSE
+                     ) {
 
   test_vars <- grab_vars(data, enquos(...), alternative = "all")
 
@@ -68,7 +79,8 @@ test_icr <- function(data, unit_var, coder_var, ...,
   # Map icr computation over test_vars
   purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},
                  levels, na.omit,
-                 agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger)
+                 agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
+                 lotus, s_lotus)
 
 }
 
@@ -87,7 +99,8 @@ test_icr <- function(data, unit_var, coder_var, ...,
 compute_icr <- function(test_var, data, unit_var, coder_var,
                      levels = c(), na.omit = FALSE,
                      agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
-                     cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE) {
+                     cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE,
+                     lotus = FALSE, s_lotus = FALSE) {
 
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var}})
 
@@ -167,6 +180,21 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
         Brennan_Predigers_Kappa = icr_brennan_prediger(ucm)
       )
   }
+
+  if (lotus) {
+    test_vals <- test_vals %>%
+      dplyr::bind_cols(
+        Lotus = icr_lotus(ucm)
+      )
+  }
+
+  if (s_lotus) {
+    test_vals <- test_vals %>%
+      dplyr::bind_cols(
+        S_Lotus = icr_lotus(ucm, standardize = TRUE)
+      )
+  }
+
 
   test_vals
 }
