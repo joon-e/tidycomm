@@ -51,3 +51,12 @@ test_that("t_test returns tibble when no variables are specified", {
   expect_equal(dim(t2), c(11, 12))
   expect_equal(dim(t3), c(11, 7))
 })
+
+
+test_that("unianova works with spaces in column names", {
+  t1 <- WoJ |>
+    dplyr::select(employment, `autonomy selection` = autonomy_selection) |>
+    unianova(employment)
+
+  expect_equal(dim(t1), c(1, 6))
+})
