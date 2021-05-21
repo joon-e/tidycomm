@@ -17,8 +17,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
-[![Travis build status](https://travis-ci.org/joon-e/tidycomm.svg?branch=master)](https://travis-ci.org/joon-e/tidycomm)
 [![Codecov test coverage](https://codecov.io/gh/joon-e/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/joon-e/tidycomm?branch=master)
+[![R-CMD-check](https://github.com/joon-e/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/joon-e/tidycomm/actions)
 <!-- badges: end -->
 
 Tidycomm provides convenience functions for common tasks in communication research. All functions follow the style and syntax of the [tidyverse](https://www.tidyverse.org/).
