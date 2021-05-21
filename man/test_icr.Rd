@@ -70,8 +70,8 @@ Performs an intercoder reliability test by computing various intercoder
 reliability estimates for the included variables
 }
 \examples{
-fbposts \%>\% test_icr(post_id, coder_id, pop_elite, pop_othering)
-fbposts \%>\% test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
+fbposts |> test_icr(post_id, coder_id, pop_elite, pop_othering)
+fbposts |> test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
 
 }
 \references{
