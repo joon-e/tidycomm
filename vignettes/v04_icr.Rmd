@@ -98,3 +98,35 @@ You can set `na.omit = TRUE` to exclude all units with `NA` values for a specifi
 fbposts %>% 
   test_icr(post_id, coder_id, na.omit = TRUE)
 ```
+
+## 'Hidden' missing values
+
+There are situations in which all units are coded multiple times, but not by same coders (e.g., in research seminars). Consider the following sample data:
+
+```{r}
+data <- tibble::tibble(
+  unit = c(1, 1, 2, 2, 3, 3),
+  coder = c('a', 'b', 'a', 'c', 'b', 'c'),
+  code = c(1, 0, 1, 1, 0, 0)
+)
+
+data
+```
+
+Each unit was coded two times, but no coder coded all units. Thus, the units-coders matrix will contain one `NA` value per (unit) row, indicating that one coder did not code the respective unit. Setting `na.omit = TRUE` in `test_icr()` will thus result in an empty units-coders matrix:
+
+```{r error=TRUE}
+data %>%
+  test_icr(unit, coder, code, na.omit = TRUE)
+```
+
+If it is not relevant that all units were coded by same coders, consider setting a variable indicating each _coding_ per unit as the `coder_id`:
+
+```{r}
+data %>% 
+  dplyr::group_by(unit) %>% 
+  dplyr::mutate(coding = 1:dplyr::n()) %>% 
+  dplyr::ungroup() %>% 
+  test_icr(unit, coding, code)
+```
+

@@ -107,6 +107,13 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
 
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var}})
 
+  # Check ucm
+  if (length(na.omit(ucm)) == 0) {
+    stop("Empty units-coders matrix detected. ",
+         "This is most likely due to none of the units having been coded by all coders. ",
+         "See vignette('v04_icr') for details.", call. = FALSE)
+  }
+
   # Get variable level
   var_string <- as_name(enquo(test_var))
   if (hasName(levels, var_string)) {

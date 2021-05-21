@@ -72,3 +72,15 @@ test_that("test_icr works with tidyselect", {
   expect_equal(dim(t1), c(3, 8))
   expect_equal(dim(t2), c(4, 8))
 })
+
+test_that("test_icr prints a specific error message when using empty ucm", {
+  data <- tibble(
+    unit = c(1, 1, 2, 2, 3, 3),
+    coder = c('a', 'b', 'a', 'c', 'b', 'c'),
+    code = rnorm(6)
+  )
+
+  expect_error(data %>% test_icr(unit, coder, na.omit = T),
+               "Empty units-coders matrix detected")
+
+})
