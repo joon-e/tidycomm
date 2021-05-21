@@ -7,7 +7,7 @@ test_that("describe returns tibble", {
   t <- describe(WoJ, ethics_1, ethics_2, ethics_3)
 
   expect_true(tibble::is_tibble(t))
-  expect_equal(dim(t), c(3, 13))
+  expect_equal(dim(t), c(3, 15))
 })
 
 test_that("describe works without specifying variables", {
@@ -15,7 +15,7 @@ test_that("describe works without specifying variables", {
   t <- describe(WoJ)
 
   expect_true(tibble::is_tibble(t))
-  expect_equal(dim(t), c(11, 13))
+  expect_equal(dim(t), c(11, 15))
 })
 
 test_that("describe works with tidyselect helpers", {
@@ -23,7 +23,7 @@ test_that("describe works with tidyselect helpers", {
   t <- describe(WoJ, tidyselect::starts_with("ethics"))
 
   expect_true(tibble::is_tibble(t))
-  expect_equal(dim(t), c(4, 13))
+  expect_equal(dim(t), c(4, 15))
 })
 
 # Describe_cat function
