@@ -16,17 +16,27 @@
 grab_vars <- function(data, vars, alternative = "numeric") {
   if (length(vars) == 0) {
     if (alternative == "numeric") {
-      vars <- data %>%
-        dplyr::ungroup() %>%
-        dplyr::select_if(is.numeric) %>%
-        names() %>%
+      vars <- data |>
+        dplyr::ungroup() |>
+        dplyr::select_if(is.numeric) |>
+        names() |>
+        syms()
+    }
+
+    if (alternative == "categorical") {
+
+      vars <- data |>
+        dplyr::ungroup() |>
+        dplyr::select(-dplyr::group_vars(data)) |>
+        dplyr::select_if(function(col) is.factor(col) | is.character(col)) |>
+        names() |>
         syms()
     }
 
     if (alternative == "all") {
-      vars <- data %>%
-        dplyr::ungroup() %>%
-        names() %>%
+      vars <- data |>
+        dplyr::ungroup() |>
+        names() |>
         syms()
     }
 
