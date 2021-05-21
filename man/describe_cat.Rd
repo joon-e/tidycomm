@@ -11,9 +11,6 @@ describe_cat(data, ...)
 
 \item{...}{Variables to describe (column names). Leave empty to describe all
 categorical variables in data.}
-
-\item{na.rm}{a logical value indicating whether \code{NA} values should be stripped
-before the computation proceeds. Defaults to \code{TRUE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

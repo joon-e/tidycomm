@@ -26,6 +26,33 @@ test_that("describe works with tidyselect helpers", {
   expect_equal(dim(t), c(4, 13))
 })
 
+# Describe_cat function
+
+test_that("describe returns tibble", {
+
+  t <- describe_cat(WoJ, reach, employment)
+
+  expect_true(tibble::is_tibble(t))
+  expect_equal(dim(t), c(2, 6))
+})
+
+test_that("describe works without specifying variables", {
+
+  t <- describe_cat(WoJ)
+
+  expect_true(tibble::is_tibble(t))
+  expect_equal(dim(t), c(4, 6))
+})
+
+test_that("describe works with tidyselect helpers", {
+
+  t <- describe_cat(WoJ, tidyselect::contains("country"))
+
+  expect_true(tibble::is_tibble(t))
+  expect_equal(dim(t), c(1, 6))
+})
+
+
 # Skewness & Kurtosis helpers
 
 test_that("skewness returns correct results", {

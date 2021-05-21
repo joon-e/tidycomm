@@ -75,8 +75,6 @@ describe <- function(data, ..., na.rm = TRUE) {
 #' @param data a [tibble][tibble::tibble-package]
 #' @param ... Variables to describe (column names). Leave empty to describe all
 #'   categorical variables in data.
-#' @param na.rm a logical value indicating whether `NA` values should be stripped
-#'  before the computation proceeds. Defaults to `TRUE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
