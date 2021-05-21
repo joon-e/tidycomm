@@ -15,9 +15,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-The first step in data exploration usually consists of univariate, descriptive analysis of all variables of interest. Tidycomm offers two basic functions to quickly output relevant statistics:
+The first step in data exploration usually consists of univariate, descriptive analysis of all variables of interest. Tidycomm offers three basic functions to quickly output relevant statistics:
 
 - `describe()` for continuous variables
+- `describe_cat()` for categorical variables
 - `tab_frequencies()` for categorical variables
 
 ```{r setup, message = FALSE, warning = FALSE, include = FALSE}
@@ -36,23 +37,47 @@ WoJ
 `describe()` outputs several measures of central tendency and variability for all variables named in the function call:
 
 ```{r}
-WoJ %>% 
+WoJ |>  
   describe(autonomy_selection, autonomy_emphasis, work_experience)
 ```
 
 If no variables are passed to `describe()`, all numeric variables in the data are described:
 
 ```{r}
-WoJ %>% 
+WoJ |> 
   describe()
 ```
 
 Data can be grouped before describing:
 
 ```{r}
-WoJ %>% 
+WoJ |>  
   dplyr::group_by(country) %>% 
   describe(autonomy_emphasis, autonomy_selection)
+```
+
+## Describe categorical variables
+
+`describe_cat()` outputs a short summary of categorical variables (number of unique values, mode, N of mode) of all variables named in the function call:
+
+```{r}
+WoJ |> 
+  describe_cat(reach, employment, temp_contract)
+```
+
+If no variables are passed to `describe_cat()`, all categorical variables (i.e., `character` and `factor` variables) in the data are described:
+
+```{r}
+WoJ |> 
+  describe_cat()
+```
+
+Data can be grouped before describing:
+
+```{r}
+WoJ |> 
+  dplyr::group_by(reach) |> 
+  describe_cat(country, employment)
 ```
 
 ## Tabulate frequencies of categorical variables
@@ -60,22 +85,22 @@ WoJ %>%
 `tab_frequencies()` outputs absolute and relative frequencies of all unique values of one or more categorical variables:
 
 ```{r}
-WoJ %>% 
+WoJ |>  
   tab_frequencies(employment)
 ```
 
 Passing more than one variable will compute relative frequencies based on all combinations of unique values:
 
 ```{r}
-WoJ %>% 
+WoJ |>  
   tab_frequencies(employment, country)
 ```
 
 You can also group your data before. This will lead to within-group relative frequencies:
 
 ```{r}
-WoJ %>% 
-  dplyr::group_by(country) %>% 
+WoJ |> 
+  dplyr::group_by(country) |>  
   tab_frequencies(employment)
 ```
 
