@@ -33,8 +33,8 @@
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' fbposts |> test_icr(post_id, coder_id, pop_elite, pop_othering)
-#' fbposts |> test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
+#' fbposts %>% test_icr(post_id, coder_id, pop_elite, pop_othering)
+#' fbposts %>% test_icr(post_id, coder_id, levels = c(n_pictures = "ordinal"), fleiss_kappa = TRUE)
 #'
 #' @family intercoder reliability
 #'
@@ -143,56 +143,56 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
 
   # Compute reliability estimates
   if (agreement) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Agreement = icr_agreement(ucm)
       )
   }
 
   if (holsti) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Holstis_CR = icr_holstis_CR(ucm)
       )
   }
 
   if (kripp_alpha) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Krippendorffs_Alpha = icr_kripp_alpha(ucm, var_level)
       )
   }
 
   if (cohens_kappa) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Cohens_Kappa = icr_cohens_kappa(ucm)
       )
   }
 
   if (fleiss_kappa) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Fleiss_Kappa = icr_fleiss_kappa(ucm)
       )
   }
 
   if (brennan_prediger) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Brennan_Predigers_Kappa = icr_brennan_prediger(ucm)
       )
   }
 
   if (lotus) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         Lotus = icr_lotus(ucm)
       )
   }
 
   if (s_lotus) {
-    test_vals <- test_vals |>
+    test_vals <- test_vals %>%
       dplyr::bind_cols(
         S_Lotus = icr_lotus(ucm, standardize = TRUE)
       )
@@ -213,9 +213,9 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
 ## @keywords internal
 unit_coder_matrix <- function(data, unit_var, coder_var, test_var) {
 
-  data |>
-    dplyr::select({{ unit_var }}, {{ coder_var }}, {{ test_var }}) |>
-    tidyr::spread({{ coder_var }}, {{ test_var }}) |>
-    dplyr::select(-1) |>
+  data %>%
+    dplyr::select({{ unit_var }}, {{ coder_var }}, {{ test_var }}) %>%
+    tidyr::spread({{ coder_var }}, {{ test_var }}) %>%
+    dplyr::select(-1) %>%
     as.matrix()
 }

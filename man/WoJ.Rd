@@ -4,7 +4,8 @@
 \name{WoJ}
 \alias{WoJ}
 \title{Worlds of Journalism sample data}
-\format{A data frame with 1200 rows and 15 variables:
+\format{
+A data frame with 1200 rows and 15 variables:
 \describe{
 \item{country}{Country of residence}
 \item{reach}{Reach of medium}
@@ -37,7 +38,8 @@ scale from 1 (\emph{no trust at all}) to 5 (\emph{complete trust})}
 scale from 1 (\emph{no trust at all}) to 5 (\emph{complete trust})}
 \item{trust_politicians}{Trust placed in politicians in general,
 scale from 1 (\emph{no trust at all}) to 5 (\emph{complete trust})}
-}}
+}
+}
 \source{
 \url{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
 }

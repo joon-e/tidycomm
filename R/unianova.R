@@ -20,9 +20,9 @@
 #' @family ANOVA
 #'
 #' @examples
-#' WoJ |> unianova(employment, autonomy_selection, autonomy_emphasis)
-#' WoJ |> unianova(employment)
-#' WoJ |> unianova(employment, descriptives = TRUE, post_hoc = TRUE)
+#' WoJ %>% unianova(employment, autonomy_selection, autonomy_emphasis)
+#' WoJ %>% unianova(employment)
+#' WoJ %>% unianova(employment, descriptives = TRUE, post_hoc = TRUE)
 #'
 #' @export
 unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALSE) {
@@ -39,7 +39,7 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
 
   # To factor if not factor
   if (!is.factor(dplyr::pull(data, {{ group_var }}))) {
-    data <- data |>
+    data <- data %>%
       dplyr::mutate_at(dplyr::vars({{ group_var }}), forcats::as_factor)
   }
 
@@ -86,22 +86,22 @@ compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
   )
 
   if (descriptives) {
-    desc_df <- data |>
-      dplyr::group_by({{ group_var }}) |>
+    desc_df <- data %>%
+      dplyr::group_by({{ group_var }}) %>%
       dplyr::summarise(M = mean({{ test_var }}, na.rm = TRUE),
-                       SD = sd({{ test_var }}, na.rm = TRUE)) |>
+                       SD = sd({{ test_var }}, na.rm = TRUE)) %>%
       tidyr::gather("stat", "val", .data$M, .data$SD)
 
-    desc_df <- desc_df |>
-      dplyr::group_by({{ group_var }}) |>
-      dplyr::mutate(order_var = dplyr::cur_group_id()) |>
-      dplyr::ungroup() |>
-      tidyr::unite("name", .data$order_var, .data$stat, {{ group_var }}) |>
-      dplyr::mutate(name = stringr::str_replace_all(.data$name, " ", "_")) |>
-      tidyr::spread(.data$name, .data$val) |>
+    desc_df <- desc_df %>%
+      dplyr::group_by({{ group_var }}) %>%
+      dplyr::mutate(order_var = dplyr::cur_group_id()) %>%
+      dplyr::ungroup() %>%
+      tidyr::unite("name", .data$order_var, .data$stat, {{ group_var }}) %>%
+      dplyr::mutate(name = stringr::str_replace_all(.data$name, " ", "_")) %>%
+      tidyr::spread(.data$name, .data$val) %>%
       dplyr::rename_all(stringr::str_replace, "\\d*_", "")
 
-    aov_df <- aov_df |>
+    aov_df <- aov_df %>%
       dplyr::bind_cols(desc_df)
   }
 
@@ -111,7 +111,7 @@ compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
         broom::tidy(TukeyHSD(aov_model))
       ))
 
-    aov_df <- aov_df |>
+    aov_df <- aov_df %>%
       dplyr::bind_cols(ph_df)
   }
 

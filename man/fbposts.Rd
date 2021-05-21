@@ -4,7 +4,8 @@
 \name{fbposts}
 \alias{fbposts}
 \title{Facebook posts reliability test}
-\format{A data frame with 270 rows and 7 variables
+\format{
+A data frame with 270 rows and 7 variables
 \describe{
 \item{post_id}{Numeric id of the coded Facebook post}
 \item{coder_id}{Numeric id of the coder}
@@ -25,7 +26,8 @@
 1 = "attacks other cultures",
 2 = "attacks other political stances",
 3 = "attacks other 'others'"}
-}}
+}
+}
 \usage{
 fbposts
 }

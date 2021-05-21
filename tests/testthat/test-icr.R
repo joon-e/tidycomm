@@ -63,10 +63,10 @@ test_that("test_icr removes missing data if specified", {
 })
 
 test_that("test_icr works with tidyselect", {
-  t1 <- fbposts |>
+  t1 <- fbposts %>%
     test_icr(post_id, coder_id, tidyselect::starts_with("pop"))
 
-  t2 <- fbposts |>
+  t2 <- fbposts %>%
     test_icr(post_id, coder_id, -type)
 
   expect_equal(dim(t1), c(3, 8))

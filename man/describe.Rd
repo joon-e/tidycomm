@@ -24,8 +24,8 @@ central tendency and variability. If no variables are specified,
 all numeric (integer or double) variables are described.
 }
 \examples{
-iris |> describe()
-mtcars |> describe(mpg, am, cyl)
+iris \%>\% describe()
+mtcars \%>\% describe(mpg, am, cyl)
 
 }
 \seealso{

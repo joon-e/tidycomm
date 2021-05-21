@@ -13,8 +13,8 @@
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' iris |> describe()
-#' mtcars |> describe(mpg, am, cyl)
+#' iris %>% describe()
+#' mtcars %>% describe(mpg, am, cyl)
 #'
 #' @family descriptives
 #'
@@ -33,18 +33,18 @@ describe <- function(data, ..., na.rm = TRUE) {
     stop("No numeric variables found to descibre")
   }
 
-  if (!all(purrr::map_lgl(data |>
-                          dplyr::ungroup() |>
+  if (!all(purrr::map_lgl(data %>%
+                          dplyr::ungroup() %>%
                           dplyr::select(!!!vars),
                           is.numeric))) {
     stop("... must only contain numeric variables.")
   }
 
   # Describe
-  data |>
-    dplyr::select(!!!vars, !!!grouping) |>
-    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") |>
-    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) |>
+  data %>%
+    dplyr::select(!!!vars, !!!grouping) %>%
+    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
+    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n() - sum(is.na(.data$Value)),
       Missing = sum(is.na(.data$Value)),
@@ -60,7 +60,7 @@ describe <- function(data, ..., na.rm = TRUE) {
       CI_95_UL = .data$M + stats::qt(0.975, df = .data$N-1) * .data$SD/sqrt(.data$N),
       Skewness = skewness(.data$Value),
       Kurtosis = kurtosis(.data$Value)
-    ) |>
+    ) %>%
     dplyr::arrange(match(.data$Variable, vars_str))
 
 }
@@ -81,7 +81,7 @@ describe <- function(data, ..., na.rm = TRUE) {
 #' @return a [tibble][tibble::tibble-package]
 #'
 #' @examples
-#' iris |> describe_cat()
+#' iris %>% describe_cat()
 #'
 #' @family descriptives
 #'
@@ -101,17 +101,17 @@ describe_cat <- function(data, ...) {
   }
 
   # Describe
-  data |>
-    dplyr::select(!!!vars, !!!grouping) |>
-    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") |>
-    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) |>
+  data %>%
+    dplyr::select(!!!vars, !!!grouping) %>%
+    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
+    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n() - sum(is.na(.data$Value)),
       Missing = sum(is.na(.data$Value)),
       Unique = length(unique(.data$Value)),
       Mode = as.character(get_mode(.data$Value)),
       Mode_N = sum(.data$Value == .data$Mode, na.rm = TRUE)
-    ) |>
+    ) %>%
     dplyr::arrange(match(.data$Variable, vars_str))
 }
 

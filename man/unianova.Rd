@@ -31,9 +31,9 @@ If no variables are specified, all numeric (integer or double) variables are
 used.
 }
 \examples{
-WoJ |> unianova(employment, autonomy_selection, autonomy_emphasis)
-WoJ |> unianova(employment)
-WoJ |> unianova(employment, descriptives = TRUE, post_hoc = TRUE)
+WoJ \%>\% unianova(employment, autonomy_selection, autonomy_emphasis)
+WoJ \%>\% unianova(employment)
+WoJ \%>\% unianova(employment, descriptives = TRUE, post_hoc = TRUE)
 
 }
 \concept{ANOVA}
