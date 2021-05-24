@@ -4,7 +4,7 @@
 \alias{add_index}
 \title{Add index}
 \usage{
-add_index(data, name, ..., type = "mean", na.rm = TRUE)
+add_index(data, name, ..., type = "mean", na.rm = TRUE, cast.numeric = FALSE)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble}}
@@ -17,6 +17,10 @@ add_index(data, name, ..., type = "mean", na.rm = TRUE)
 
 \item{na.rm}{a logical value indicating whether \code{NA} values should be stripped
 before the computation proceeds. Defaults to \code{TRUE}.}
+
+\item{cast.numeric}{a logical value indicating whether all variables selected
+for index computation should be converted to numeric. Useful if computing
+indices from factor variables. Defaults to \code{FALSE}.}
 }
 \value{
 a \link[tibble:tibble-package]{tibble}

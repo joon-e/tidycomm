@@ -8,6 +8,9 @@
 #' @param type Type of index to compute. Either "mean" (default) or "sum".
 #' @param na.rm a logical value indicating whether `NA` values should be stripped
 #'   before the computation proceeds. Defaults to `TRUE`.
+#' @param cast.numeric a logical value indicating whether all variables selected
+#'   for index computation should be converted to numeric. Useful if computing
+#'   indices from factor variables. Defaults to `FALSE`.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
@@ -19,7 +22,8 @@
 #'   variables.
 #'
 #' @export
-add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
+add_index <- function(data, name, ..., type = "mean",
+                      na.rm = TRUE, cast.numeric = FALSE) {
 
   name <- as_label(enquo(name))
 
@@ -27,6 +31,19 @@ add_index <- function(data, name, ..., type = "mean", na.rm = TRUE) {
   i <- data %>%
     dplyr::select(...)
 
+  # Cast numeric
+  if (cast.numeric) {
+    i <- dplyr::mutate(i, dplyr::across(dplyr::everything(), as.numeric))
+  }
+
+  # Check
+  if (!all(purrr::map_lgl(i, is.numeric))) {
+    stop("All variables for index computation must be numeric. ",
+         "Set cast.numeric = TRUE to try automatically convert all used
+         variables to numeric", call. = FALSE)
+  }
+
+  # Compute
   if (type == "sum") {
     index_col <- rowSums(i, na.rm = na.rm)
   } else {
