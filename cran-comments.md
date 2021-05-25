@@ -1,21 +1,12 @@
-This update addresses NOTEs raised by CRAN checks of binary builds
-and the issues raised by the submission handler
-
-* Fixed typos
-* Included references for intercoder reliability coefficients
-* Package 'tidyselect' has been moved to 'Suggests' instead of 'Imports',
-  as it is only used for tests and vignettes
+This update addresses various issues raised on GitHub and introduces one new function for the description of categorical data as well as two additional intercoder reliability coefficients (Fretwurst's Lotus and S-Lotus).
 
 ## Test environments
-* local Win 10 install, R 3.6.1
-* OS X (on travis-ci), release
-* Linux (on travis-ci), release
-* Linux (on travis-ci), devel
-* win-builder, devel
 
-Test environment config on travis-ci included installing the 'libgsl23' (linux)/
-'gsl' (osx) packages, which are needed for R package 'gsl', which is a dependency
-of the 'MBESS' package.
+* local Win 10 install, R 4.1.0
+* OS X latest (on GitHub Actions), release
+* Ubuntu 20.04 (on GitHub Actions), release
+* Ubuntu 20.04 (on GitHub Actions), devel
+* Windows latest (on GitHub Actions), release
 
 ## R CMD check results
 
