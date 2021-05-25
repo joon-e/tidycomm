@@ -41,3 +41,13 @@ test_that("add_index works with tidyselect", {
 
   expect_equal(ncol(WoJ) + 1, ncol(WoJ_i))
 })
+
+test_that("add_index works with factors", {
+
+  expect_error(add_index(WoJ, new_index, country, ethics_1),
+               "All variables for index computation must be numeric")
+  expect_equal(ncol(add_index(WoJ, new_index, country, ethics_1, cast.numeric = TRUE)),
+               ncol(WoJ) + 1)
+
+
+})
