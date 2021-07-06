@@ -13,10 +13,10 @@ knitr::opts_chunk$set(
 # tidycomm <img src='man/figures/logo.png' align="right" height="138.5" />
 
 <!-- badges: start -->
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
-[![Travis build status](https://travis-ci.org/joon-e/tidycomm.svg?branch=master)](https://travis-ci.org/joon-e/tidycomm)
 [![Codecov test coverage](https://codecov.io/gh/joon-e/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/joon-e/tidycomm?branch=master)
+[![R-CMD-check](https://github.com/joon-e/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/joon-e/tidycomm/actions)
 <!-- badges: end -->
 
 Tidycomm provides convenience functions for common tasks in communication research. All functions follow the style and syntax of the [tidyverse](https://www.tidyverse.org/).
@@ -34,7 +34,7 @@ install.packages("tidycomm")
 Or install the most recent development version of tidycomm with:
 
 ```{r eval = FALSE}
-devtools::install_github("joon-e/tidycomm")
+remotes::install_github("joon-e/tidycomm")
 ```
 
 ## Usage

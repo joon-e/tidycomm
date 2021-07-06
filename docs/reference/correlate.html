@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -47,7 +51,6 @@
 variables. If no variables are specified, all numeric (integer or double)
 variables are used." />
 <meta property="og:image" content="https://joon-e.github.io/tidycomm/index.html/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -65,7 +68,7 @@ variables are used." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -79,7 +82,7 @@ variables are used." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidycomm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -87,7 +90,7 @@ variables are used." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -115,9 +118,17 @@ variables are used." />
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/joon-e/tidycomm/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -132,7 +143,7 @@ variables are used." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Compute correlation coefficients</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/joon-e/tidycomm/blob/master/R/correlation.R'><code>R/correlation.R</code></a></small>
     <div class="hidden name"><code>correlate.Rd</code></div>
     </div>
 
@@ -142,14 +153,14 @@ variables. If no variables are specified, all numeric (integer or double)
 variables are used.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>correlate</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>)</pre>
+    <pre class="usage"><span class='fu'>correlate</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span>, method <span class='op'>=</span> <span class='st'>"pearson"</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a <a href='https://rdrr.io/pkg/tibble/man/tibble-package.html'>tibble</a></p></td>
+      <td><p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -165,38 +176,36 @@ is to be computed. One of "pearson" (default), "kendall", or "spearman"</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <a href='https://rdrr.io/pkg/tibble/man/tibble-package.html'>tibble</a></p>
+    <p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>WoJ</span> <span class='kw'>%&gt;%</span> <span class='fu'>correlate</span>(<span class='no'>ethics_1</span>, <span class='no'>ethics_2</span>, <span class='no'>ethics_3</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 5</span><span>
+    <pre class="examples"><div class='input'><span class='va'>WoJ</span> <span class='op'>%&gt;%</span> <span class='fu'>correlate</span><span class='op'>(</span><span class='va'>ethics_1</span>, <span class='va'>ethics_2</span>, <span class='va'>ethics_3</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 5</span>
 #&gt;   x        y            r    df        p
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> ethics_1 ethics_2 0.172  </span><span style='text-decoration: underline;'>1</span><span>198 2.04</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 9</span><span>
-#&gt; </span><span style='color: #555555;'>2</span><span> ethics_1 ethics_3 0.165  </span><span style='text-decoration: underline;'>1</span><span>198 8.44</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>- 9</span><span>
-#&gt; </span><span style='color: #555555;'>3</span><span> ethics_2 ethics_3 0.409  </span><span style='text-decoration: underline;'>1</span><span>198 1.05</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-49</span><span></div><div class='input'><span class='no'>WoJ</span> <span class='kw'>%&gt;%</span> <span class='fu'>correlate</span>()</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 55 x 5</span><span>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> ethics_1 ethics_2 0.172  <span style='text-decoration: underline;'>1</span>198 2.04<span style='color: #949494;'>e</span><span style='color: #BB0000;'>- 9</span>
+#&gt; <span style='color: #BCBCBC;'>2</span> ethics_1 ethics_3 0.165  <span style='text-decoration: underline;'>1</span>198 8.44<span style='color: #949494;'>e</span><span style='color: #BB0000;'>- 9</span>
+#&gt; <span style='color: #BCBCBC;'>3</span> ethics_2 ethics_3 0.409  <span style='text-decoration: underline;'>1</span>198 1.05<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-49</span></div><div class='input'><span class='va'>WoJ</span> <span class='op'>%&gt;%</span> <span class='fu'>correlate</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 55 x 5</span>
 #&gt;    x                  y                        r    df         p
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>              </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>                </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>     </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> autonomy_selection autonomy_emphasis  0.644    </span><span style='text-decoration: underline;'>1</span><span>192 4.83</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-141</span><span>
-#&gt; </span><span style='color: #555555;'> 2</span><span> autonomy_selection ethics_1          -</span><span style='color: #BB0000;'>0.076</span><span style='color: #BB0000;text-decoration: underline;'>6</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 7.98</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  3</span><span>
-#&gt; </span><span style='color: #555555;'> 3</span><span> autonomy_selection ethics_2          -</span><span style='color: #BB0000;'>0.027</span><span style='color: #BB0000;text-decoration: underline;'>4</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 3.43</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span><span>
-#&gt; </span><span style='color: #555555;'> 4</span><span> autonomy_selection ethics_3          -</span><span style='color: #BB0000;'>0.025</span><span style='color: #BB0000;text-decoration: underline;'>7</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 3.73</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span><span>
-#&gt; </span><span style='color: #555555;'> 5</span><span> autonomy_selection ethics_4          -</span><span style='color: #BB0000;'>0.078</span><span style='color: #BB0000;text-decoration: underline;'>1</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 6.89</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  3</span><span>
-#&gt; </span><span style='color: #555555;'> 6</span><span> autonomy_selection work_experience    0.161    </span><span style='text-decoration: underline;'>1</span><span>182 2.71</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  8</span><span>
-#&gt; </span><span style='color: #555555;'> 7</span><span> autonomy_selection trust_parliament  -</span><span style='color: #BB0000;'>0.008</span><span style='color: #BB0000;text-decoration: underline;'>40</span><span>  </span><span style='text-decoration: underline;'>1</span><span>195 7.72</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span><span>
-#&gt; </span><span style='color: #555555;'> 8</span><span> autonomy_selection trust_government   0.041</span><span style='text-decoration: underline;'>4</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 1.53</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span><span>
-#&gt; </span><span style='color: #555555;'> 9</span><span> autonomy_selection trust_parties      0.026</span><span style='text-decoration: underline;'>9</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 3.52</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span><span>
-#&gt; </span><span style='color: #555555;'>10</span><span> autonomy_selection trust_politicians  0.010</span><span style='text-decoration: underline;'>9</span><span>   </span><span style='text-decoration: underline;'>1</span><span>195 7.07</span><span style='color: #555555;'>e</span><span style='color: #BB0000;'>-  1</span><span>
-#&gt; </span><span style='color: #555555;'># ... with 45 more rows</span><span></div><div class='input'>
-</div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>              <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>                <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>     <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> autonomy_selection autonomy_emphasis  0.644    <span style='text-decoration: underline;'>1</span>192 4.83<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-141</span>
+#&gt; <span style='color: #BCBCBC;'> 2</span> autonomy_selection ethics_1          -<span style='color: #BB0000;'>0.076</span><span style='color: #BB0000; text-decoration: underline;'>6</span>   <span style='text-decoration: underline;'>1</span>195 7.98<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  3</span>
+#&gt; <span style='color: #BCBCBC;'> 3</span> autonomy_selection ethics_2          -<span style='color: #BB0000;'>0.027</span><span style='color: #BB0000; text-decoration: underline;'>4</span>   <span style='text-decoration: underline;'>1</span>195 3.43<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  1</span>
+#&gt; <span style='color: #BCBCBC;'> 4</span> autonomy_selection ethics_3          -<span style='color: #BB0000;'>0.025</span><span style='color: #BB0000; text-decoration: underline;'>7</span>   <span style='text-decoration: underline;'>1</span>195 3.73<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  1</span>
+#&gt; <span style='color: #BCBCBC;'> 5</span> autonomy_selection ethics_4          -<span style='color: #BB0000;'>0.078</span><span style='color: #BB0000; text-decoration: underline;'>1</span>   <span style='text-decoration: underline;'>1</span>195 6.89<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  3</span>
+#&gt; <span style='color: #BCBCBC;'> 6</span> autonomy_selection work_experience    0.161    <span style='text-decoration: underline;'>1</span>182 2.71<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  8</span>
+#&gt; <span style='color: #BCBCBC;'> 7</span> autonomy_selection trust_parliament  -<span style='color: #BB0000;'>0.008</span><span style='color: #BB0000; text-decoration: underline;'>40</span>  <span style='text-decoration: underline;'>1</span>195 7.72<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  1</span>
+#&gt; <span style='color: #BCBCBC;'> 8</span> autonomy_selection trust_government   0.041<span style='text-decoration: underline;'>4</span>   <span style='text-decoration: underline;'>1</span>195 1.53<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  1</span>
+#&gt; <span style='color: #BCBCBC;'> 9</span> autonomy_selection trust_parties      0.026<span style='text-decoration: underline;'>9</span>   <span style='text-decoration: underline;'>1</span>195 3.52<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  1</span>
+#&gt; <span style='color: #BCBCBC;'>10</span> autonomy_selection trust_politicians  0.010<span style='text-decoration: underline;'>9</span>   <span style='text-decoration: underline;'>1</span>195 7.07<span style='color: #949494;'>e</span><span style='color: #BB0000;'>-  1</span>
+#&gt; <span style='color: #949494;'># ... with 45 more rows</span></div><div class='input'>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -207,7 +216,7 @@ is to be computed. One of "pearson" (default), "kendall", or "spearman"</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

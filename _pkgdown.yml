@@ -9,6 +9,7 @@ reference:
   - title: "Univariate analysis"
     contents:
       - describe
+      - describe_cat
       - tab_frequencies
   - title: "Bivariate analysis"
     contents:
@@ -26,3 +27,7 @@ reference:
   - title: "Intercoder reliability"
     contents:
       - test_icr
+  - title: "Sample data"
+    contents:
+      - WoJ
+      - fbposts

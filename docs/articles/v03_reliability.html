@@ -12,20 +12,20 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="Adding indices and computing reliability estimates">
-<meta property="og:description" content="">
+<meta property="og:description" content="tidycomm">
 <meta property="og:image" content="https://joon-e.github.io/tidycomm/index.html/logo.png">
-<meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -38,7 +38,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidycomm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -46,7 +46,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -74,8 +74,18 @@
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/joon-e/tidycomm/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -85,14 +95,14 @@
 
       
 
-      </header><div class="row">
+      </header><script src="v03_reliability_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Adding indices and computing reliability estimates</h1>
+      <h1 data-toc-skip>Adding indices and computing reliability estimates</h1>
             
-            <h4 class="date">2019-09-27</h4>
+            <h4 class="date">2021-07-06</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/joon-e/tidycomm/blob/master/vignettes/v03_reliability.Rmd"><code>vignettes/v03_reliability.Rmd</code></a></small>
       <div class="hidden name"><code>v03_reliability.Rmd</code></div>
 
     </div>
@@ -107,113 +117,113 @@
 <code><a href="../reference/get_reliability.html">get_reliability()</a></code> computes reliability estimates for all added indices</li>
 </ul>
 <p>Once again, we will again sample data from the <a href="https://worldsofjournalism.org/">Worlds of Journalism</a> 2012-16 study for demonstration purposes.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>WoJ</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; # A tibble: 1,200 x 15</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt;    country reach employment temp_contract autonomy_select~ autonomy_emphas~</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt;    &lt;fct&gt;   &lt;fct&gt; &lt;chr&gt;      &lt;fct&gt;                    &lt;dbl&gt;            &lt;dbl&gt;</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="co">#&gt;  1 Germany Nati~ Full-time  Permanent                    5                4</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;  2 Germany Nati~ Full-time  Permanent                    3                4</span></span>
-<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;  3 Switze~ Regi~ Full-time  Permanent                    4                4</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt;  4 Switze~ Local Part-time  Permanent                    4                5</span></span>
-<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt;  5 Austria Nati~ Part-time  Permanent                    4                4</span></span>
-<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt;  6 Switze~ Local Freelancer &lt;NA&gt;                         4                4</span></span>
-<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt;  7 Germany Local Full-time  Permanent                    4                4</span></span>
-<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt;  8 Denmark Nati~ Full-time  Permanent                    3                3</span></span>
-<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt;  9 Switze~ Local Full-time  Permanent                    5                5</span></span>
-<span id="cb1-14"><a href="#cb1-14"></a><span class="co">#&gt; 10 Denmark Nati~ Full-time  Permanent                    2                4</span></span>
-<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt; # ... with 1,190 more rows, and 9 more variables: ethics_1 &lt;dbl&gt;,</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="co">#&gt; #   ethics_2 &lt;dbl&gt;, ethics_3 &lt;dbl&gt;, ethics_4 &lt;dbl&gt;, work_experience &lt;dbl&gt;,</span></span>
-<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt; #   trust_parliament &lt;dbl&gt;, trust_government &lt;dbl&gt;, trust_parties &lt;dbl&gt;,</span></span>
-<span id="cb1-18"><a href="#cb1-18"></a><span class="co">#&gt; #   trust_politicians &lt;dbl&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">WoJ</span>
+<span class="co">#&gt; # A tibble: 1,200 x 15</span>
+<span class="co">#&gt;    country   reach   employment temp_contract autonomy_selecti~ autonomy_emphas~</span>
+<span class="co">#&gt;    &lt;fct&gt;     &lt;fct&gt;   &lt;chr&gt;      &lt;fct&gt;                     &lt;dbl&gt;            &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 Germany   Nation~ Full-time  Permanent                     5                4</span>
+<span class="co">#&gt;  2 Germany   Nation~ Full-time  Permanent                     3                4</span>
+<span class="co">#&gt;  3 Switzerl~ Region~ Full-time  Permanent                     4                4</span>
+<span class="co">#&gt;  4 Switzerl~ Local   Part-time  Permanent                     4                5</span>
+<span class="co">#&gt;  5 Austria   Nation~ Part-time  Permanent                     4                4</span>
+<span class="co">#&gt;  6 Switzerl~ Local   Freelancer &lt;NA&gt;                          4                4</span>
+<span class="co">#&gt;  7 Germany   Local   Full-time  Permanent                     4                4</span>
+<span class="co">#&gt;  8 Denmark   Nation~ Full-time  Permanent                     3                3</span>
+<span class="co">#&gt;  9 Switzerl~ Local   Full-time  Permanent                     5                5</span>
+<span class="co">#&gt; 10 Denmark   Nation~ Full-time  Permanent                     2                4</span>
+<span class="co">#&gt; # ... with 1,190 more rows, and 9 more variables: ethics_1 &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   ethics_2 &lt;dbl&gt;, ethics_3 &lt;dbl&gt;, ethics_4 &lt;dbl&gt;, work_experience &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   trust_parliament &lt;dbl&gt;, trust_government &lt;dbl&gt;, trust_parties &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   trust_politicians &lt;dbl&gt;</span></code></pre></div>
 <p><code>ethics_1</code> to <code>ethics_4</code> measure agreement with statements concerning ethics in journalism and may be combined into an index of ‘ethical flexbility’, while the items starting with <code>trust_</code> measure trust in various political institutions and thus may be combined into an index of trust in politics.</p>
 <div id="add-mean-and-sum-indices" class="section level2">
 <h2 class="hasAnchor">
 <a href="#add-mean-and-sum-indices" class="anchor"></a>Add mean and sum indices</h2>
 <p><code><a href="../reference/add_index.html">add_index()</a></code> adds a mean index of specified variables to the data. The second (or first, if used in a pipe) argument is the name of index variable to be created:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw"><a href="../reference/add_index.html">add_index</a></span>(ethical_flexibility, ethics_<span class="dv">1</span>, ethics_<span class="dv">2</span>, ethics_<span class="dv">3</span>, ethics_<span class="dv">4</span>) <span class="op">%&gt;%</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="co"># Select variables of relevance for output</span></span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(ethical_flexibility, ethics_<span class="dv">1</span>, ethics_<span class="dv">2</span>, ethics_<span class="dv">3</span>, ethics_<span class="dv">4</span>)</span>
-<span id="cb2-5"><a href="#cb2-5"></a><span class="co">#&gt; # A tibble: 1,200 x 5</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;    ethical_flexibility ethics_1 ethics_2 ethics_3 ethics_4</span></span>
-<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;                  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt;  1                2           2        3        2        1</span></span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt;  2                1.5         1        2        2        1</span></span>
-<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt;  3                2.25        2        4        2        1</span></span>
-<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt;  4                1.75        1        3        1        2</span></span>
-<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt;  5                2           2        3        2        1</span></span>
-<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt;  6                3.25        2        4        4        3</span></span>
-<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt;  7                2           1        3        2        2</span></span>
-<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt;  8                3.5         2        4        4        4</span></span>
-<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt;  9                1.75        1        2        1        3</span></span>
-<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; 10                3.25        1        4        4        4</span></span>
-<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; # ... with 1,190 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">WoJ</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_index.html">add_index</a></span><span class="op">(</span><span class="va">ethical_flexibility</span>, <span class="va">ethics_1</span>, <span class="va">ethics_2</span>, <span class="va">ethics_3</span>, <span class="va">ethics_4</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="co"># Select variables of relevance for output</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">ethical_flexibility</span>, <span class="va">ethics_1</span>, <span class="va">ethics_2</span>, <span class="va">ethics_3</span>, <span class="va">ethics_4</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1,200 x 5</span>
+<span class="co">#&gt;    ethical_flexibility ethics_1 ethics_2 ethics_3 ethics_4</span>
+<span class="co">#&gt;                  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1                2           2        3        2        1</span>
+<span class="co">#&gt;  2                1.5         1        2        2        1</span>
+<span class="co">#&gt;  3                2.25        2        4        2        1</span>
+<span class="co">#&gt;  4                1.75        1        3        1        2</span>
+<span class="co">#&gt;  5                2           2        3        2        1</span>
+<span class="co">#&gt;  6                3.25        2        4        4        3</span>
+<span class="co">#&gt;  7                2           1        3        2        2</span>
+<span class="co">#&gt;  8                3.5         2        4        4        4</span>
+<span class="co">#&gt;  9                1.75        1        2        1        3</span>
+<span class="co">#&gt; 10                3.25        1        4        4        4</span>
+<span class="co">#&gt; # ... with 1,190 more rows</span></code></pre></div>
 <p>To create a sum index instead, set <code>type = "sum"</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="st">  </span><span class="kw"><a href="../reference/add_index.html">add_index</a></span>(ethical_flexibility, ethics_<span class="dv">1</span>, ethics_<span class="dv">2</span>, ethics_<span class="dv">3</span>, ethics_<span class="dv">4</span>, <span class="dt">type =</span> <span class="st">"sum"</span>) <span class="op">%&gt;%</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="st">  </span><span class="co"># Select variables of relevance for output</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span>(ethical_flexibility, ethics_<span class="dv">1</span>, ethics_<span class="dv">2</span>, ethics_<span class="dv">3</span>, ethics_<span class="dv">4</span>)</span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; # A tibble: 1,200 x 5</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt;    ethical_flexibility ethics_1 ethics_2 ethics_3 ethics_4</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt;                  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt;  1                   8        2        3        2        1</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;  2                   6        1        2        2        1</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt;  3                   9        2        4        2        1</span></span>
-<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt;  4                   7        1        3        1        2</span></span>
-<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt;  5                   8        2        3        2        1</span></span>
-<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt;  6                  13        2        4        4        3</span></span>
-<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt;  7                   8        1        3        2        2</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt;  8                  14        2        4        4        4</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt;  9                   7        1        2        1        3</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; 10                  13        1        4        4        4</span></span>
-<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; # ... with 1,190 more rows</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">WoJ</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_index.html">add_index</a></span><span class="op">(</span><span class="va">ethical_flexibility</span>, <span class="va">ethics_1</span>, <span class="va">ethics_2</span>, <span class="va">ethics_3</span>, <span class="va">ethics_4</span>, type <span class="op">=</span> <span class="st">"sum"</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="co"># Select variables of relevance for output</span>
+  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">ethical_flexibility</span>, <span class="va">ethics_1</span>, <span class="va">ethics_2</span>, <span class="va">ethics_3</span>, <span class="va">ethics_4</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1,200 x 5</span>
+<span class="co">#&gt;    ethical_flexibility ethics_1 ethics_2 ethics_3 ethics_4</span>
+<span class="co">#&gt;                  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1                   8        2        3        2        1</span>
+<span class="co">#&gt;  2                   6        1        2        2        1</span>
+<span class="co">#&gt;  3                   9        2        4        2        1</span>
+<span class="co">#&gt;  4                   7        1        3        1        2</span>
+<span class="co">#&gt;  5                   8        2        3        2        1</span>
+<span class="co">#&gt;  6                  13        2        4        4        3</span>
+<span class="co">#&gt;  7                   8        1        3        2        2</span>
+<span class="co">#&gt;  8                  14        2        4        4        4</span>
+<span class="co">#&gt;  9                   7        1        2        1        3</span>
+<span class="co">#&gt; 10                  13        1        4        4        4</span>
+<span class="co">#&gt; # ... with 1,190 more rows</span></code></pre></div>
 </div>
 <div id="compute-reliability-estimates-of-created-indices" class="section level2">
 <h2 class="hasAnchor">
 <a href="#compute-reliability-estimates-of-created-indices" class="anchor"></a>Compute reliability estimates of created indices</h2>
 <p>Use <code><a href="../reference/get_reliability.html">get_reliability()</a></code> to compute reliability/internal consistency estimates for indices created with <code><a href="../reference/add_index.html">add_index()</a></code>. Passing no further arguments to the function will automatically compute reliability estimates for all indices created with <code><a href="../reference/add_index.html">add_index()</a></code> found in the data and output Cronbach’s <span class="math inline">\(\alpha\)</span> along with descriptives and index information.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># Add two indices to data</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a>WoJ &lt;-<span class="st"> </span>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="st">  </span><span class="kw"><a href="../reference/add_index.html">add_index</a></span>(ethical_flexibility, ethics_<span class="dv">1</span>, ethics_<span class="dv">2</span>, ethics_<span class="dv">3</span>, ethics_<span class="dv">4</span>) <span class="op">%&gt;%</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw"><a href="../reference/add_index.html">add_index</a></span>(trust_in_politics, trust_parliament, trust_government, trust_parties, trust_politicians)</span>
-<span id="cb4-5"><a href="#cb4-5"></a></span>
-<span id="cb4-6"><a href="#cb4-6"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-7"><a href="#cb4-7"></a><span class="st">  </span><span class="kw"><a href="../reference/get_reliability.html">get_reliability</a></span>()</span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; # A tibble: 2 x 5</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt;   Index       Index_of                              M    SD Cronbachs_Alpha</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="co">#&gt; 1 ethical_fl~ ethics_1, ethics_2, ethics_3, et~  2.45 0.777           0.612</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt; 2 trust_in_p~ trust_parliament, trust_governme~  2.70 0.652           0.856</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Add two indices to data</span>
+<span class="va">WoJ</span> <span class="op">&lt;-</span> <span class="va">WoJ</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/add_index.html">add_index</a></span><span class="op">(</span><span class="va">ethical_flexibility</span>, <span class="va">ethics_1</span>, <span class="va">ethics_2</span>, <span class="va">ethics_3</span>, <span class="va">ethics_4</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="../reference/add_index.html">add_index</a></span><span class="op">(</span><span class="va">trust_in_politics</span>, <span class="va">trust_parliament</span>, <span class="va">trust_government</span>, <span class="va">trust_parties</span>, <span class="va">trust_politicians</span><span class="op">)</span>
+
+<span class="va">WoJ</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/get_reliability.html">get_reliability</a></span><span class="op">(</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 2 x 5</span>
+<span class="co">#&gt;   Index        Index_of                                  M    SD Cronbachs_Alpha</span>
+<span class="co">#&gt;   &lt;chr&gt;        &lt;chr&gt;                                 &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 ethical_fle~ ethics_1, ethics_2, ethics_3, ethics~  2.45 0.777           0.612</span>
+<span class="co">#&gt; 2 trust_in_po~ trust_parliament, trust_government, ~  2.70 0.652           0.856</span></code></pre></div>
 <p>If you only want reliability estimates for specific indices, pass their names as function arguments.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="st">  </span><span class="kw"><a href="../reference/get_reliability.html">get_reliability</a></span>(trust_in_politics)</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; # A tibble: 1 x 5</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt;   Index       Index_of                              M    SD Cronbachs_Alpha</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;                             &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;</span></span>
-<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; 1 trust_in_p~ trust_parliament, trust_governme~  2.70 0.652           0.856</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">WoJ</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/get_reliability.html">get_reliability</a></span><span class="op">(</span><span class="va">trust_in_politics</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 1 x 5</span>
+<span class="co">#&gt;   Index       Index_of                                   M    SD Cronbachs_Alpha</span>
+<span class="co">#&gt;   &lt;chr&gt;       &lt;chr&gt;                                  &lt;dbl&gt; &lt;dbl&gt;           &lt;dbl&gt;</span>
+<span class="co">#&gt; 1 trust_in_p~ trust_parliament, trust_government, t~  2.70 0.652           0.856</span></code></pre></div>
 <p>Essentially, <code><a href="../reference/get_reliability.html">get_reliability()</a></code> provides a wrapper for <a href="https://cran.r-project.org/package=MBESS">the ci.reliability function from the MBESS package</a>. Thus, all arguments of <code><a href="https://rdrr.io/pkg/MBESS/man/ci.reliability.html">MBESS::ci.reliability()</a></code> can be passed to <code><a href="../reference/get_reliability.html">get_reliability()</a></code>. For example, to output <span class="math inline">\(\omega\)</span> instead of Cronbach’s <span class="math inline">\(\alpha\)</span> including robust maximum likelihood confidence intervals, you can type:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>WoJ <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw"><a href="../reference/get_reliability.html">get_reliability</a></span>(<span class="dt">type =</span> <span class="st">'omega'</span>, <span class="dt">interval.type =</span> <span class="st">'mlr'</span>)</span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; # A tibble: 2 x 8</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt;   Index    Index_of                  M    SD Omega CI_LL CI_UL CI_Type     </span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;                 &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;       </span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 1 ethical~ ethics_1, ethics_2, ~  2.45 0.777 0.626 0.590 0.663 robust maxi~</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt; 2 trust_i~ trust_parliament, tr~  2.70 0.652 0.856 0.840 0.871 robust maxi~</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">WoJ</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="../reference/get_reliability.html">get_reliability</a></span><span class="op">(</span>type <span class="op">=</span> <span class="st">'omega'</span>, interval.type <span class="op">=</span> <span class="st">'mlr'</span><span class="op">)</span>
+<span class="co">#&gt; # A tibble: 2 x 8</span>
+<span class="co">#&gt;   Index     Index_of                    M    SD Omega CI_LL CI_UL CI_Type       </span>
+<span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;                   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;         </span>
+<span class="co">#&gt; 1 ethical_~ ethics_1, ethics_2, et~  2.45 0.777 0.626 0.590 0.663 robust maximu~</span>
+<span class="co">#&gt; 2 trust_in~ trust_parliament, trus~  2.70 0.652 0.856 0.840 0.871 robust maximu~</span></code></pre></div>
 <p>See the <a href="https://cran.r-project.org/package=MBESS">function documentation</a> for more info (and don’t forget to cite the <code>MBESS</code> package if using <code><a href="../reference/get_reliability.html">get_reliability()</a></code>).</p>
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#add-mean-and-sum-indices">Add mean and sum indices</a></li>
-      <li><a href="#compute-reliability-estimates-of-created-indices">Compute reliability estimates of created indices</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -224,7 +234,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

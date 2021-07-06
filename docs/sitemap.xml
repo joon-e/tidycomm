@@ -4,22 +4,7 @@
     <loc>https://joon-e.github.io/tidycomm/index.html/index.html</loc>
   </url>
   <url>
-    <loc>https://joon-e.github.io/tidycomm/index.html/reference/WoJ.html</loc>
-  </url>
-  <url>
-    <loc>https://joon-e.github.io/tidycomm/index.html/reference/describe.html</loc>
-  </url>
-  <url>
-    <loc>https://joon-e.github.io/tidycomm/index.html/reference/fbposts.html</loc>
-  </url>
-  <url>
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/add_index.html</loc>
-  </url>
-  <url>
-    <loc>https://joon-e.github.io/tidycomm/index.html/reference/pipe.html</loc>
-  </url>
-  <url>
-    <loc>https://joon-e.github.io/tidycomm/index.html/reference/to_correlation_matrix.html</loc>
   </url>
   <url>
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/correlate.html</loc>
@@ -28,10 +13,19 @@
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/crosstab.html</loc>
   </url>
   <url>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/describe.html</loc>
+  </url>
+  <url>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/describe_cat.html</loc>
+  </url>
+  <url>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/fbposts.html</loc>
+  </url>
+  <url>
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/get_reliability.html</loc>
   </url>
   <url>
-    <loc>https://joon-e.github.io/tidycomm/index.html/reference/t_test.html</loc>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/pipe.html</loc>
   </url>
   <url>
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/tab_frequencies.html</loc>
@@ -40,7 +34,16 @@
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/test_icr.html</loc>
   </url>
   <url>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/to_correlation_matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/t_test.html</loc>
+  </url>
+  <url>
     <loc>https://joon-e.github.io/tidycomm/index.html/reference/unianova.html</loc>
+  </url>
+  <url>
+    <loc>https://joon-e.github.io/tidycomm/index.html/reference/WoJ.html</loc>
   </url>
   <url>
     <loc>https://joon-e.github.io/tidycomm/index.html/articles/v01_univariate.html</loc>

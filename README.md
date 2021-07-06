@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental-1)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
 [![Codecov test
@@ -33,7 +33,7 @@ install.packages("tidycomm")
 Or install the most recent development version of tidycomm with:
 
 ``` r
-devtools::install_github("joon-e/tidycomm")
+remotes::install_github("joon-e/tidycomm")
 ```
 
 ## Usage
@@ -54,14 +54,13 @@ tidycomm functions follow the style and syntax of the
 ``` r
 WoJ %>% # Worlds of Journalism sample data
   describe(autonomy_selection, autonomy_emphasis)
-#> Warning: The `add` argument of `group_by()` is deprecated as of dplyr 1.0.0.
-#> Please use the `.add` argument instead.
-#> # A tibble: 2 x 13
+#> # A tibble: 2 x 15
 #>   Variable             N Missing     M    SD   Min   Q25   Mdn   Q75   Max Range
 #>   <chr>            <int>   <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 #> 1 autonomy_select~  1197       3  3.88 0.803     1     4     4     4     5     4
 #> 2 autonomy_emphas~  1195       5  4.08 0.793     1     4     4     5     5     4
-#> # ... with 2 more variables: Skewness <dbl>, Kurtosis <dbl>
+#> # ... with 4 more variables: CI_95_LL <dbl>, CI_95_UL <dbl>, Skewness <dbl>,
+#> #   Kurtosis <dbl>
 ```
 
 Most functions will automatically use all relevant variables in the data
@@ -72,7 +71,7 @@ just call `describe()` without further arguments:
 ``` r
 WoJ %>% 
   describe()
-#> # A tibble: 11 x 13
+#> # A tibble: 11 x 15
 #>    Variable           N Missing     M     SD   Min   Q25   Mdn   Q75   Max Range
 #>    <chr>          <int>   <int> <dbl>  <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>
 #>  1 autonomy_sele~  1197       3  3.88  0.803     1  4        4     4     5     4
@@ -86,7 +85,8 @@ WoJ %>%
 #>  9 trust_governm~  1200       0  2.82  0.854     1  2        3     3     5     4
 #> 10 trust_parties   1200       0  2.42  0.736     1  2        2     3     4     3
 #> 11 trust_politic~  1200       0  2.52  0.712     1  2        3     3     4     3
-#> # ... with 2 more variables: Skewness <dbl>, Kurtosis <dbl>
+#> # ... with 4 more variables: CI_95_LL <dbl>, CI_95_UL <dbl>, Skewness <dbl>,
+#> #   Kurtosis <dbl>
 ```
 
 Likewise, compute intercoder reliability tests for all variables by only

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Crosstab variables — crosstab • tidycomm</title>
+<title>Describe categorical variables — describe_cat • tidycomm</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,10 @@
 
 
 
-<meta property="og:title" content="Crosstab variables — crosstab" />
-<meta property="og:description" content="Computes contingency table for one independent (column) variable and one or
-more dependent (row) variables." />
+<meta property="og:title" content="Describe categorical variables — describe_cat" />
+<meta property="og:description" content="Describe categorical variables by N, number of unique values, and mode.
+Note that in case of multiple modes, the first mode by order of values
+is chosen." />
 <meta property="og:image" content="https://joon-e.github.io/tidycomm/index.html/logo.png" />
 
 
@@ -141,24 +142,18 @@ more dependent (row) variables." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Crosstab variables</h1>
-    <small class="dont-index">Source: <a href='https://github.com/joon-e/tidycomm/blob/master/R/categorical.R'><code>R/categorical.R</code></a></small>
-    <div class="hidden name"><code>crosstab.Rd</code></div>
+    <h1>Describe categorical variables</h1>
+    <small class="dont-index">Source: <a href='https://github.com/joon-e/tidycomm/blob/master/R/describe.R'><code>R/describe.R</code></a></small>
+    <div class="hidden name"><code>describe_cat.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Computes contingency table for one independent (column) variable and one or
-more dependent (row) variables.</p>
+    <p>Describe categorical variables by N, number of unique values, and mode.
+Note that in case of multiple modes, the first mode by order of values
+is chosen.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>crosstab</span><span class='op'>(</span>
-  <span class='va'>data</span>,
-  <span class='va'>col_var</span>,
-  <span class='va'>...</span>,
-  add_total <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  percentages <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  chi_square <span class='op'>=</span> <span class='cn'>FALSE</span>
-<span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>describe_cat</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,52 +163,30 @@ more dependent (row) variables.</p>
       <td><p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p></td>
     </tr>
     <tr>
-      <th>col_var</th>
-      <td><p>Independent (column) variable.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
-      <td><p>Dependent (row) variables.</p></td>
-    </tr>
-    <tr>
-      <th>add_total</th>
-      <td><p>Logical indicating whether a 'Total' column should be
-computed. Defaults to <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>percentages</th>
-      <td><p>Logical indicating whether to output column-wise
-percentages instead of absolute values. Defaults to <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>chi_square</th>
-      <td><p>Logical indicating whether a Chi-square test should be computed.
-Test results will be reported via message(). Defaults to <code>FALSE</code>.</p></td>
+      <td><p>Variables to describe (column names). Leave empty to describe all
+categorical variables in data.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>If no variables are specified, all categorical (character or factor)
+variables are described.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other categorical: 
-<code><a href='tab_frequencies.html'>tab_frequencies</a>()</code></p></div>
+    <div class='dont-index'><p>Other descriptives: 
+<code><a href='describe.html'>describe</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>WoJ</span> <span class='op'>%&gt;%</span> <span class='fu'>crosstab</span><span class='op'>(</span><span class='va'>reach</span>, <span class='va'>employment</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 5</span>
-#&gt;   employment Local Regional National Transnational
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> Freelancer    23       36      104             9
-#&gt; <span style='color: #BCBCBC;'>2</span> Full-time    111      287      438            66
-#&gt; <span style='color: #BCBCBC;'>3</span> Part-time     15       32       75             4</div><div class='input'><span class='va'>WoJ</span> <span class='op'>%&gt;%</span> <span class='fu'>crosstab</span><span class='op'>(</span><span class='va'>reach</span>, <span class='va'>employment</span>, add_total <span class='op'>=</span> <span class='cn'>TRUE</span>, percentages <span class='op'>=</span> <span class='cn'>TRUE</span>, chi_square <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Chi-square = 16.005239, df = 6.000000, p = 0.013726, V = 0.081663</span></div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 6</span>
-#&gt;   employment Local Regional National Transnational Total
-#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>         <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
-#&gt; <span style='color: #BCBCBC;'>1</span> Freelancer 0.154   0.101     0.169        0.114  0.143
-#&gt; <span style='color: #BCBCBC;'>2</span> Full-time  0.745   0.808     0.710        0.835  0.752
-#&gt; <span style='color: #BCBCBC;'>3</span> Part-time  0.101   0.090<span style='text-decoration: underline;'>1</span>    0.122        0.050<span style='text-decoration: underline;'>6</span> 0.105</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='va'>iris</span> <span class='op'>%&gt;%</span> <span class='fu'>describe_cat</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 1 x 6</span>
+#&gt;   Variable     N Missing Unique Mode   Mode_N
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> Species    150       0      3 setosa     50</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

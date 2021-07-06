@@ -17,23 +17,27 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/lumen/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -46,7 +50,6 @@
 <meta property="og:description" content="Tabulates frequencies for one or more categorical variable, including relative,
 and cumulative frequencies." />
 <meta property="og:image" content="https://joon-e.github.io/tidycomm/index.html/logo.png" />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -64,7 +67,7 @@ and cumulative frequencies." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -78,7 +81,7 @@ and cumulative frequencies." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">tidycomm</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -86,7 +89,7 @@ and cumulative frequencies." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -114,9 +117,17 @@ and cumulative frequencies." />
     </li>
   </ul>
 </li>
+<li>
+  <a href="../news/index.html">Changelog</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/joon-e/tidycomm/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -131,7 +142,7 @@ and cumulative frequencies." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Tabulate frequencies</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/joon-e/tidycomm/blob/master/R/categorical.R'><code>R/categorical.R</code></a></small>
     <div class="hidden name"><code>tab_frequencies.Rd</code></div>
     </div>
 
@@ -140,14 +151,14 @@ and cumulative frequencies." />
 and cumulative frequencies.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tab_frequencies</span>(<span class='no'>data</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>tab_frequencies</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>a <a href='https://rdrr.io/pkg/tibble/man/tibble-package.html'>tibble</a></p></td>
+      <td><p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -157,46 +168,44 @@ and cumulative frequencies.</p>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <a href='https://rdrr.io/pkg/tibble/man/tibble-package.html'>tibble</a></p>
+    <p>a <a href='https://tibble.tidyverse.org/reference/tibble-package.html'>tibble</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other categorical: <code><a href='crosstab.html'>crosstab</a></code></p></div>
+    <div class='dont-index'><p>Other categorical: 
+<code><a href='crosstab.html'>crosstab</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>WoJ</span> <span class='kw'>%&gt;%</span> <span class='fu'>tab_frequencies</span>(<span class='no'>employment</span>)</div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 3 x 5</span><span>
+    <pre class="examples"><div class='input'><span class='va'>WoJ</span> <span class='op'>%&gt;%</span> <span class='fu'>tab_frequencies</span><span class='op'>(</span><span class='va'>employment</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 3 x 5</span>
 #&gt;   employment     n percent cum_n cum_percent
-#&gt;   </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span> Freelancer   172   0.143   172       0.143
-#&gt; </span><span style='color: #555555;'>2</span><span> Full-time    902   0.752  </span><span style='text-decoration: underline;'>1</span><span>074       0.895
-#&gt; </span><span style='color: #555555;'>3</span><span> Part-time    126   0.105  </span><span style='text-decoration: underline;'>1</span><span>200       1    </div><div class='input'><span class='no'>WoJ</span> <span class='kw'>%&gt;%</span> <span class='fu'>tab_frequencies</span>(<span class='no'>employment</span>, <span class='no'>country</span>)</div><div class='output co'>#&gt; </span><span style='color: #555555;'># A tibble: 15 x 6</span><span>
+#&gt;   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'>1</span> Freelancer   172   0.143   172       0.143
+#&gt; <span style='color: #BCBCBC;'>2</span> Full-time    902   0.752  <span style='text-decoration: underline;'>1</span>074       0.895
+#&gt; <span style='color: #BCBCBC;'>3</span> Part-time    126   0.105  <span style='text-decoration: underline;'>1</span>200       1    </div><div class='input'><span class='va'>WoJ</span> <span class='op'>%&gt;%</span> <span class='fu'>tab_frequencies</span><span class='op'>(</span><span class='va'>employment</span>, <span class='va'>country</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #949494;'># A tibble: 15 x 6</span>
 #&gt;    employment country         n percent cum_n cum_percent
-#&gt;    </span><span style='color: #555555;font-style: italic;'>&lt;chr&gt;</span><span>      </span><span style='color: #555555;font-style: italic;'>&lt;fct&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;int&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'> 1</span><span> Freelancer Austria        16 0.013</span><span style='text-decoration: underline;'>3</span><span>     16      0.013</span><span style='text-decoration: underline;'>3</span><span>
-#&gt; </span><span style='color: #555555;'> 2</span><span> Freelancer Denmark        85 0.070</span><span style='text-decoration: underline;'>8</span><span>    101      0.084</span><span style='text-decoration: underline;'>2</span><span>
-#&gt; </span><span style='color: #555555;'> 3</span><span> Freelancer Germany        29 0.024</span><span style='text-decoration: underline;'>2</span><span>    130      0.108 
-#&gt; </span><span style='color: #555555;'> 4</span><span> Freelancer Switzerland    10 0.008</span><span style='text-decoration: underline;'>33</span><span>   140      0.117 
-#&gt; </span><span style='color: #555555;'> 5</span><span> Freelancer UK             32 0.026</span><span style='text-decoration: underline;'>7</span><span>    172      0.143 
-#&gt; </span><span style='color: #555555;'> 6</span><span> Full-time  Austria       165 0.138     337      0.281 
-#&gt; </span><span style='color: #555555;'> 7</span><span> Full-time  Denmark       275 0.229     612      0.51  
-#&gt; </span><span style='color: #555555;'> 8</span><span> Full-time  Germany       139 0.116     751      0.626 
-#&gt; </span><span style='color: #555555;'> 9</span><span> Full-time  Switzerland   154 0.128     905      0.754 
-#&gt; </span><span style='color: #555555;'>10</span><span> Full-time  UK            169 0.141    </span><span style='text-decoration: underline;'>1</span><span>074      0.895 
-#&gt; </span><span style='color: #555555;'>11</span><span> Part-time  Austria        26 0.021</span><span style='text-decoration: underline;'>7</span><span>   </span><span style='text-decoration: underline;'>1</span><span>100      0.917 
-#&gt; </span><span style='color: #555555;'>12</span><span> Part-time  Denmark        16 0.013</span><span style='text-decoration: underline;'>3</span><span>   </span><span style='text-decoration: underline;'>1</span><span>116      0.93  
-#&gt; </span><span style='color: #555555;'>13</span><span> Part-time  Germany         5 0.004</span><span style='text-decoration: underline;'>17</span><span>  </span><span style='text-decoration: underline;'>1</span><span>121      0.934 
-#&gt; </span><span style='color: #555555;'>14</span><span> Part-time  Switzerland    69 0.057</span><span style='text-decoration: underline;'>5</span><span>   </span><span style='text-decoration: underline;'>1</span><span>190      0.992 
-#&gt; </span><span style='color: #555555;'>15</span><span> Part-time  UK             10 0.008</span><span style='text-decoration: underline;'>33</span><span>  </span><span style='text-decoration: underline;'>1</span><span>200      1     </div><div class='input'>
-</div></span></pre>
+#&gt;    <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>      <span style='color: #949494; font-style: italic;'>&lt;fct&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;int&gt;</span>       <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>
+#&gt; <span style='color: #BCBCBC;'> 1</span> Freelancer Austria        16 0.013<span style='text-decoration: underline;'>3</span>     16      0.013<span style='text-decoration: underline;'>3</span>
+#&gt; <span style='color: #BCBCBC;'> 2</span> Freelancer Denmark        85 0.070<span style='text-decoration: underline;'>8</span>    101      0.084<span style='text-decoration: underline;'>2</span>
+#&gt; <span style='color: #BCBCBC;'> 3</span> Freelancer Germany        29 0.024<span style='text-decoration: underline;'>2</span>    130      0.108 
+#&gt; <span style='color: #BCBCBC;'> 4</span> Freelancer Switzerland    10 0.008<span style='text-decoration: underline;'>33</span>   140      0.117 
+#&gt; <span style='color: #BCBCBC;'> 5</span> Freelancer UK             32 0.026<span style='text-decoration: underline;'>7</span>    172      0.143 
+#&gt; <span style='color: #BCBCBC;'> 6</span> Full-time  Austria       165 0.138     337      0.281 
+#&gt; <span style='color: #BCBCBC;'> 7</span> Full-time  Denmark       275 0.229     612      0.51  
+#&gt; <span style='color: #BCBCBC;'> 8</span> Full-time  Germany       139 0.116     751      0.626 
+#&gt; <span style='color: #BCBCBC;'> 9</span> Full-time  Switzerland   154 0.128     905      0.754 
+#&gt; <span style='color: #BCBCBC;'>10</span> Full-time  UK            169 0.141    <span style='text-decoration: underline;'>1</span>074      0.895 
+#&gt; <span style='color: #BCBCBC;'>11</span> Part-time  Austria        26 0.021<span style='text-decoration: underline;'>7</span>   <span style='text-decoration: underline;'>1</span>100      0.917 
+#&gt; <span style='color: #BCBCBC;'>12</span> Part-time  Denmark        16 0.013<span style='text-decoration: underline;'>3</span>   <span style='text-decoration: underline;'>1</span>116      0.93  
+#&gt; <span style='color: #BCBCBC;'>13</span> Part-time  Germany         5 0.004<span style='text-decoration: underline;'>17</span>  <span style='text-decoration: underline;'>1</span>121      0.934 
+#&gt; <span style='color: #BCBCBC;'>14</span> Part-time  Switzerland    69 0.057<span style='text-decoration: underline;'>5</span>   <span style='text-decoration: underline;'>1</span>190      0.992 
+#&gt; <span style='color: #BCBCBC;'>15</span> Part-time  UK             10 0.008<span style='text-decoration: underline;'>33</span>  <span style='text-decoration: underline;'>1</span>200      1     </div><div class='input'>
+</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -207,7 +216,7 @@ and cumulative frequencies.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
