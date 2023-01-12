@@ -36,7 +36,7 @@ grab_vars <- function(data, vars, alternative = "numeric", exclude_vars = NULL) 
     if (alternative == "all") {
       vars <- data %>%
         dplyr::ungroup() %>%
-        dplyr::select(-exclude_vars) %>%
+        dplyr::select(-tidyselect::all_of(exclude_vars)) %>%
         names() %>%
         syms()
     }
@@ -47,7 +47,7 @@ grab_vars <- function(data, vars, alternative = "numeric", exclude_vars = NULL) 
   } else {
     vars <- data %>%
       dplyr::ungroup() %>%
-      dplyr::select(!!!vars, -exclude_vars) %>%
+      dplyr::select(!!!vars, -tidyselect::all_of(exclude_vars)) %>%
       names() %>%
       syms()
   }

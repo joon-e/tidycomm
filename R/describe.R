@@ -44,24 +44,24 @@ describe <- function(data, ..., na.rm = TRUE) {
   data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
     tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
-    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
+    dplyr::group_by(Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
-      N = dplyr::n() - sum(is.na(.data$Value)),
-      Missing = sum(is.na(.data$Value)),
-      M = mean(.data$Value, na.rm = na.rm),
-      SD = sd(.data$Value, na.rm = na.rm),
-      Min = min(.data$Value, na.rm = na.rm),
-      Q25 = quantile(.data$Value, .25, na.rm = na.rm),
-      Mdn = median(.data$Value, na.rm = na.rm),
-      Q75 = quantile(.data$Value, .75, na.rm = na.rm),
-      Max = max(.data$Value, na.rm = na.rm),
-      Range = .data$Max - .data$Min,
-      CI_95_LL = .data$M - stats::qt(0.975, df = .data$N-1) * .data$SD/sqrt(.data$N),
-      CI_95_UL = .data$M + stats::qt(0.975, df = .data$N-1) * .data$SD/sqrt(.data$N),
-      Skewness = skewness(.data$Value),
-      Kurtosis = kurtosis(.data$Value)
+      N = dplyr::n() - sum(is.na(Value)),
+      Missing = sum(is.na(Value)),
+      M = mean(Value, na.rm = na.rm),
+      SD = sd(Value, na.rm = na.rm),
+      Min = min(Value, na.rm = na.rm),
+      Q25 = quantile(Value, .25, na.rm = na.rm),
+      Mdn = median(Value, na.rm = na.rm),
+      Q75 = quantile(Value, .75, na.rm = na.rm),
+      Max = max(Value, na.rm = na.rm),
+      Range = Max - Min,
+      CI_95_LL = M - stats::qt(0.975, df = N-1) * SD/sqrt(N),
+      CI_95_UL = M + stats::qt(0.975, df = N-1) * SD/sqrt(N),
+      Skewness = skewness(Value),
+      Kurtosis = kurtosis(Value)
     ) %>%
-    dplyr::arrange(match(.data$Variable, vars_str))
+    dplyr::arrange(match(Variable, vars_str))
 
 }
 
@@ -104,15 +104,15 @@ describe_cat <- function(data, ...) {
   data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
     tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
-    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
+    dplyr::group_by(Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
-      N = dplyr::n() - sum(is.na(.data$Value)),
-      Missing = sum(is.na(.data$Value)),
-      Unique = length(unique(.data$Value)),
-      Mode = as.character(get_mode(.data$Value)),
-      Mode_N = sum(.data$Value == .data$Mode, na.rm = TRUE)
+      N = dplyr::n() - sum(is.na(Value)),
+      Missing = sum(is.na(Value)),
+      Unique = length(unique(Value)),
+      Mode = as.character(get_mode(Value)),
+      Mode_N = sum(Value == Mode, na.rm = TRUE)
     ) %>%
-    dplyr::arrange(match(.data$Variable, vars_str))
+    dplyr::arrange(match(Variable, vars_str))
 }
 
 ### Internal functions ###
