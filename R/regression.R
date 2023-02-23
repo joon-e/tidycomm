@@ -15,7 +15,8 @@
 #'   two cases is being checked using a Durbin-Watson test
 #' @param check_multicollinearity if set, multicollinearity among all specified
 #'   independent variables is being checked using the variance inflation factor
-#'   (VIF)
+#'   (VIF) and the tolerance (1/VIF); can only be calculated if at least two
+#'   independent variables are given all of which are numeric
 #' @param check_homoscedasticity if set, homoscedasticity is being checked
 #'   using a Breusch-Pagan test
 #'
@@ -44,19 +45,35 @@ regress <- function(data,
     stop("No independent variable(s) given.")
   }
 
-  count_columns <- data %>%
-    dplyr::select(!!!xvars, !!yvar) %>%
-    names() %>%
-    length()
-
-  count_columns_numeric <- data %>%
-    dplyr::select(!!!xvars, !!yvar) %>%
+  yvar_numeric <- data %>%
+    dplyr::select(!!yvar) %>%
     dplyr::select_if(is.numeric) %>%
     names() %>%
     length()
 
-  if (count_columns_numeric < count_columns) {
-    stop("At least one variable is not numeric.")
+  if (yvar_numeric < 1) {
+    stop("Dependent variable must be numeric.")
+  }
+
+  xvars_count <- data %>%
+    dplyr::select(!!!xvars) %>%
+    names() %>%
+    length()
+
+  xvars_count_numeric <- data %>%
+    dplyr::select(!!!xvars) %>%
+    dplyr::select_if(is.numeric) %>%
+    names() %>%
+    length()
+
+  xvars_count_factor <- data %>%
+    dplyr::select(!!!xvars) %>%
+    dplyr::select_if(is.factor) %>%
+    names() %>%
+    length()
+
+  if ((xvars_count_factor + xvars_count_numeric) < xvars_count) {
+    stop("At least one independent variable is neither numeric nor a factor.")
   }
 
   if (dplyr::is.grouped_df(data)) {
@@ -74,7 +91,7 @@ regress <- function(data,
   model_summary <- summary(model)
   model_tibble <-
     tibble::tibble(
-      Variable = c("(Intercept)", xvars_string),
+      Variable = dimnames(model_summary$coefficients)[[1]],
       B = model_summary$coefficients[,1],
       StdErr = model_summary$coefficients[,2],
       beta = lm.beta::lm.beta(model)$standardized.coefficients,
@@ -109,14 +126,35 @@ regress <- function(data,
   }
 
   if (check_multicollinearity) {
-    if (count_columns < 3) {
+    if (xvars_count < 2) {
       warning(paste0("multicollinearity (VIF) checks are only applicable with ",
                      "2+ independent variables. No VIF will be computed."))
     } else {
-      message("- Check for multicollinearity: VIF added to tibble")
-      check_vif <- car::vif(model)
-      model_tibble <- model_tibble %>%
-        dplyr::bind_cols(tibble::tibble(VIF = c(NA, check_vif)))
+      if (xvars_count_factor > 0) {
+        warning(paste0("multicollinearity (VIF) checks are only applicable ",
+                       "to numeric (rather than factorial) independent ",
+                       "variables. No VIF will be computed."))
+      } else {
+        check_vif <- car::vif(model)
+        model_tibble <- model_tibble %>%
+          dplyr::bind_cols(tibble::tibble(VIF = c(NA,
+                                                  check_vif),
+                                          tolerance = c(NA,
+                                                        1/check_vif)))
+        message("- Check for multicollinearity: VIF/tolerance added to output")
+      }
+    }
+  }
+
+  if (xvars_count_factor > 0) {
+    for (xvar in xvars_string) {
+      if (is.factor(data[[xvar]])) {
+        message(sprintf(paste0("- %s is a factor and was split into one ",
+                               "variable per level, each compared to '%s' (",
+                               "reference level)"),
+                        xvar,
+                        levels(data[[xvar]])[[1]]))
+      }
     }
   }
 

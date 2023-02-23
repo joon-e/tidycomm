@@ -35,7 +35,7 @@ test_that("regress returns tibble also when requesting multicoll./VIF", {
   t1 <- regress(tt, y, x1, x2, check_multicollinearity = TRUE)
   expect_true(tibble::is_tibble(t1))
   expect_true(all(expected_columns %in% names(t1)))
-  expect_equal(dim(t1), c(3, 7))
+  expect_equal(dim(t1), c(3, 8))
 
   t2 <- regress(tt, y, x1, x2,
                 check_independenterrors = TRUE,
@@ -43,7 +43,7 @@ test_that("regress returns tibble also when requesting multicoll./VIF", {
                 check_homoscedasticity = TRUE)
   expect_true(tibble::is_tibble(t2))
   expect_true(all(expected_columns %in% names(t2)))
-  expect_equal(dim(t2), c(3, 7))
+  expect_equal(dim(t2), c(3, 8))
 })
 
 test_that("regress returns tibble with tidyselect helpers", {
@@ -56,6 +56,25 @@ test_that("regress returns tibble with tidyselect helpers", {
   expect_true(tibble::is_tibble(t))
   expect_true(all(c("Variable", "B", "StdErr", "beta", "t", "p") %in% names(t)))
   expect_equal(dim(t), c(3, 6))
+})
+
+
+test_that("regress can handle factors", {
+  tt <- tibble::tibble(x1 = 1:10,
+                       x2 = as.factor(c(1, 1, 1, 2, 2, 1, 2, 1, 1, 2)),
+                       y = c(2:5, 1, 6:10))
+
+  t <- regress(tt, y, tidyselect::starts_with("x"))
+
+  expect_true(tibble::is_tibble(t))
+  expect_true(all(c("Variable", "B", "StdErr", "beta", "t", "p") %in% names(t)))
+  expect_equal(dim(t), c(3, 6))
+
+
+  expect_warning(regress(tt,
+                         y,
+                         tidyselect::starts_with("x"),
+                         check_multicollinearity = TRUE))
 })
 
 
