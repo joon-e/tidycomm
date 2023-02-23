@@ -28,7 +28,8 @@ two cases is being checked using a Durbin-Watson test}
 
 \item{check_multicollinearity}{if set, multicollinearity among all specified
 independent variables is being checked using the variance inflation factor
-(VIF)}
+(VIF) and the tolerance (1/VIF); can only be calculated if at least two
+independent variables are given all of which are numeric}
 
 \item{check_homoscedasticity}{if set, homoscedasticity is being checked
 using a Breusch-Pagan test}
