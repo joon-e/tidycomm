@@ -28,11 +28,11 @@ tab_frequencies <- function(data, ...) {
   d %>%
     dplyr::bind_cols(d %>%
                 dplyr::select(!!!grouping,
-                       cum_n = .data$n,
-                       cum_percent = .data$percent) %>%
+                       cum_n = "n",
+                       cum_percent = "percent") %>%
                 dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), cumsum) %>%
                 dplyr::ungroup() %>%
-                dplyr::select(.data$cum_n, .data$cum_percent)
+                dplyr::select("cum_n", "cum_percent")
     )
 
 }
@@ -82,10 +82,10 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     dplyr::ungroup()
 
   xt_cross_vars <- xt %>%
-    dplyr::select(c(1:cross_vars))
+    dplyr::select(1:tidyselect::all_of(cross_vars))
 
   xt_col_vars <- xt %>%
-    dplyr::select(-c(1:cross_vars))
+    dplyr::select(-(1:tidyselect::all_of(cross_vars)))
 
   if (chi_square) {
     chi2 <- xt_col_vars %>%
@@ -95,7 +95,8 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     test_string <- "Chi-square = %f, df = %f, p = %f, V = %f"
 
     message(sprintf(test_string,
-                    chi2$statistic, chi2$parameter, chi2$p.value, cramer_V(chi2)))
+                    chi2$statistic, chi2$parameter, chi2$p.value,
+                    cramer_V(chi2)))
   }
 
   if (add_total) {
