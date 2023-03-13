@@ -88,7 +88,7 @@ regress <- function(data,
                                       yvar_string,
                                       paste(xvars_string,
                                             collapse = " + ")))
-  model <- lm(model_formula, data)
+  model <- stats::lm(model_formula, data)
   model_summary <- summary(model)
   model_tibble <-
     tibble::tibble(
