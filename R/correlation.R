@@ -63,12 +63,13 @@ to_correlation_matrix <- function(data) {
     dplyr::bind_rows(
       data %>%
         dplyr::select(x = 1, y = 2, cor = 3) %>%
-        dplyr::rename(x = .data$y, y = .data$x)
+        dplyr::rename(x = "y", y = "x")
     ) %>%
     tidyr::spread(.data$y, .data$cor, fill = 1) %>%
     dplyr::arrange(match(.data$x, var_order)) %>%
-    dplyr::rename(!!estimate := .data$x) %>%
-    dplyr::select(estimate, var_order, dplyr::everything())
+    dplyr::rename(!!estimate := "x") %>%
+    dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
+                  dplyr::everything())
 }
 
 ### Internal functions ###

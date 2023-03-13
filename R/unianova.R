@@ -90,13 +90,13 @@ compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
       dplyr::group_by({{ group_var }}) %>%
       dplyr::summarise(M = mean({{ test_var }}, na.rm = TRUE),
                        SD = sd({{ test_var }}, na.rm = TRUE)) %>%
-      tidyr::gather("stat", "val", .data$M, .data$SD)
+      tidyr::gather("stat", "val", "M", "SD")
 
     desc_df <- desc_df %>%
       dplyr::group_by({{ group_var }}) %>%
       dplyr::mutate(order_var = dplyr::cur_group_id()) %>%
       dplyr::ungroup() %>%
-      tidyr::unite("name", .data$order_var, .data$stat, {{ group_var }}) %>%
+      tidyr::unite("name", "order_var", "stat", {{ group_var }}) %>%
       dplyr::mutate(name = stringr::str_replace_all(.data$name, " ", "_")) %>%
       tidyr::spread(.data$name, .data$val) %>%
       dplyr::rename_all(stringr::str_replace, "\\d*_", "")
