@@ -22,17 +22,17 @@ tab_frequencies <- function(data, ...) {
     dplyr::group_by(..., !!!grouping) %>%
     dplyr::summarise(n = dplyr::n()) %>%
     dplyr::group_by(!!!grouping) %>%
-    dplyr::mutate(percent = n / sum(n)) %>%
+    dplyr::mutate(percent = .data$n / sum(.data$n)) %>%
     dplyr::arrange(!!!grouping)
 
   d %>%
     dplyr::bind_cols(d %>%
                 dplyr::select(!!!grouping,
-                       cum_n = n,
-                       cum_percent = percent) %>%
+                       cum_n = .data$n,
+                       cum_percent = .data$percent) %>%
                 dplyr::mutate_at(dplyr::vars(-dplyr::group_cols()), cumsum) %>%
                 dplyr::ungroup() %>%
-                dplyr::select(cum_n, cum_percent)
+                dplyr::select(.data$cum_n, .data$cum_percent)
     )
 
 }
@@ -69,21 +69,23 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
             call. = FALSE)
   }
 
-  if (length(quos(...)) < 1) {
+  cross_vars <- length(quos(...))
+
+  if (cross_vars < 1) {
     stop("Must provide at least one variable to crosstabulate.")
   }
 
   xt <- data %>%
     dplyr::group_by({{ col_var }}, ...) %>%
     dplyr::count() %>%
-    tidyr::spread({{ col_var }}, n, fill = 0) %>%
+    tidyr::spread({{ col_var }}, .data$n, fill = 0) %>%
     dplyr::ungroup()
 
   xt_cross_vars <- xt %>%
-    dplyr::select(...)
+    dplyr::select(c(1:cross_vars))
 
   xt_col_vars <- xt %>%
-    dplyr::select(-c(...))
+    dplyr::select(-c(1:cross_vars))
 
   if (chi_square) {
     chi2 <- xt_col_vars %>%
@@ -98,7 +100,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
 
   if (add_total) {
     xt_col_vars <- xt_col_vars %>%
-      dplyr::mutate(Total = rowSums(.))
+      dplyr::mutate(Total = rowSums(xt_col_vars))
   }
 
   if (percentages) {
