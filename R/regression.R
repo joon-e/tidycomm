@@ -15,8 +15,9 @@
 #'   two cases is being checked using a Durbin-Watson test
 #' @param check_multicollinearity if set, multicollinearity among all specified
 #'   independent variables is being checked using the variance inflation factor
-#'   (VIF) and the tolerance (1/VIF); can only be calculated if at least two
-#'   independent variables are given all of which are numeric
+#'   (VIF) and the tolerance (1/VIF); this check can only be performed if at
+#'   least two independent variables are provided, and all provided variables
+#'   need to be numeric
 #' @param check_homoscedasticity if set, homoscedasticity is being checked
 #'   using a Breusch-Pagan test
 #'
