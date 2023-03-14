@@ -64,6 +64,7 @@ tab_frequencies <- function(data, ...) {
 crosstab <- function(data, col_var, ..., add_total = FALSE,
                      percentages = FALSE, chi_square = FALSE) {
 
+  # Checks
   if (dplyr::is_grouped_df(data)) {
     warning("Grouping variable(s) present in data will be ignored.",
             call. = FALSE)
@@ -75,6 +76,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     stop("Must provide at least one variable to crosstabulate.")
   }
 
+  # Prepare crosstab
   xt <- data %>%
     dplyr::group_by({{ col_var }}, ...) %>%
     dplyr::count() %>%
@@ -87,18 +89,14 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
   xt_col_vars <- xt %>%
     dplyr::select(-(1:tidyselect::all_of(cross_vars)))
 
+  # Estimate Chi-square test
   if (chi_square) {
     chi2 <- xt_col_vars %>%
       as.matrix() %>%
       chisq.test()
-
-    test_string <- "Chi-square = %f, df = %f, p = %f, V = %f"
-
-    message(sprintf(test_string,
-                    chi2$statistic, chi2$parameter, chi2$p.value,
-                    cramer_V(chi2)))
   }
 
+  # Augment
   if (add_total) {
     xt_col_vars <- xt_col_vars %>%
       dplyr::mutate(Total = rowSums(xt_col_vars))
@@ -109,11 +107,20 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
       dplyr::mutate_all(col_percs)
   }
 
-  xt_cross_vars %>%
+  # Output
+  out <- xt_cross_vars %>%
     dplyr::bind_cols(xt_col_vars)
+
+  if (chi_square) {
+    return(new_tdcmm_chi2(
+      new_tdcmm(out, model = list(chi2)))
+      )
+  } else {
+    return(new_tdcmm(out))
+  }
 }
 
-### Internal functions ###
+# Internal functions ----
 
 ## Compute Cramer's V
 ##
@@ -144,4 +151,36 @@ cramer_V <- function(chi2) {
 ## @return a `dbl`
 col_percs <- function(x) {
   x / sum(x, na.rm = TRUE)
+}
+
+
+# Constructors ----
+
+new_tdcmm_chi2 <- function(x) {
+  stopifnot(tibble::is_tibble(x))
+
+  structure(
+    x,
+    class = c("tdcmm_chi2", class(x))
+  )
+}
+
+# Formatting ----
+
+#' @export
+tbl_format_footer.tdcmm_chi2 <- function(x, ...) {
+  default_footer <- NextMethod()
+
+  # Get values
+  chi2 <- model(x)
+
+  # Format test string
+  test_string <- glue("Chi-square = {format_testvalue(chi2$statistic)}, ",
+                      "df = {format(chi2$parameter, digits = 4)}, ",
+                      "{format_pvalue(chi2$p.value)}, ",
+                      "V = {format_testvalue(cramer_V(chi2))}")
+
+  extra_footer <- style_subtle(paste0("# ", test_string))
+
+  c(default_footer, extra_footer)
 }
