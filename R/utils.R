@@ -54,3 +54,9 @@ grab_vars <- function(data, vars, alternative = "numeric",
   }
   return(vars)
 }
+
+# Formatters ----
+
+format_pvalue <- scales::label_pvalue(prefix = c("p < ", "p = ", "p > "))
+format_testvalue <- scales::label_number(0.001)
+format_descvalue <- scales::label_number(0.01)
