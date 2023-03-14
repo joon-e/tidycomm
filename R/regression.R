@@ -101,7 +101,7 @@ regress <- function(data,
     )
 
   # overall quality
-  message(sprintf("F(%d, %d) = %f, p = %f, R-squared = %f",
+  message(sprintf("F(%d, %d) = %f, p = %f, R-square = %f",
                   model_summary$fstatistic[["numdf"]],
                   model_summary$fstatistic[["dendf"]],
                   model_summary$fstatistic[["value"]],
