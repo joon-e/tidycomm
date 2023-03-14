@@ -36,8 +36,10 @@ Imports:
     glue,
     magrittr,
     MBESS,
+    pillar,
     purrr,
     rlang,
+    scales,
     stringr,
     tibble,
     tidyr
