@@ -1,21 +1,23 @@
-#' Compute partial correlation coefficients for three variables
-#'
-#' Computes pairwise partial correlations (pearson, kendall, spearman) for
-#' all combinations, i.e. pairs, of specified variables while controlling for the third variable.
-#'
-#' @param data a [tibble][tibble::tibble-package]
-#' @param ... three variables to compute partial correlations for (column names).
-#' @param method a character string indicating which partial correlation coefficient
-#'   is to be computed. One of "pearson" (default), "kendall", or "spearman"
-#'
-#' @return a [tibble][tibble::tibble-package]
-#'
-#' @family correlations
-#'
-#' @examples
-#' WoJ %>% correlate_partial(ethics_1, ethics_2, ethics_3)
-#'
-#' @export
+### Internal functions ###
+
+## Compute partial correlation coefficients for three variables
+##
+## Computes pairwise partial correlations (pearson, kendall, spearman) for
+## all combinations, i.e. pairs, of specified variables while controlling for the third variable.
+##
+## @param data a [tibble][tibble::tibble-package]
+## @param ... three variables to compute partial correlations for (column names).
+## @param method a character string indicating which partial correlation coefficient
+##  is to be computed. One of "pearson" (default), "kendall", or "spearman"
+##
+## @return a [tibble][tibble::tibble-package]
+##
+## @family correlations
+##
+## @examples
+## WoJ %>% correlate_partial(ethics_1, ethics_2, ethics_3)
+##
+## @keywords internal
 
 correlate_partial <- function(data, ..., method = "pearson") {
 
@@ -28,22 +30,22 @@ correlate_partial <- function(data, ..., method = "pearson") {
 
   # basic checks: check whether three variables have been provided
   if (length(vars) > 3) {
-    stop('The computation cannot be performed due to an excessive number of variables provided. Please provide exactly three variables.',
+    stop('The computation cannot be performed due to an excessive number of variables provided. Please provide exactly three variables for a partial correlation.',
          call. = FALSE)
   }
 
   if (length(vars) == 0) {
-    stop("No variable(s) given. Please provide exactly three variables.")
+    stop("No variable(s) given. Please provide exactly three variables for a partial correlation.")
   }
 
   if (length(vars) < 3) {
-    stop('The computation cannot be performed because there are not enough variables provided. Please provide exactly three variables.',
+    stop('The computation cannot be performed because there are not enough variables provided. Please provide exactly three variables for a partial correlation.',
          call. = FALSE)
   }
 
   # basic checks: check whether data is grouped
   if (dplyr::is.grouped_df(data)) {
-    warning("correlate_partial does not support grouped data. Groups will be dropped.",
+    warning("correlate(partial = TRUE) does not support grouped data. Groups will be dropped.",
             call. = FALSE)
     data <- dplyr::ungroup(data)
   }

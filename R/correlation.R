@@ -9,6 +9,10 @@
 #'   to compute for all numeric variables in data.
 #' @param method a character string indicating which correlation coefficient
 #'   is to be computed. One of "pearson" (default), "kendall", or "spearman"
+#' @param partial Logical indicating whether the pairwise partial correlation
+#' for three variables should be computed. Defaults to `FALSE`. If set to `TRUE`
+#' all combinations, i.e. pairs, of specified variables will be computed
+#' while controlling for the third variable.
 #'
 #' @return a [tibble][tibble::tibble-package]
 #'
@@ -17,9 +21,20 @@
 #' @examples
 #' WoJ %>% correlate(ethics_1, ethics_2, ethics_3)
 #' WoJ %>% correlate()
+#' WoJ %>% correlate(ethics_1, ethics_2, ethics_3, partial = TRUE)
 #'
 #' @export
-correlate <- function(data, ..., method = "pearson") {
+correlate <- function(data, ..., method = "pearson", partial = FALSE) {
+
+  if (partial == TRUE) {
+    vars <- grab_vars(data, enquos(...), alternative = "none")
+    var_strings <- data %>%
+      dplyr::select(!!!vars) %>%
+      names()
+    method_string <- method
+    result_correlate_partial <- correlate_partial(data, var_strings, method = method_string)
+    return(result_correlate_partial)
+  }
 
   if (!method %in% c("pearson", "kendall", "spearman")) {
     stop('method must be one of "pearson", "kendall" or "spearman"',

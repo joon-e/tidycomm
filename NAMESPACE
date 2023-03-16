@@ -3,7 +3,6 @@
 export("%>%")
 export(add_index)
 export(correlate)
-export(correlate_partial)
 export(crosstab)
 export(describe)
 export(describe_cat)
