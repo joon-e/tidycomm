@@ -6,6 +6,14 @@
 \usage{
 model(x, ...)
 }
+\arguments{
+\item{x}{\code{tdcmm} output}
+
+\item{...}{other arguments}
+}
+\value{
+A model object or a list of model objects
+}
 \description{
-Access model(s) used to estimate output
+Returns model objects used to estimate \code{tdcmm} output.
 }
