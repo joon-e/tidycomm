@@ -39,7 +39,6 @@ Imports:
     pillar,
     purrr,
     rlang,
-    scales,
     stringr,
     tibble,
     tidyr
