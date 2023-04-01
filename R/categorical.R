@@ -52,7 +52,7 @@ tab_frequencies <- function(data, ...) {
 #' @param chi_square Logical indicating whether a Chi-square test should be computed.
 #'   Test results will be reported via message(). Defaults to `FALSE`.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' WoJ %>% crosstab(reach, employment)
@@ -175,10 +175,10 @@ tbl_format_footer.tdcmm_chi2 <- function(x, ...) {
   chi2 <- model(x)
 
   # Format test string
-  test_string <- glue("Chi-square = {format_testvalue(chi2$statistic)}, ",
+  test_string <- glue("Chi-square = {format_value(chi2$statistic, 3)}, ",
                       "df = {format(chi2$parameter, digits = 4)}, ",
                       "{format_pvalue(chi2$p.value)}, ",
-                      "V = {format_testvalue(cramer_V(chi2))}")
+                      "V = {format_value(cramer_V(chi2), 3)}")
 
   # Add to footer and display
   test_footer <- style_subtle(glue("# {test_string}"))

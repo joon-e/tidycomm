@@ -57,6 +57,18 @@ grab_vars <- function(data, vars, alternative = "numeric",
 
 # Formatters ----
 
-format_pvalue <- scales::label_pvalue(prefix = c("p < ", "p = ", "p > "))
-format_testvalue <- scales::label_number(0.001)
-format_descvalue <- scales::label_number(0.01)
+## Format a vector of values to printable string p-values
+format_pvalue <- function(x) {
+  single_val <- function(x) {
+    if (x < .001) {
+      return("p < 0.001")
+      } else {
+      return(glue("p = {format(round(x, 3), nsmall = 3)}"))
+      }
+  }
+  purrr::map_chr(x, single_val)
+}
+
+## Format a vector of values to printable string values with exact number of
+## decimal places
+format_value <- function(x, d) trimws(format(round(x, d), nsmall = d))
