@@ -15,7 +15,7 @@ test_that("correct subclasses are assigned to outputs", {
 test_that("tdcmm provides model accessors", {
 
   # Outputs without models
-  expect_null(model(crosstab(WoJ, reach, employment)))
+  expect_warning(model(crosstab(WoJ, reach, employment)))
 
   # Crosstabs with Chi2
   expect_s3_class(model(crosstab(WoJ, reach, employment, chi_square = TRUE)),

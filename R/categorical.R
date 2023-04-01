@@ -157,7 +157,7 @@ col_percs <- function(x) {
 # Constructors ----
 
 new_tdcmm_chi2 <- function(x) {
-  stopifnot(tibble::is_tibble(x))
+  stopifnot(is_tdcmm(x))
 
   structure(
     x,
@@ -180,7 +180,8 @@ tbl_format_footer.tdcmm_chi2 <- function(x, ...) {
                       "{format_pvalue(chi2$p.value)}, ",
                       "V = {format_testvalue(cramer_V(chi2))}")
 
-  extra_footer <- style_subtle(paste0("# ", test_string))
+  # Add to footer and display
+  test_footer <- style_subtle(glue("# {test_string}"))
 
-  c(default_footer, extra_footer)
+  c(default_footer, test_footer)
 }
