@@ -4,13 +4,13 @@
 #' central tendency and variability. If no variables are specified,
 #' all numeric (integer or double) variables are described.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Variables to describe (column names). Leave empty to describe all
 #'   numeric variables in data.
 #' @param na.rm a logical value indicating whether `NA` values should be stripped
 #'  before the computation proceeds. Defaults to `TRUE`.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' iris %>% describe()
@@ -41,7 +41,7 @@ describe <- function(data, ..., na.rm = TRUE) {
   }
 
   # Describe
-  data %>%
+  out <- data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
     tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
     dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
@@ -63,6 +63,8 @@ describe <- function(data, ..., na.rm = TRUE) {
     ) %>%
     dplyr::arrange(match(.data$Variable, vars_str))
 
+  # Output
+  return(new_tdcmm(out))
 }
 
 #' Describe categorical variables
@@ -74,11 +76,11 @@ describe <- function(data, ..., na.rm = TRUE) {
 #' If no variables are specified, all categorical (character or factor)
 #' variables are described.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Variables to describe (column names). Leave empty to describe all
 #'   categorical variables in data.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' iris %>% describe_cat()
@@ -101,7 +103,7 @@ describe_cat <- function(data, ...) {
   }
 
   # Describe
-  data %>%
+  out <- data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
     tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
     dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
@@ -113,6 +115,9 @@ describe_cat <- function(data, ...) {
       Mode_N = sum(.data$Value == .data$Mode, na.rm = TRUE)
     ) %>%
     dplyr::arrange(match(.data$Variable, vars_str))
+
+  # Output
+  return(new_tdcmm(out))
 }
 
 ### Internal functions ###

@@ -41,6 +41,10 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
                                                   autonomy_selection,
                                                   method = "kendall")),
                   "tdcmm")
+
+  # Description
+  expect_s3_class(describe(WoJ, autonomy_emphasis), "tdcmm")
+  expect_s3_class(describe_cat(WoJ, reach), "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {
