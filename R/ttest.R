@@ -104,7 +104,7 @@ t_test <- function(data, group_var, ...,
 
     # Compute and Create output
     tt <- t.test(x, y, var.equal = var.equal, paired = paired)
-    tt_row <- format_t_test(test_var, tt, x, y, levels, pooled_sd)
+    tt_row <- format_t_test({{ test_var }}, tt, x, y, levels, pooled_sd)
 
     # collect
     model_list[[length(model_list) + 1]] <- tt
