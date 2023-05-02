@@ -60,7 +60,7 @@ to_correlation_matrix <- function(data) {
     dplyr::pull(.data$x) %>%
     unique()
 
-  out <-data %>%
+  out <- data %>%
     dplyr::select(x = 1, y = 2, cor = 3) %>%
     dplyr::bind_rows(
       data %>%
