@@ -63,6 +63,16 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
   expect_s3_class(t_test(WoJ,
                          temp_contract, autonomy_selection, autonomy_emphasis),
                   "tdcmm")
+
+  # uni anova
+  expect_s3_class(unianova(WoJ, employment,
+                           autonomy_selection, autonomy_emphasis),
+                  "tdcmm")
+  expect_s3_class(unianova(WoJ, employment),
+                  "tdcmm")
+  expect_s3_class(unianova(WoJ, employment,
+                           descriptives = TRUE, post_hoc = TRUE),
+                  "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {
@@ -80,6 +90,11 @@ test_that("correct subclasses are assigned to outputs", {
   # t tests
   expect_s3_class(t_test(WoJ, temp_contract, autonomy_selection),
                   "tdcmm_ttest")
+
+  # uni anova
+  expect_s3_class(unianova(WoJ, employment,
+                           autonomy_selection, autonomy_emphasis),
+                  "tdcmm_uniaov")
 })
 
 test_that("tdcmm provides model accessors", {
@@ -109,4 +124,20 @@ test_that("tdcmm provides model accessors", {
   expect_s3_class(model(t_test(WoJ, temp_contract,
                                autonomy_selection, autonomy_emphasis))[[2]],
                   "htest")
+
+  # uni anova with aov/lm
+  expect_s3_class(model(unianova(WoJ, employment, autonomy_selection)),
+                  "aov")
+  expect_s3_class(model(unianova(WoJ, employment, autonomy_selection,
+                                 descriptives = TRUE, post_hoc = TRUE)),
+                  "aov")
+  expect_length(model(unianova(WoJ, employment,
+                               autonomy_selection, autonomy_emphasis)),
+                2)
+  expect_s3_class(model(unianova(WoJ, employment,
+                                 autonomy_selection, autonomy_emphasis))[[1]],
+                  "aov")
+  expect_s3_class(model(unianova(WoJ, employment,
+                                 autonomy_selection, autonomy_emphasis))[[2]],
+                  "aov")
 })
