@@ -56,6 +56,13 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
                            levels = c(n_pictures = "ordinal"),
                            fleiss_kappa = TRUE),
                   "tdcmm")
+
+  # t Test
+  expect_s3_class(t_test(WoJ, temp_contract, autonomy_selection),
+                  "tdcmm")
+  expect_s3_class(t_test(WoJ,
+                         temp_contract, autonomy_selection, autonomy_emphasis),
+                  "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {
@@ -69,6 +76,10 @@ test_that("correct subclasses are assigned to outputs", {
                                                   work_experience,
                                                   autonomy_selection)),
                   "tdcmm_cormatrix")
+
+  # t tests
+  expect_s3_class(t_test(WoJ, temp_contract, autonomy_selection),
+                  "tdcmm_ttest")
 })
 
 test_that("tdcmm provides model accessors", {
@@ -85,4 +96,17 @@ test_that("tdcmm provides model accessors", {
                                                         work_experience,
                                                         autonomy_selection))),
                   "tdcmm")
+
+  # t tests with t.test
+  expect_s3_class(model(t_test(WoJ, temp_contract, autonomy_selection)),
+                  "htest")
+  expect_length(model(t_test(WoJ, temp_contract,
+                             autonomy_selection, autonomy_emphasis)),
+                2)
+  expect_s3_class(model(t_test(WoJ, temp_contract,
+                               autonomy_selection, autonomy_emphasis))[[1]],
+                  "htest")
+  expect_s3_class(model(t_test(WoJ, temp_contract,
+                               autonomy_selection, autonomy_emphasis))[[2]],
+                  "htest")
 })

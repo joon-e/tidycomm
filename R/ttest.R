@@ -4,7 +4,7 @@
 #' If no variables are specified, all numeric (integer or double) variables are
 #' used.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param group_var group variable (column name)
 #' @param ... test variables (column names). Leave empty to compute t-tests for
 #'   all numeric variables in data.
@@ -22,7 +22,7 @@
 #'   set `paired = TRUE`, specifying a case variable will ensure that data
 #'   are properly sorted for a dependent t-test.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @family t-test
 #'
@@ -90,38 +90,52 @@ t_test <- function(data, group_var, ...,
   data <- dplyr::select(data, {{ group_var }}, !!!test_vars)
 
   # Main function
-  purrr::map_dfr(test_vars, compute_t_test, data, {{ group_var }},
-                 levels, var.equal, paired, pooled_sd)
+  model_list <- list()
+  out <- NULL
+  for (test_var in test_vars) {
 
+    # Split data
+    x <- data %>%
+      dplyr::filter({{ group_var }} == levels[1]) %>%
+      dplyr::pull({{ test_var }})
+    y <- data %>%
+      dplyr::filter({{ group_var }} == levels[2]) %>%
+      dplyr::pull({{ test_var }})
+
+    # Compute and Create output
+    tt <- t.test(x, y, var.equal = var.equal, paired = paired)
+    tt_row <- format_t_test(test_var, tt, x, y, levels, pooled_sd)
+
+    # collect
+    model_list[[length(model_list) + 1]] <- tt
+    out <- out %>%
+      dplyr::bind_rows(tt_row)
+  }
+
+  # Output
+  return(new_tdcmm_ttest(
+    new_tdcmm(out, model = model_list))
+  )
 }
 
 ### Internal functions ###
 
-## Compute t-test
+## Format computed t-test
 ##
-## Computes and outputs a t-test for one test variable
+## Outputs a t-test for one test variable
 ##
 ## @inheritParams t_test
 ## @param test_var Test variable
+## @param tt [htest] t.test object as returned from [compute_t_test]
+## @param x splitted x part of the data
+## @param y splitted y part of the data
 ##
 ## @return a [tibble][tibble::tibble-package]
 ##
 ## @family t-test
 ##
 ## @keywords internal
-compute_t_test <- function(test_var, data, group_var, levels,
-                           var.equal, paired, pooled_sd) {
-
-  # Split data
-  x <- data %>%
-    dplyr::filter({{ group_var }} == levels[1]) %>%
-    dplyr::pull({{ test_var }})
-  y <- data %>%
-    dplyr::filter({{ group_var }} == levels[2]) %>%
-    dplyr::pull({{ test_var }})
-
-  # Test
-  tt <- t.test(x, y, var.equal = var.equal, paired = paired)
+format_t_test <- function(test_var, tt, x, y, levels, pooled_sd) {
 
   # Get names
   level_names <- levels %>%
@@ -177,4 +191,15 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
   }
 
   (mx - my) / s
+}
+
+# Constructors ----
+
+new_tdcmm_ttest <- function(x) {
+  stopifnot(is_tdcmm(x))
+
+  structure(
+    x,
+    class = c("tdcmm_ttest", class(x))
+  )
 }
