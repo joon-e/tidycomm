@@ -1,5 +1,26 @@
 test_that("S3 class tdcmm is assigned to relevant outputs", {
 
+  # Indices
+  expect_s3_class(add_index(WoJ,
+                            ethical_flexibility,
+                            ethics_1, ethics_2, ethics_3, ethics_4),
+                  "tdcmm")
+  expect_s3_class(add_index(WoJ,
+                            ethical_flexibility,
+                            ethics_1, ethics_2, ethics_3, ethics_4,
+                            type = "sum"),
+                  "tdcmm")
+
+  expect_s3_class(get_reliability(add_index(WoJ,
+                                            ethical_flexibility,
+                                            ethics_1, ethics_2, ethics_3)),
+                  "tdcmm")
+  expect_s3_class(get_reliability(add_index(WoJ,
+                                            ethical_flexibility,
+                                            ethics_1, ethics_2, ethics_3,
+                                            type = "sum")),
+                  "tdcmm")
+
   # Crosstabs
   expect_s3_class(crosstab(WoJ, reach, employment), "tdcmm")
   expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE), "tdcmm")
