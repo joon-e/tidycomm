@@ -76,7 +76,11 @@ model <- function(x, ...) {
 model.tdcmm <- function(x, ...) {
   model <- attr(x, "model")
   if (is.null(model)) {
-    warning(glue("'{deparse(substitute(x))}' does not contain any model.'"),
+    x_string <- deparse(substitute(x))
+    x_string <- ifelse(x_string == ".",
+                       "The provided object",
+                       glue("'{x_string}'"))
+    warning(glue("{x_string} does not contain any model."),
             call. = FALSE)
   }
   if (length(model) == 1) model[[1]] else model
