@@ -3,10 +3,10 @@
 #' Tabulates frequencies for one or more categorical variable, including relative,
 #' and cumulative frequencies.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Variables to tabulate
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' WoJ %>% tab_frequencies(employment)
@@ -25,7 +25,7 @@ tab_frequencies <- function(data, ...) {
     dplyr::mutate(percent = .data$n / sum(.data$n)) %>%
     dplyr::arrange(!!!grouping)
 
-  d %>%
+  out <- d %>%
     dplyr::bind_cols(d %>%
                 dplyr::select(!!!grouping,
                        cum_n = "n",
@@ -35,6 +35,7 @@ tab_frequencies <- function(data, ...) {
                 dplyr::select("cum_n", "cum_percent")
     )
 
+  return(new_tdcmm(out))
 }
 
 #' Crosstab variables
@@ -42,7 +43,7 @@ tab_frequencies <- function(data, ...) {
 #' Computes contingency table for one independent (column) variable and one or
 #' more dependent (row) variables.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param col_var Independent (column) variable.
 #' @param ... Dependent (row) variables.
 #' @param add_total Logical indicating whether a 'Total' column should be

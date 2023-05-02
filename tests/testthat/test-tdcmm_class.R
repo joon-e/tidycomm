@@ -3,6 +3,9 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
   # Crosstabs
   expect_s3_class(crosstab(WoJ, reach, employment), "tdcmm")
   expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE), "tdcmm")
+
+  # Frequency tables
+  expect_s3_class(tab_frequencies(WoJ, employment, country), "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {
