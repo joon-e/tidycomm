@@ -45,6 +45,17 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
   # Description
   expect_s3_class(describe(WoJ, autonomy_emphasis), "tdcmm")
   expect_s3_class(describe_cat(WoJ, reach), "tdcmm")
+
+  # ICR
+  expect_s3_class(test_icr(fbposts,
+                           post_id, coder_id,
+                           pop_elite, pop_othering),
+                  "tdcmm")
+  expect_s3_class(test_icr(fbposts,
+                           post_id, coder_id,
+                           levels = c(n_pictures = "ordinal"),
+                           fleiss_kappa = TRUE),
+                  "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {

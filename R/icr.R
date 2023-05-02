@@ -3,7 +3,7 @@
 #' Performs an intercoder reliability test by computing various intercoder
 #' reliability estimates for the included variables
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param unit_var Variable with unit identifiers
 #' @param coder_var Variable with coder identifiers
 #' @param ... Variables to compute intercoder reliability estimates for. Leave
@@ -30,7 +30,7 @@
 #' @param s_lotus Logical indicating whether Fretwurst's standardized Lotus
 #'   (S-Lotus) should be computed. Defaults to `FALSE`.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' fbposts %>% test_icr(post_id, coder_id, pop_elite, pop_othering)
@@ -80,11 +80,13 @@ test_icr <- function(data, unit_var, coder_var, ...,
 
 
   # Map icr computation over test_vars
-  purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},
-                 levels, na.omit,
-                 agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
-                 lotus, s_lotus)
+  out <- purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},
+                        levels, na.omit,
+                        agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
+                        lotus, s_lotus)
 
+  # Output
+  return(new_tdcmm(out))
 }
 
 ### Internal functions ###
