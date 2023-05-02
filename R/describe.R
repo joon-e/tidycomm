@@ -4,6 +4,21 @@
 #' central tendency and variability. If no variables are specified,
 #' all numeric (integer or double) variables are described.
 #'
+#' - N: number of valid cases (i.e., all but missing)
+#' - Missing: number of NA cases
+#' - M: [mean] average
+#' - SD: standard deviation, [sd]
+#' - Min: minimum value, [min]
+#' - Q25: 25% quantile, [quantile]
+#' - Mdn: [median] average, same as 50% quantile
+#' - Q75: 75% quantile, [quantile]
+#' - Max: maximum value, [max]
+#' - Range: difference between Min and Max
+#' - CI_95_LL: \eqn{M - Q(0.975) \times \frac{SD}{\sqrt{N}}} where \eqn{Q(0.975)} denotes Student t's [stats::quantile] function with a probability of \eqn{0.975} and \eqn{N-1} degrees of freedom
+#' - CI_95_UL: \eqn{M + Q(0.975) \times \frac{SD}{\sqrt{N}}} where \eqn{Q(0.975)} denotes Student t's [stats::quantile] function with a probability of \eqn{0.975} and \eqn{N-1} degrees of freedom
+#' - Skewness: traditional Fisher-Pearson coefficient of [skewness] of valid cases as per \eqn{\frac{\frac{1}{N} \sum\limits_{i=1}^N (x_{i}-\overline{x})^3}{[\frac{1}{N}\sum\limits_{i=1}^N (x_{i}-\overline{x})^2]^{3/2}}} where \eqn{\overline{x}} denotes \eqn{M}, following [Doane & Seward, 2011, p. 6, 1a](https://doi.org/10.1080/10691898.2011.11889611)
+#' - Kurtosis: empirical sample kurtosis (i.e., standardized fourth population moment about the mean) as per \eqn{\frac{\sum (x-\overline{x})^4 / N}{(\sum (x-\overline{x})^2 / N)^2}}, following [DeCarlo, 1997, p. 292, b2](https://doi.org/10.1037/1082-989X.2.3.292)
+#'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Variables to describe (column names). Leave empty to describe all
 #'   numeric variables in data.
@@ -13,8 +28,8 @@
 #' @return a [tdcmm] model
 #'
 #' @examples
-#' iris %>% describe()
-#' mtcars %>% describe(mpg, am, cyl)
+#' WoJ %>% describe(autonomy_selection, autonomy_emphasis, work_experience)
+#' fbposts %>% describe(n_pictures)
 #'
 #' @family descriptives
 #'
@@ -76,6 +91,12 @@ describe <- function(data, ..., na.rm = TRUE) {
 #' If no variables are specified, all categorical (character or factor)
 #' variables are described.
 #'
+#' - N: number of valid cases (i.e., all but missing)
+#' - Missing: number of NA cases
+#' - Unique: number of unique categories in a given variable, without Missing
+#' - Mode: mode average (if multiple modes exist, first mode by order of values is returned)
+#' - Mode_N: number of cases reflecting the Mode
+#'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Variables to describe (column names). Leave empty to describe all
 #'   categorical variables in data.
@@ -83,7 +104,8 @@ describe <- function(data, ..., na.rm = TRUE) {
 #' @return a [tdcmm] model
 #'
 #' @examples
-#' iris %>% describe_cat()
+#' WoJ %>% describe_cat(reach, employment, temp_contract)
+#' fbposts %>% describe_cat(type)
 #'
 #' @family descriptives
 #'
@@ -110,7 +132,7 @@ describe_cat <- function(data, ...) {
     dplyr::summarise(
       N = dplyr::n() - sum(is.na(.data$Value)),
       Missing = sum(is.na(.data$Value)),
-      Unique = length(unique(.data$Value)),
+      Unique = length(unique(.data$Value)) - ifelse(Missing > 0, 1, 0),
       Mode = as.character(get_mode(.data$Value)),
       Mode_N = sum(.data$Value == .data$Mode, na.rm = TRUE)
     ) %>%
@@ -149,5 +171,6 @@ skewness <- function(x) {
 kurtosis <- function(x) {
   x <- x[!is.na(x)]
   m <- mean(x, na.rm = TRUE)
-  sum((x - m)^4) / (sum((x - m)^2)^2) * length(x)
+  n <- length(x)
+  (sum((x - m)^4) / n) / (sum((x - m)^2) / n)^2
 }
