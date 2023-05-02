@@ -27,6 +27,20 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
 
   # Frequency tables
   expect_s3_class(tab_frequencies(WoJ, employment, country), "tdcmm")
+
+  # Correlations
+  expect_s3_class(correlate(WoJ, work_experience, autonomy_selection), "tdcmm")
+  expect_s3_class(correlate(WoJ, work_experience, autonomy_selection,
+                            method = "kendall"), "tdcmm")
+  expect_s3_class(to_correlation_matrix(correlate(WoJ,
+                                                  work_experience,
+                                                  autonomy_selection)),
+                  "tdcmm")
+  expect_s3_class(to_correlation_matrix(correlate(WoJ,
+                                                  work_experience,
+                                                  autonomy_selection,
+                                                  method = "kendall")),
+                  "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {
@@ -34,6 +48,12 @@ test_that("correct subclasses are assigned to outputs", {
   # Crosstabs with Chi2
   expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE),
                   "tdcmm_chi2")
+
+  # Correlation matrices with correlations
+  expect_s3_class(to_correlation_matrix(correlate(WoJ,
+                                                  work_experience,
+                                                  autonomy_selection)),
+                  "tdcmm_cormatrix")
 })
 
 test_that("tdcmm provides model accessors", {
@@ -44,4 +64,10 @@ test_that("tdcmm provides model accessors", {
   # Crosstabs with Chi2
   expect_s3_class(model(crosstab(WoJ, reach, employment, chi_square = TRUE)),
                   "htest")
+
+  # Correlation matrices with correlations
+  expect_s3_class(model(to_correlation_matrix(correlate(WoJ,
+                                                        work_experience,
+                                                        autonomy_selection))),
+                  "tdcmm")
 })
