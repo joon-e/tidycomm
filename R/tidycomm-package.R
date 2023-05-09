@@ -1,5 +1,6 @@
 ## usethis namespace: start
 #' @import rlang
+#' @import pillar
 #' @importFrom tibble tibble
 #' @importFrom glue glue
 #' @importFrom stats chisq.test cor cor.test median na.omit quantile sd t.test var TukeyHSD aov as.formula

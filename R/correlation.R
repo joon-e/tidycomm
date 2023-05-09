@@ -4,13 +4,13 @@
 #' variables. If no variables are specified, all numeric (integer or double)
 #' variables are used.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Variables to compute correlations for (column names). Leave empty
 #'   to compute for all numeric variables in data.
 #' @param method a character string indicating which correlation coefficient
 #'   is to be computed. One of "pearson" (default), "kendall", or "spearman"
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @family correlations
 #'
@@ -32,7 +32,9 @@ correlate <- function(data, ..., method = "pearson") {
     dplyr::select(!!!vars) %>%
     names()
   var_combs <- combn(var_strings, 2, simplify = FALSE)
-  purrr::map_dfr(var_combs, correlation_test, data, method)
+  out <- purrr::map_dfr(var_combs, correlation_test, data, method)
+
+  return(new_tdcmm(out))
 }
 
 #' Create correlation matrix
@@ -40,9 +42,9 @@ correlate <- function(data, ..., method = "pearson") {
 #' Turns the tibble exported from \code{\link{correlate}} into a correlation
 #' matrix.
 #'
-#' @param data a [tibble][tibble::tibble-package] returned from \code{\link{correlate}}
+#' @param data a [tdcmm] model returned from \code{\link{correlate}}
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @family correlation
 #'
@@ -58,7 +60,7 @@ to_correlation_matrix <- function(data) {
     dplyr::pull(.data$x) %>%
     unique()
 
-  data %>%
+  out <- data %>%
     dplyr::select(x = 1, y = 2, cor = 3) %>%
     dplyr::bind_rows(
       data %>%
@@ -70,6 +72,10 @@ to_correlation_matrix <- function(data) {
     dplyr::rename(!!estimate := "x") %>%
     dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
                   dplyr::everything())
+
+  return(new_tdcmm_cormatrix(
+    new_tdcmm(out, model = list(data)))
+  )
 }
 
 ### Internal functions ###
@@ -117,5 +123,17 @@ correlation_test <- function(var_comb, data, method) {
     df = ifelse(is.null(cor_test$parameter),
                 NA, cor_test$parameter),
     p = cor_test$p.value
+  )
+}
+
+
+# Constructors ----
+
+new_tdcmm_cormatrix <- function(x) {
+  stopifnot(is_tdcmm(x))
+
+  structure(
+    x,
+    class = c("tdcmm_cormatrix", class(x))
   )
 }
