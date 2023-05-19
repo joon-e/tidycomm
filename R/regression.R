@@ -5,7 +5,7 @@
 #' stepwise regression modeling. If specified, preconditions for
 #' (multi-)collinearity and for homoscedasticity are checked.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param dependent_var The dependent variable on which the linear model is
 #'   fitted. Specify as column name.
 #' @param ... Independent variables to take into account as (one or many)
@@ -21,7 +21,7 @@
 #' @param check_homoscedasticity if set, homoscedasticity is being checked
 #'   using a Breusch-Pagan test
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' WoJ %>% regress(autonomy_selection, ethics_1)
@@ -100,30 +100,17 @@ regress <- function(data,
       p = model_summary$coefficients[,4]
     )
 
-  # overall quality
-  message(sprintf("F(%d, %d) = %f, p = %f, R-square = %f",
-                  model_summary$fstatistic[["numdf"]],
-                  model_summary$fstatistic[["dendf"]],
-                  model_summary$fstatistic[["value"]],
-                  pf(model_summary$fstatistic[["value"]],
-                     model_summary$fstatistic[["numdf"]],
-                     model_summary$fstatistic[["dendf"]],
-                     lower.tail = FALSE),
-                  model_summary$r.squared))
+  # checks
+  model_checks <- list()
 
-  # preconditions
   if (check_independenterrors) {
     check_durbin_watson <- car::durbinWatsonTest(model)
-    message(sprintf("- Check for independent errors: Durbin-Watson = %f (p = %f)",
-                    check_durbin_watson$dw,
-                    check_durbin_watson$p))
+    model_checks[['independenterrors']] <- check_durbin_watson
   }
 
   if (check_homoscedasticity) {
     check_breusch_pagan <- car::ncvTest(model)
-    message(sprintf("- Check for homoscedasticity: Breusch-Pagan = %f (p = %f)",
-                    check_breusch_pagan$ChiSquare,
-                    check_breusch_pagan$p))
+    model_checks[['homoscedasticity']] <- check_breusch_pagan
   }
 
   if (check_multicollinearity) {
@@ -142,23 +129,101 @@ regress <- function(data,
                                                   check_vif),
                                           tolerance = c(NA,
                                                         1/check_vif)))
-        message("- Check for multicollinearity: VIF/tolerance added to output")
+        model_checks[['multicollinearity']] <- check_vif
       }
     }
   }
 
+  checks_factors <- list()
   if (xvars_count_factor > 0) {
     for (xvar in xvars_string) {
       if (is.factor(data[[xvar]])) {
-        message(sprintf(paste0("- %s is a factor and was split into one ",
-                               "variable per level, each compared to '%s' (",
-                               "reference level)"),
-                        xvar,
-                        levels(data[[xvar]])[[1]]))
+        checks_factors[[length(checks_factors) + 1]] <-
+          c(xvar, levels(data[[xvar]])[[1]])
       }
     }
   }
+  model_checks[['factors']] <- checks_factors
 
   # return
-  return(model_tibble)
+  return(new_tdcmm_lm(
+    new_tdcmm(model_tibble,
+              model = list(model),
+              checks = model_checks))
+  )
+}
+
+
+# Formatting ----
+
+#' @export
+tbl_format_footer.tdcmm_lm <- function(x, ...) {
+  default_footer <- NextMethod()
+  footers <- c(default_footer)
+
+  # Get values
+  model <- model(x)
+  model_summary <- summary(model)
+  model_checks <- attr(x, "checks")
+  model_check_names <- names(model_checks)
+
+  # overall quality
+  quality_footer <- sprintf("F(%d, %d) = %f, p = %f, R-square = %f",
+                            model_summary$fstatistic[["numdf"]],
+                            model_summary$fstatistic[["dendf"]],
+                            model_summary$fstatistic[["value"]],
+                            pf(model_summary$fstatistic[["value"]],
+                               model_summary$fstatistic[["numdf"]],
+                               model_summary$fstatistic[["dendf"]],
+                               lower.tail = FALSE),
+                            model_summary$r.squared)
+  footers <- c(footers, glue("# {quality_footer}"))
+
+  # checks
+  if ("independenterrors" %in% model_check_names) {
+    durbin_watson_footer <- sprintf(paste0("Check for independent errors: ",
+                                           "Durbin-Watson = %f (p = %f)"),
+                                    model_checks$independenterrors$dw,
+                                    model_checks$independenterrors$p)
+    footers <- c(footers, glue("- {durbin_watson_footer}"))
+  }
+
+  if ("homoscedasticity" %in% model_check_names) {
+    breusch_pagan_footer <- sprintf(paste0("Check for homoscedasticity: ",
+                                           "Breusch-Pagan = %f (p = %f)"),
+                                    model_checks$homoscedasticity$ChiSquare,
+                                    model_checks$homoscedasticity$p)
+    footers <- c(footers, glue("- {breusch_pagan_footer}"))
+  }
+
+  if ("multicollinearity" %in% model_check_names) {
+    footers <- c(footers,
+                 "- Check for multicollinearity: VIF/tolerance added to output")
+  }
+
+  if (length(model_checks$factors) > 0) {
+    for (i in 1:length(model_checks$factors)) {
+      factor_footer <- sprintf(paste0("%s is a factor and was split into one ",
+                                      "variable per level, each compared to ",
+                                      "'%s' (reference level)"),
+                               model_checks$factors[[i]][[1]],
+                               model_checks$factors[[i]][[2]])
+      footers <- c(footers, glue("- {factor_footer}"))
+    }
+  }
+
+  style_subtle(footers)
+}
+
+### Internal functions ###
+
+# Constructors ----
+
+new_tdcmm_lm <- function(x) {
+  stopifnot(is_tdcmm(x))
+
+  structure(
+    x,
+    class = c("tdcmm_lm", class(x))
+  )
 }
