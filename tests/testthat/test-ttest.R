@@ -2,16 +2,6 @@ context("t-Test")
 
 # Main functions
 
-test_that("compute_t_test returns tibble", {
-
-  t <- compute_t_test(autonomy_selection, WoJ, temp_contract,
-                      levels = c("Permanent", "Temporary"),
-                      var.equal = TRUE, paired = FALSE, pooled_sd = TRUE)
-
-  expect_true(tibble::is_tibble(t))
-  expect_equal(dim(t), c(1, 10))
-})
-
 test_that("t_test returns tibble", {
 
   t <- t_test(WoJ, temp_contract, autonomy_selection, autonomy_emphasis)

@@ -4,7 +4,7 @@
 #' If no variables are specified, all numeric (integer or double) variables are
 #' used.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param group_var group variable (column name)
 #' @param ... test variables (column names). Leave empty to compute ANOVAs for
 #'   all numeric variables in data.
@@ -15,7 +15,7 @@
 #'   should be computed. Results of the post-hoc test will be added in a list
 #'   column of result tibbles.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @family ANOVA
 #'
@@ -44,18 +44,43 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
   }
 
   # Main function
-  purrr::map_dfr(test_vars, compute_aov, data, {{ group_var }},
-                 descriptives, post_hoc)
+  model_list <- list()
+  out <- NULL
+  for (test_var in test_vars) {
 
+    # preparation
+    group_var_string <- as_label(enquo(group_var))
+    test_var_string <- as_label(enquo(test_var))
+    formula <- as.formula(paste("`", test_var_string, "`",
+                                " ~ ",
+                                "`", group_var_string, "`",
+                                sep = ""))
+
+    # Compute and create output
+    aov_model <- aov(formula, data)
+    aov_model_row <- format_aov(aov_model, {{ test_var }}, data, {{ group_var }},
+                                descriptives, post_hoc)
+
+    # collect
+    model_list[[length(model_list) + 1]] <- aov_model
+    out <- out %>%
+      dplyr::bind_rows(aov_model_row)
+  }
+
+  # Output
+  return(new_tdcmm_uniaov(
+    new_tdcmm(out, model = model_list))
+  )
 }
 
 ### Internal functions ###
 
-## Compute one-way ANOVA
+## Format provided one-way ANOVA
 ##
-## Computes and outputs a one-way ANOVA for one test variable
+## Outputs a one-way ANOVA for one test variable
 ##
 ## @inheritParams unianova
+## @param aov_model aov model
 ## @param test_var Test variable
 ##
 ## @return a [tibble][tibble::tibble-package]
@@ -63,17 +88,10 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
 ## @family ANOVA
 ##
 ## @keywords internal
-compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
-  group_var_string <- as_label(enquo(group_var))
+format_aov <- function(aov_model, test_var, data, group_var, descriptives,
+                       post_hoc) {
+
   test_var_string <- as_label(enquo(test_var))
-
-  formula <- as.formula(paste("`", test_var_string, "`",
-                              " ~ ",
-                              "`", group_var_string, "`",
-                              sep = ""))
-
-  aov_model <- aov(formula, data)
-
   aov_s <- broom::tidy(aov_model)
 
   aov_df <- tibble(
@@ -116,4 +134,16 @@ compute_aov <- function(test_var, data, group_var, descriptives, post_hoc) {
   }
 
   return(aov_df)
+}
+
+
+# Constructors ----
+
+new_tdcmm_uniaov <- function(x) {
+  stopifnot(is_tdcmm(x))
+
+  structure(
+    x,
+    class = c("tdcmm_uniaov", class(x))
+  )
 }

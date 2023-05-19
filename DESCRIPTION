@@ -38,6 +38,7 @@ Imports:
     lm.beta,
     magrittr,
     MBESS,
+    pillar,
     purrr,
     rlang,
     stats,
