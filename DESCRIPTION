@@ -31,14 +31,17 @@ Depends:
     R (>= 2.10)
 Imports: 
     broom,
+    car,
     dplyr,
     forcats,
     glue,
+    lm.beta,
     magrittr,
     MBESS,
     pillar,
     purrr,
     rlang,
+    stats,
     stringr,
     tibble,
     tidyr

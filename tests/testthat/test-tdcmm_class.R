@@ -73,6 +73,14 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
   expect_s3_class(unianova(WoJ, employment,
                            descriptives = TRUE, post_hoc = TRUE),
                   "tdcmm")
+
+  # regression
+  expect_s3_class(regress(WoJ, autonomy_selection, ethics_1), "tdcmm")
+  expect_s3_class(regress(WoJ, autonomy_selection,
+                          work_experience, trust_government), "tdcmm")
+  expect_s3_class(regress(WoJ, autonomy_selection,
+                          work_experience, trust_government,
+                          check_multicollinearity = TRUE), "tdcmm")
 })
 
 test_that("correct subclasses are assigned to outputs", {
@@ -95,6 +103,9 @@ test_that("correct subclasses are assigned to outputs", {
   expect_s3_class(unianova(WoJ, employment,
                            autonomy_selection, autonomy_emphasis),
                   "tdcmm_uniaov")
+
+  # regression
+  expect_s3_class(regress(WoJ, autonomy_selection, ethics_1), "tdcmm_lm")
 })
 
 test_that("tdcmm provides model accessors", {
@@ -140,4 +151,8 @@ test_that("tdcmm provides model accessors", {
   expect_s3_class(model(unianova(WoJ, employment,
                                  autonomy_selection, autonomy_emphasis))[[2]],
                   "aov")
+
+  # regression with lm
+  expect_s3_class(model(regress(WoJ, autonomy_selection, ethics_1)),
+                  "lm")
 })
