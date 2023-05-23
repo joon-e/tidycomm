@@ -101,6 +101,10 @@ model.tdcmm <- function(x, ...) {
 #' (see list below). Returns `NULL` (and a warning) if not visualization has
 #' been implemented for the particular model.
 #'
+#' - `describe`: horizontal box plot depicting a box from Q25 to Q75, a thick
+#' line for Mdn, and two whiskers to Min/Max respectively;
+#' no additional arguments
+#'
 #' @param x `tdcmm` output
 #' @param ... other arguments
 #'
@@ -113,6 +117,10 @@ visualize <- function(x, ...) {
 
 #' @export
 visualize.tdcmm <- function(x, ...) {
+  if (attr(x, "func") == "describe") {
+    return(visualize_describe(x))
+  }
+
   warning(glue("No visualization implemented for this model."),
           call. = FALSE)
   NULL
