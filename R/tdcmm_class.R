@@ -95,3 +95,25 @@ model.tdcmm <- function(x, ...) {
   }
   if (length(model) == 1) model[[1]] else model
 }
+#' Access visualization used to estimate output
+#'
+#' Returns [ggplot2] visualization appropriate to respective `tdcmm` model
+#' (see list below). Returns `NULL` (and a warning) if not visualization has
+#' been implemented for the particular model.
+#'
+#' @param x `tdcmm` output
+#' @param ... other arguments
+#'
+#' @returns A [ggplot2] object
+#'
+#' @export
+visualize <- function(x, ...) {
+  UseMethod("visualize")
+}
+
+#' @export
+visualize.tdcmm <- function(x, ...) {
+  warning(glue("No visualization implemented for this model."),
+          call. = FALSE)
+  NULL
+}
