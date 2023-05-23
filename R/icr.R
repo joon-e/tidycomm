@@ -89,6 +89,7 @@ test_icr <- function(data, unit_var, coder_var, ...,
   # Output
   return(new_tdcmm(out,
                    func = "test_icr",
+                   data = data,
                    params = list(unit_var = as_name(enquo(unit_var)),
                                  coder_var = as_name(enquo(coder_var)),
                                  vars = test_vars_str,

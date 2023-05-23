@@ -71,6 +71,7 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
   return(new_tdcmm_uniaov(
     new_tdcmm(out,
               func = "unianova",
+              data = data,
               params = list(group_var = group_var_string,
                             vars = test_vars_string,
                             descriptives = descriptives,

@@ -60,6 +60,7 @@ add_index <- function(data, name, ..., type = "mean",
   # Output
   return(new_tdcmm(index_df,
                    func = "add_index",
+                   data = data,
                    params = list(name = name,
                                  vars = index_vars_str,
                                  type = type,

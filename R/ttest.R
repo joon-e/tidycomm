@@ -116,6 +116,7 @@ t_test <- function(data, group_var, ...,
   return(new_tdcmm_ttest(
     new_tdcmm(out,
               func = "t_test",
+              data = data,
               params = list(group_var = group_var_str,
                             vars = test_vars_string,
                             var.equal = var.equal,

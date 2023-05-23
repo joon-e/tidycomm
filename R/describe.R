@@ -56,9 +56,11 @@ describe <- function(data, ..., na.rm = TRUE) {
   }
 
   # Describe
-  out <- data %>%
+  data <- data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
-    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
+    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value")
+
+  out <- data %>%
     dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n() - sum(is.na(.data$Value)),
@@ -81,6 +83,7 @@ describe <- function(data, ..., na.rm = TRUE) {
   # Output
   return(new_tdcmm(out,
                    func = "describe",
+                   data = data,
                    params = list(vars = vars_str,
                                  na.rm = na.rm)))
 }
@@ -128,9 +131,11 @@ describe_cat <- function(data, ...) {
   }
 
   # Describe
-  out <- data %>%
+  data <- data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
-    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
+    tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value")
+
+  out <- data %>%
     dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(
       N = dplyr::n() - sum(is.na(.data$Value)),
@@ -144,6 +149,7 @@ describe_cat <- function(data, ...) {
   # Output
   return(new_tdcmm(out,
                    func = "describe_cat",
+                   data = data,
                    params = list(vars = vars_str)))
 }
 

@@ -34,6 +34,7 @@ NULL
 #'
 #' @param x A [tibble][tibble::tibble-package].
 #' @param func Function name called that produced this model.
+#' @param data The [tibble] that served as input to the function.
 #' @param model A list of model object(s) used in preparation of the output.
 #'   Defaults to `NULL`. A single model should be wrapped in a list of length
 #'   `1`.
@@ -41,9 +42,10 @@ NULL
 #'   output. Defaults to `NULL`.
 #' @param params A named list of parameters originally passed to the call.
 #'   Defaults to an empty list.
-new_tdcmm <- function(x, func, model = NULL, checks = NULL, params = list()) {
+new_tdcmm <- function(x, func, data, model = NULL, checks = NULL, params = list()) {
   stopifnot(tibble::is_tibble(x))
   stopifnot(func != "")
+  stopifnot(tibble::is_tibble(data))
   stopifnot(is.list(model) | is.null(model))
   stopifnot(is.list(checks) | is.null(checks))
   stopifnot(is.list(params))
@@ -52,6 +54,7 @@ new_tdcmm <- function(x, func, model = NULL, checks = NULL, params = list()) {
     x,
     class = c("tdcmm", class(x)),
     func = func,
+    data = data,
     params = params,
     model = model,
     checks = checks

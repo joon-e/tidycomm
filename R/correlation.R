@@ -36,6 +36,7 @@ correlate <- function(data, ..., method = "pearson") {
 
   return(new_tdcmm(out,
                    func = "correlate",
+                   data = data,
                    params = list(vars = var_strings,
                                  method = method)))
 }
@@ -78,6 +79,7 @@ to_correlation_matrix <- function(data) {
 
   return(new_tdcmm_cormatrix(
     new_tdcmm(out,
+              data = data,
               func = "to_correlation_matrix",
               model = list(data)))
   )

@@ -40,6 +40,7 @@ tab_frequencies <- function(data, ...) {
 
   return(new_tdcmm(out,
                    func = "tab_frequencies",
+                   data = data,
                    params = list(vars = vars_str)))
 }
 
@@ -124,6 +125,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     return(new_tdcmm_chi2(
       new_tdcmm(out,
                 func = "crosstab",
+                data = data,
                 params = list(vars = vars_str,
                               col_var = as_name(enquo(col_var)),
                               add_total = add_total,
@@ -134,6 +136,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
   } else {
     return(new_tdcmm(out,
                      func = "crosstab",
+                     data = data,
                      params = list(vars = vars_str,
                                    col_var = as_name(enquo(col_var)),
                                    add_total = add_total,

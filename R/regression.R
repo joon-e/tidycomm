@@ -149,6 +149,7 @@ regress <- function(data,
   return(new_tdcmm_lm(
     new_tdcmm(model_tibble,
               func = "regress",
+              data = data,
               params = list(dependent_var = yvar_string,
                             vars = xvars_string,
                             check_independenterrors = check_independenterrors,
