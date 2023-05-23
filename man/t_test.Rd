@@ -16,7 +16,7 @@ t_test(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{group_var}{group variable (column name)}
 
@@ -42,7 +42,7 @@ set \code{paired = TRUE}, specifying a case variable will ensure that data
 are properly sorted for a dependent t-test.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes t-tests for one group variable and specified test variables.

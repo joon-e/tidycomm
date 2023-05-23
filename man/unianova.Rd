@@ -7,7 +7,7 @@
 unianova(data, group_var, ..., descriptives = FALSE, post_hoc = FALSE)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{group_var}{group variable (column name)}
 
@@ -23,7 +23,7 @@ should be computed. Results of the post-hoc test will be added in a list
 column of result tibbles.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes one-way ANOVAS for one group variable and specified test variables.

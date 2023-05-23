@@ -7,7 +7,7 @@
 correlate(data, ..., method = "pearson")
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{...}{Variables to compute correlations for (column names). Leave empty
 to compute for all numeric variables in data.}
@@ -16,7 +16,7 @@ to compute for all numeric variables in data.}
 is to be computed. One of "pearson" (default), "kendall", or "spearman"}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes correlation coefficients for all combinations of the specified
