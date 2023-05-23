@@ -156,3 +156,81 @@ test_that("tdcmm provides model accessors", {
   expect_s3_class(model(regress(WoJ, autonomy_selection, ethics_1)),
                   "lm")
 })
+
+test_that("tdcmm contains adequate func names and param lists", {
+  t <- describe(WoJ, autonomy_selection)
+  expect_equal(attr(t, "func"), "describe")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(describe)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- describe_cat(WoJ, reach)
+  expect_equal(attr(t, "func"), "describe_cat")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(describe_cat)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- tab_frequencies(WoJ, employment)
+  expect_equal(attr(t, "func"), "tab_frequencies")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(tab_frequencies)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- crosstab(WoJ, reach, employment)
+  expect_equal(attr(t, "func"), "crosstab")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(crosstab)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- crosstab(WoJ, reach, employment, chi_square = TRUE)
+  expect_equal(attr(t, "func"), "crosstab")
+  expect_type(attr(t, "params"), "list")
+
+  t <- correlate(WoJ)
+  expect_equal(attr(t, "func"), "correlate")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(correlate)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- to_correlation_matrix(t)
+  expect_equal(attr(t, "func"), "to_correlation_matrix")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(to_correlation_matrix)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- add_index(WoJ, ethical_flexibility, ethics_1, ethics_2, ethics_3)
+  expect_equal(attr(t, "func"), "add_index")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(add_index)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- get_reliability(t)
+  expect_equal(attr(t, "func"), "get_reliability")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(get_reliability)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- t_test(WoJ, temp_contract)
+  expect_equal(attr(t, "func"), "t_test")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(t_test)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- unianova(WoJ, employment)
+  expect_equal(attr(t, "func"), "unianova")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(unianova)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- test_icr(fbposts, post_id, coder_id, pop_elite, pop_othering)
+  expect_equal(attr(t, "func"), "test_icr")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(test_icr)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+
+  t <- regress(WoJ, autonomy_selection, ethics_1)
+  expect_equal(attr(t, "func"), "regress")
+  expect_type(attr(t, "params"), "list")
+  expect_equal(length(formals(regress)) - 1, # reduced by piping data argument
+               length(attr(t, "params")))
+})

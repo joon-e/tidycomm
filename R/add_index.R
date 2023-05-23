@@ -58,5 +58,11 @@ add_index <- function(data, name, ..., type = "mean",
   attributes(index_df[[name]]) <- list(index_of = index_vars_str)
 
   # Output
-  return(new_tdcmm(index_df))
+  return(new_tdcmm(index_df,
+                   func = "add_index",
+                   params = list(name = name,
+                                 vars = index_vars_str,
+                                 type = type,
+                                 na.rm = na.rm,
+                                 cast.numeric = cast.numeric)))
 }

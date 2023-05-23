@@ -34,7 +34,10 @@ correlate <- function(data, ..., method = "pearson") {
   var_combs <- combn(var_strings, 2, simplify = FALSE)
   out <- purrr::map_dfr(var_combs, correlation_test, data, method)
 
-  return(new_tdcmm(out))
+  return(new_tdcmm(out,
+                   func = "correlate",
+                   params = list(vars = var_strings,
+                                 method = method)))
 }
 
 #' Create correlation matrix
@@ -74,7 +77,9 @@ to_correlation_matrix <- function(data) {
                   dplyr::everything())
 
   return(new_tdcmm_cormatrix(
-    new_tdcmm(out, model = list(data)))
+    new_tdcmm(out,
+              func = "to_correlation_matrix",
+              model = list(data)))
   )
 }
 

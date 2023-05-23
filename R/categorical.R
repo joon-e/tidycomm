@@ -16,6 +16,9 @@
 #'
 #' @export
 tab_frequencies <- function(data, ...) {
+  vars <- grab_vars(data, enquos(...))
+  vars_str <- purrr::map_chr(vars, as_label)
+
   grouping <- dplyr::groups(data)
 
   d <- data %>%
@@ -35,7 +38,9 @@ tab_frequencies <- function(data, ...) {
                 dplyr::select("cum_n", "cum_percent")
     )
 
-  return(new_tdcmm(out))
+  return(new_tdcmm(out,
+                   func = "tab_frequencies",
+                   params = list(vars = vars_str)))
 }
 
 #' Crosstab variables
@@ -70,6 +75,9 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     warning("Grouping variable(s) present in data will be ignored.",
             call. = FALSE)
   }
+
+  vars <- grab_vars(data, enquos(...))
+  vars_str <- purrr::map_chr(vars, as_label)
 
   cross_vars <- length(quos(...))
 
@@ -114,10 +122,23 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
 
   if (chi_square) {
     return(new_tdcmm_chi2(
-      new_tdcmm(out, model = list(chi2)))
+      new_tdcmm(out,
+                func = "crosstab",
+                params = list(vars = vars_str,
+                              col_var = as_name(enquo(col_var)),
+                              add_total = add_total,
+                              percentages = percentages,
+                              chi_square = chi_square),
+                model = list(chi2)))
       )
   } else {
-    return(new_tdcmm(out))
+    return(new_tdcmm(out,
+                     func = "crosstab",
+                     params = list(vars = vars_str,
+                                   col_var = as_name(enquo(col_var)),
+                                   add_total = add_total,
+                                   percentages = percentages,
+                                   chi_square = chi_square)))
   }
 }
 

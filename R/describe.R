@@ -79,7 +79,10 @@ describe <- function(data, ..., na.rm = TRUE) {
     dplyr::arrange(match(.data$Variable, vars_str))
 
   # Output
-  return(new_tdcmm(out))
+  return(new_tdcmm(out,
+                   func = "describe",
+                   params = list(vars = vars_str,
+                                 na.rm = na.rm)))
 }
 
 #' Describe categorical variables
@@ -139,7 +142,9 @@ describe_cat <- function(data, ...) {
     dplyr::arrange(match(.data$Variable, vars_str))
 
   # Output
-  return(new_tdcmm(out))
+  return(new_tdcmm(out,
+                   func = "describe_cat",
+                   params = list(vars = vars_str)))
 }
 
 ### Internal functions ###

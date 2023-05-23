@@ -77,6 +77,7 @@ test_icr <- function(data, unit_var, coder_var, ...,
 
   exclude_vars <- c(as_label(expr({{ unit_var }})), as_label(expr({{ coder_var }})))
   test_vars <- grab_vars(data, enquos(...), alternative = "all", exclude_vars = exclude_vars)
+  test_vars_str <- purrr::map_chr(test_vars, as_label)
 
 
   # Map icr computation over test_vars
@@ -86,7 +87,21 @@ test_icr <- function(data, unit_var, coder_var, ...,
                         lotus, s_lotus)
 
   # Output
-  return(new_tdcmm(out))
+  return(new_tdcmm(out,
+                   func = "test_icr",
+                   params = list(unit_var = as_name(enquo(unit_var)),
+                                 coder_var = as_name(enquo(coder_var)),
+                                 vars = test_vars_str,
+                                 levels = levels,
+                                 na.omit = na.omit,
+                                 agreement = agreement,
+                                 holsti = holsti,
+                                 kripp_alpha = kripp_alpha,
+                                 cohens_kappa = cohens_kappa,
+                                 fleiss_kappa = fleiss_kappa,
+                                 brennan_prediger = brennan_prediger,
+                                 lotus = lotus,
+                                 s_lotus = s_lotus)))
 }
 
 ### Internal functions ###

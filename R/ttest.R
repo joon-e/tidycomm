@@ -114,7 +114,16 @@ t_test <- function(data, group_var, ...,
 
   # Output
   return(new_tdcmm_ttest(
-    new_tdcmm(out, model = model_list))
+    new_tdcmm(out,
+              func = "t_test",
+              params = list(group_var = group_var_str,
+                            vars = test_vars_string,
+                            var.equal = var.equal,
+                            paired = paired,
+                            pooled_sd = pooled_sd,
+                            levels = levels,
+                            case_var = case_var),
+              model = model_list))
   )
 }
 
