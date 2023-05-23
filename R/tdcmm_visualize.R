@@ -114,3 +114,59 @@ visualize_describe_cat <- function(x, stacked) {
       ggplot2::theme(legend.position = "none")
   }
 }
+
+#' Visualize `tab_frequencies()` as one or many histogram(s)
+#'
+#' @param x a [tdcmm] model
+#'
+#' @return a [ggplot2] object
+#'
+#' @family tdcmm visualize
+#'
+#' @keywords internal
+visualize_tab_frequencies <- function(x) {
+  var_names <- attr(x, "params")$vars
+  num_histograms <- length(var_names)
+
+  # collect data
+  data <- NULL
+  for (variable in var_names) {
+    data <- data %>%
+      rbind(attr(x, "data") %>%
+              tab_frequencies(!!sym(variable)) %>%
+              dplyr::mutate(var = variable,
+                            level = !!sym(variable)) %>%
+              dplyr::select(var, level, percent))
+  }
+
+  # visualize
+  percentage_labeller <-  function(x) {
+    paste0(round(100*x, 0), "%")
+  }
+
+  g <- data %>%
+    ggplot2::ggplot(ggplot2::aes(x = level,
+                                 y = percent)) +
+    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::scale_x_discrete(NULL) +
+    ggplot2::scale_y_continuous(NULL,
+                                labels = percentage_labeller,
+                                limits = c(0, 1),
+                                breaks = seq(0, 1, .1)) +
+    tdcmm_defaults()$theme()
+
+  # wrap depending on number of variables
+  if (num_histograms > 1) {
+    g <- g + ggplot2::facet_wrap(ggplot2::vars(var),
+                                 scales = "free_x")
+
+    if (num_histograms >= 4) {
+      warning("Visualizing too many histograms at once might strongly inhibit ",
+              "readability. Consider reducing the number of variables in ",
+              "tab_frequencies() before calling visualize().",
+              call. = FALSE)
+    }
+  }
+
+  return(g)
+}

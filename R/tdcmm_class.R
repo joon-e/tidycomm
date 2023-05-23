@@ -109,6 +109,9 @@ model.tdcmm <- function(x, ...) {
 #' no additional arguments
 #' - `describe_cat`: horizontal bar plot depicting number of occurrences;
 #' optional argument to either show stacked or unstacked/grouped bars
+#' - `tab_frequencies`: either a histogram (if 1 variable is given) or multiple
+#' histograms wrapped, 4+ variables also issue a warning about readability;
+#' no additional arguments
 #'
 #' @param x `tdcmm` output
 #' @param stacked only for `describe_cat`, if `TRUE` (default), bars are stacked
@@ -129,6 +132,10 @@ visualize.tdcmm <- function(x, stacked = TRUE, ...) {
 
   if (attr(x, "func") == "describe_cat") {
     return(visualize_describe_cat(x, stacked = stacked))
+  }
+
+  if (attr(x, "func") == "tab_frequencies") {
+    return(visualize_tab_frequencies(x))
   }
 
   warning(glue("No visualization implemented for this model."),
