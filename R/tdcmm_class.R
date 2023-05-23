@@ -107,8 +107,11 @@ model.tdcmm <- function(x, ...) {
 #' - `describe`: horizontal box plot depicting a box from Q25 to Q75, a thick
 #' line for Mdn, and two whiskers to Min/Max respectively;
 #' no additional arguments
+#' - `describe_cat`: horizontal bar plot depicting number of occurrences;
+#' optional argument to either show stacked or unstacked/grouped bars
 #'
 #' @param x `tdcmm` output
+#' @param stacked only for `describe_cat`, if `TRUE` (default), bars are stacked
 #' @param ... other arguments
 #'
 #' @returns A [ggplot2] object
@@ -119,9 +122,13 @@ visualize <- function(x, ...) {
 }
 
 #' @export
-visualize.tdcmm <- function(x, ...) {
+visualize.tdcmm <- function(x, stacked = TRUE, ...) {
   if (attr(x, "func") == "describe") {
     return(visualize_describe(x))
+  }
+
+  if (attr(x, "func") == "describe_cat") {
+    return(visualize_describe_cat(x, stacked = stacked))
   }
 
   warning(glue("No visualization implemented for this model."),
