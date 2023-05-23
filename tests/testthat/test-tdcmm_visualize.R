@@ -14,4 +14,10 @@ test_that("implemented visualize() calls return ggplot2", {
                   "ggplot")
   expect_s3_class(visualize(tab_frequencies(WoJ, employment, reach)),
                   "ggplot")
+
+  expect_s3_class(visualize(crosstab(WoJ, reach, employment)),
+                  "ggplot")
+  expect_s3_class(visualize(crosstab(WoJ, reach, employment, percentages = T)),
+                  "ggplot")
+  expect_error(visualize(crosstab(WoJ, reach, employment, ethics_1)))
 })

@@ -112,6 +112,8 @@ model.tdcmm <- function(x, ...) {
 #' - `tab_frequencies`: either a histogram (if 1 variable is given) or multiple
 #' histograms wrapped, 4+ variables also issue a warning about readability;
 #' no additional arguments
+#' - `crosstab`: horizontal stacked bar plot, either absolute or relative
+#' (depending on `percentages`)
 #'
 #' @param x `tdcmm` output
 #' @param stacked only for `describe_cat`, if `TRUE` (default), bars are stacked
@@ -136,6 +138,10 @@ visualize.tdcmm <- function(x, stacked = TRUE, ...) {
 
   if (attr(x, "func") == "tab_frequencies") {
     return(visualize_tab_frequencies(x))
+  }
+
+  if (attr(x, "func") == "crosstab") {
+    return(visualize_crosstab(x))
   }
 
   warning(glue("No visualization implemented for this model."),
