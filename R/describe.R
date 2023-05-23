@@ -140,7 +140,7 @@ describe_cat <- function(data, ...) {
     dplyr::summarise(
       N = dplyr::n() - sum(is.na(.data$Value)),
       Missing = sum(is.na(.data$Value)),
-      Unique = length(unique(.data$Value)) - ifelse(Missing > 0, 1, 0),
+      Unique = length(unique(.data$Value)) - ifelse(.data$Missing > 0, 1, 0),
       Mode = as.character(get_mode(.data$Value)),
       Mode_N = sum(.data$Value == .data$Mode, na.rm = TRUE)
     ) %>%
