@@ -101,19 +101,25 @@ model.tdcmm <- function(x, ...) {
 #' Access visualization used to estimate output
 #'
 #' Returns [ggplot2] visualization appropriate to respective `tdcmm` model
-#' (see list below). Returns `NULL` (and a warning) if not visualization has
+#' (see list below). Returns `NULL` (and a warning) if no visualization has
 #' been implemented for the particular model.
 #'
-#' - `describe`: horizontal box plot depicting a box from Q25 to Q75, a thick
+#' - [describe]: horizontal box plot depicting a box from Q25 to Q75, a thick
 #' line for Mdn, and two whiskers to Min/Max respectively;
 #' no additional arguments
-#' - `describe_cat`: horizontal bar plot depicting number of occurrences;
+#' - [describe_cat]: horizontal bar plot depicting number of occurrences;
 #' no additional arguments
-#' - `tab_frequencies`: either a histogram (if 1 variable is given) or multiple
+#' - [tab_frequencies]: either a histogram (if 1 variable is given) or multiple
 #' histograms wrapped, 4+ variables also issue a warning about readability;
 #' no additional arguments
-#' - `crosstab`: horizontal stacked bar plot, either absolute or relative
-#' (depending on `percentages`)
+#' - [crosstab]: horizontal stacked bar plot, either absolute or relative
+#' (depending on the `percentages` argument in [crosstab])
+#' - [t_test]: plot with points and appended 95% confidence intervals;
+#' no additional arguments
+#' - [unianova]:
+#' - [correlate]:
+#' - [to_correlation_matrix]:
+#' - [regress]:
 #'
 #' @param x `tdcmm` output
 #' @param ... other arguments

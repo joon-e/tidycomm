@@ -106,7 +106,7 @@ test_that("correct subclasses are assigned to outputs", {
 
   # t tests
   expect_s3_class(t_test(WoJ, temp_contract, autonomy_selection),
-                  "tdcmm_ttest")
+                  "tdcmm_ttst")
 
   # uni anova
   expect_s3_class(unianova(WoJ, employment,

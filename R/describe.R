@@ -73,8 +73,8 @@ describe <- function(data, ..., na.rm = TRUE) {
       Q75 = quantile(.data$Value, .75, na.rm = na.rm),
       Max = max(.data$Value, na.rm = na.rm),
       Range = .data$Max - .data$Min,
-      CI_95_LL = .data$M - stats::qt(0.975, df = .data$N-1) * .data$SD/sqrt(.data$N),
-      CI_95_UL = .data$M + stats::qt(0.975, df = .data$N-1) * .data$SD/sqrt(.data$N),
+      CI_95_LL = calculate_ci_ll(.data$M, .data$SD, .data$N),
+      CI_95_UL = calculate_ci_ul(.data$M, .data$SD, .data$N),
       Skewness = skewness(.data$Value),
       Kurtosis = kurtosis(.data$Value)
     ) %>%
@@ -225,7 +225,7 @@ visualize_describe <- function(x) {
                                 limits = c(0, NA),
                                 n.breaks = 8) +
     ggplot2::scale_y_discrete(NULL) +
-    tdcmm_defaults()$theme()
+    tdcmm_visual_defaults()$theme()
 }
 
 #' Visualize `describe_cat()` as horizontal bar plot
@@ -268,11 +268,11 @@ visualize_describe_cat <- function(x, stacked) {
                                 n.breaks = 10) +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_fill_manual(NULL,
-                               values = rep(tdcmm_defaults()$fill_qual_1,
+                               values = rep(tdcmm_visual_defaults()$fill_qual_1,
                                             dplyr::n_distinct(attr(x, "data")$Value))) +
     ggplot2::scale_color_manual(NULL, values = c("w" = "white",
                                                  "b" = "black")) +
-    tdcmm_defaults()$theme() +
+    tdcmm_visual_defaults()$theme() +
     ggplot2::theme(legend.position = "none")
 }
 

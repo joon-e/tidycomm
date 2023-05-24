@@ -225,7 +225,7 @@ visualize_tab_frequencies <- function(x) {
                                 labels = percentage_labeller,
                                 limits = c(0, 1),
                                 breaks = seq(0, 1, .1)) +
-    tdcmm_defaults()$theme()
+    tdcmm_visual_defaults()$theme()
 
   # wrap depending on number of variables
   if (num_histograms > 1) {
@@ -308,9 +308,9 @@ visualize_crosstab <- function(x) {
   g <- g +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_fill_brewer(NULL,
-                               palette = tdcmm_defaults()$fill_qual_max12,
+                               palette = tdcmm_visual_defaults()$fill_qual_max12,
                                guide = ggplot2::guide_legend(reverse = TRUE)) +
-    tdcmm_defaults()$theme() +
+    tdcmm_visual_defaults()$theme() +
     ggplot2::theme(legend.position = "bottom")
 
   return(g)

@@ -113,7 +113,7 @@ t_test <- function(data, group_var, ...,
   }
 
   # Output
-  return(new_tdcmm_ttest(
+  return(new_tdcmm_ttst(
     new_tdcmm(out,
               func = "t_test",
               data = data,
@@ -126,6 +126,15 @@ t_test <- function(data, group_var, ...,
                             case_var = case_var),
               model = model_list))
   )
+}
+
+#' @export
+visualize.tdcmm_ttst <- function(x, ...) {
+  if (attr(x, "func") == "t_test") {
+    return(visualize_t_test(x))
+  }
+
+  return(warn_about_missing_visualization(x))
 }
 
 ### Internal functions ###
@@ -203,13 +212,80 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
   (mx - my) / s
 }
 
+visualize_t_test <- function(x) {
+  # get variables
+  group_var_str <- attr(x, "params")$group_var
+  group_var <- sym(group_var_str)
+
+  test_vars_str <- attr(x, "params")$vars
+  test_vars_str <- test_vars_str[test_vars_str != group_var_str]
+  test_vars <- syms(test_vars_str)
+
+  data <- attr(x, "data")
+  levels <- attr(x, "params")$levels
+  level_names <- levels %>%
+    stringr::str_replace_all(" ", "_") %>%
+    stringr::str_sub(1, 10)
+  n_str <- paste("N", level_names, sep = "_")
+
+  # collect n
+  n <- NULL
+  for (test_var_str in test_vars_str) {
+    n <- n %>%
+      rbind(tibble::tibble(Variable = test_var_str,
+                           !!n_str[1] := (
+                             data %>%
+                               dplyr::filter({{ group_var }} == levels[1]) %>%
+                               nrow()
+                           ),
+                           !!n_str[2] := (
+                             data %>%
+                               dplyr::filter({{ group_var }} == levels[2]) %>%
+                               nrow()
+                           )))
+  }
+
+  # merge
+  data <- x %>%
+    dplyr::select(-.data$Delta_M, -.data$t, -.data$df, -.data$p, -.data$d) %>%
+    dplyr::left_join(n, by = "Variable") %>%
+    tidyr::pivot_longer(tidyselect::ends_with(level_names),
+                        names_to = "level") %>%
+    dplyr::mutate(var = stringr::str_split_i(.data$level, "_", 1),
+                  level = stringr::str_split_i(.data$level, "_", 2)) %>%
+    tidyr::pivot_wider(names_from = .data$var,
+                       values_from = .data$value) %>%
+    dplyr::mutate(ci_95_ll = calculate_ci_ll(.data$M, .data$SD, .data$N),
+                  ci_95_ul = calculate_ci_ul(.data$M, .data$SD, .data$N))
+
+  print(data)
+
+  # build graph
+  data %>%
+    ggplot2::ggplot(ggplot2::aes(xmin = .data$ci_95_ll,
+                                 x = .data$M,
+                                 xmax = .data$ci_95_ul,
+                                 y = .data$Variable,
+                                 color = .data$level)) +
+    ggplot2::geom_pointrange(stat = "identity",
+                             position = ggplot2::position_dodge2(width = 0.9)) +
+    ggplot2::scale_x_continuous(NULL,
+                                n.breaks = 8) +
+    ggplot2::scale_y_discrete(NULL) +
+    ggplot2::scale_color_brewer(NULL,
+                                palette = tdcmm_visual_defaults()$fill_qual_max12,
+                                guide = ggplot2::guide_legend(reverse = TRUE)) +
+    tdcmm_visual_defaults()$theme() +
+    ggplot2::theme(legend.position = "bottom")
+}
+
 # Constructors ----
 
-new_tdcmm_ttest <- function(x) {
+new_tdcmm_ttst <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_ttest", class(x))
+    class = c("tdcmm_ttst", class(x))
   )
 }
