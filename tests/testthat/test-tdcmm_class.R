@@ -85,6 +85,12 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
 
 test_that("correct subclasses are assigned to outputs", {
 
+  # Describe
+  expect_s3_class(describe(WoJ, autonomy_emphasis),
+                  "tdcmm_dscrb")
+  expect_s3_class(describe_cat(WoJ, reach),
+                  "tdcmm_dscrb")
+
   # Crosstabs with Chi2
   expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE),
                   "tdcmm_chi2")

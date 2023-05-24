@@ -108,7 +108,7 @@ model.tdcmm <- function(x, ...) {
 #' line for Mdn, and two whiskers to Min/Max respectively;
 #' no additional arguments
 #' - `describe_cat`: horizontal bar plot depicting number of occurrences;
-#' optional argument to either show stacked or unstacked/grouped bars
+#' no additional arguments
 #' - `tab_frequencies`: either a histogram (if 1 variable is given) or multiple
 #' histograms wrapped, 4+ variables also issue a warning about readability;
 #' no additional arguments
@@ -116,7 +116,6 @@ model.tdcmm <- function(x, ...) {
 #' (depending on `percentages`)
 #'
 #' @param x `tdcmm` output
-#' @param stacked only for `describe_cat`, if `TRUE` (default), bars are stacked
 #' @param ... other arguments
 #'
 #' @returns A [ggplot2] object
@@ -127,15 +126,7 @@ visualize <- function(x, ...) {
 }
 
 #' @export
-visualize.tdcmm <- function(x, stacked = TRUE, ...) {
-  if (attr(x, "func") == "describe") {
-    return(visualize_describe(x))
-  }
-
-  if (attr(x, "func") == "describe_cat") {
-    return(visualize_describe_cat(x, stacked = stacked))
-  }
-
+visualize.tdcmm <- function(x, ...) {
   if (attr(x, "func") == "tab_frequencies") {
     return(visualize_tab_frequencies(x))
   }

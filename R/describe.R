@@ -81,11 +81,11 @@ describe <- function(data, ..., na.rm = TRUE) {
     dplyr::arrange(match(.data$Variable, vars_str))
 
   # Output
-  return(new_tdcmm(out,
-                   func = "describe",
-                   data = data,
-                   params = list(vars = vars_str,
-                                 na.rm = na.rm)))
+  return(new_tdcmm_dscrb(new_tdcmm(out,
+                                   func = "describe",
+                                   data = data,
+                                   params = list(vars = vars_str,
+                                                 na.rm = na.rm))))
 }
 
 #' Describe categorical variables
@@ -147,11 +147,26 @@ describe_cat <- function(data, ...) {
     dplyr::arrange(match(.data$Variable, vars_str))
 
   # Output
-  return(new_tdcmm(out,
-                   func = "describe_cat",
-                   data = data,
-                   params = list(vars = vars_str)))
+  return(new_tdcmm_dscrb(new_tdcmm(out,
+                                   func = "describe_cat",
+                                   data = data,
+                                   params = list(vars = vars_str))))
 }
+
+#' @export
+visualize.tdcmm_dscrb <- function(x, ...) {
+  if (attr(x, "func") == "describe") {
+    return(visualize_describe(x))
+  }
+
+  if (attr(x, "func") == "describe_cat") {
+    return(visualize_describe_cat(x))
+  }
+
+  NULL
+}
+
+
 
 ### Internal functions ###
 
@@ -184,4 +199,91 @@ kurtosis <- function(x) {
   m <- mean(x, na.rm = TRUE)
   n <- length(x)
   (sum((x - m)^4) / n) / (sum((x - m)^2) / n)^2
+}
+
+#' Visualize `describe()` as horizontal box plot
+#'
+#' @param x a [tdcmm] model
+#'
+#' @return a [ggplot2] object
+#'
+#' @family tdcmm visualize
+#
+#' @keywords internal
+visualize_describe <- function(x) {
+  x %>%
+    dplyr::mutate(Variable = forcats::as_factor(.data$Variable),
+                  Variable_desc = forcats::fct_rev(.data$Variable)) %>%
+    ggplot2::ggplot(ggplot2::aes(xmin = .data$Min,
+                                 xlower = .data$Q25,
+                                 xmiddle = .data$Mdn,
+                                 xupper = .data$Q75,
+                                 xmax = .data$Max,
+                                 y = .data$Variable_desc)) +
+    ggplot2::geom_boxplot(stat = "identity") +
+    ggplot2::scale_x_continuous(NULL,
+                                limits = c(0, NA),
+                                n.breaks = 8) +
+    ggplot2::scale_y_discrete(NULL) +
+    tdcmm_defaults()$theme()
+}
+
+#' Visualize `describe_cat()` as horizontal bar plot
+#'
+#' @param x a [tdcmm] model
+#'
+#' @return a [ggplot2] object
+#'
+#' @family tdcmm visualize
+#'
+#' @keywords internal
+visualize_describe_cat <- function(x, stacked) {
+  x %>%
+    attr("data") %>%
+    dplyr::arrange(.data$Variable) %>%
+    dplyr::mutate(Variable = forcats::as_factor(.data$Variable),
+                  Variable_desc = forcats::fct_rev(.data$Variable)) %>%
+    dplyr::group_by(.data$Variable_desc,
+                    .data$Value,
+                    .add = TRUE, .drop = TRUE) %>%
+    dplyr::summarise(N = dplyr::n() - sum(is.na(.data$Value))) %>%
+    dplyr::arrange(.data$Variable_desc,
+                   dplyr::desc(.data$N)) %>%
+    dplyr::mutate(Value = paste(" ", .data$Value, " "),
+                  Value = forcats::as_factor(.data$Value),
+                  Value_desc = forcats::fct_rev(.data$Value),
+                  label_placement = ifelse(dplyr::row_number() == 1, 1, 0),
+                  label_color = ifelse(dplyr::row_number() == 1, "w", "b"))%>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$N,
+                                 y = .data$Variable_desc,
+                                 fill = .data$Value_desc,
+                                 label = .data$Value_desc)) +
+    ggplot2::geom_bar(stat = "identity",
+                      position = ggplot2::position_dodge2(width = 0.9)) +
+    ggplot2::geom_text(ggplot2::aes(hjust = label_placement,
+                                    color = label_color),
+                       position = ggplot2::position_dodge2(width = 0.9)) +
+    ggplot2::scale_x_continuous('N',
+                                limits = c(0, NA),
+                                n.breaks = 10) +
+    ggplot2::scale_y_discrete(NULL) +
+    ggplot2::scale_fill_manual(NULL,
+                               values = rep(tdcmm_defaults()$fill_qual_1,
+                                            dplyr::n_distinct(attr(x, "data")$Value))) +
+    ggplot2::scale_color_manual(NULL, values = c("w" = "white",
+                                                 "b" = "black")) +
+    tdcmm_defaults()$theme() +
+    ggplot2::theme(legend.position = "none")
+}
+
+
+# Constructors ----
+
+new_tdcmm_dscrb <- function(x) {
+  stopifnot(is_tdcmm(x))
+
+  structure(
+    x,
+    class = c("tdcmm_dscrb", class(x))
+  )
 }
