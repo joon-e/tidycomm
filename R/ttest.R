@@ -256,14 +256,14 @@ visualize_t_test <- function(x) {
 
   # merge
   data <- x %>%
-    dplyr::select(-.data$Delta_M, -.data$t, -.data$df, -.data$p, -.data$d) %>%
+    dplyr::select(-c("Delta_M", "t", "df", "p", "d")) %>%
     dplyr::left_join(n, by = "Variable") %>%
     tidyr::pivot_longer(tidyselect::ends_with(level_names),
                         names_to = "level") %>%
     dplyr::mutate(var = stringr::str_split_i(.data$level, "_", 1),
                   level = stringr::str_split_i(.data$level, "_", 2)) %>%
-    tidyr::pivot_wider(names_from = .data$var,
-                       values_from = .data$value) %>%
+    tidyr::pivot_wider(names_from = "var",
+                       values_from = "value") %>%
     dplyr::mutate(ci_95_ll = calculate_ci_ll(.data$M, .data$SD, .data$N),
                   ci_95_ul = calculate_ci_ul(.data$M, .data$SD, .data$N))
 

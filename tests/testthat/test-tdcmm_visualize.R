@@ -26,4 +26,11 @@ test_that("implemented visualize() calls return ggplot2", {
   expect_s3_class(visualize(t_test(WoJ, temp_contract,
                                    autonomy_selection, autonomy_emphasis)),
                   "ggplot")
+
+  expect_s3_class(visualize(unianova(WoJ, employment)),
+                  "ggplot")
+  expect_s3_class(visualize(unianova(WoJ, employment, descriptives = T)),
+                  "ggplot")
+  expect_s3_class(visualize(unianova(WoJ, employment, post_hoc = T)),
+                  "ggplot")
 })

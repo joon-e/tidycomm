@@ -116,7 +116,8 @@ model.tdcmm <- function(x, ...) {
 #' (depending on the `percentages` argument in [crosstab])
 #' - [t_test]: plot with points and appended 95% confidence intervals;
 #' no additional arguments
-#' - [unianova]:
+#' - [unianova]: plot with points and appended 95% confidence intervals;
+#' no additional arguments
 #' - [correlate]:
 #' - [to_correlation_matrix]:
 #' - [regress]:
