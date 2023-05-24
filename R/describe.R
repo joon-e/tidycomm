@@ -163,7 +163,7 @@ visualize.tdcmm_dscrb <- function(x, ...) {
     return(visualize_describe_cat(x))
   }
 
-  NULL
+  return(warn_about_missing_visualization(x))
 }
 
 

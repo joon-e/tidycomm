@@ -91,9 +91,12 @@ test_that("correct subclasses are assigned to outputs", {
   expect_s3_class(describe_cat(WoJ, reach),
                   "tdcmm_dscrb")
 
-  # Crosstabs with Chi2
+  # Categorical
+  expect_s3_class(tab_frequencies(WoJ, employment, country),
+                  "tdcmm_ctgrcl")
+  expect_s3_class(crosstab(WoJ, reach, employment), "tdcmm_ctgrcl")
   expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE),
-                  "tdcmm_chi2")
+                  "tdcmm_ctgrcl")
 
   # Correlation matrices with correlations
   expect_s3_class(to_correlation_matrix(correlate(WoJ,

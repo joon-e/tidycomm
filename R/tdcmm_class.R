@@ -127,15 +127,5 @@ visualize <- function(x, ...) {
 
 #' @export
 visualize.tdcmm <- function(x, ...) {
-  if (attr(x, "func") == "tab_frequencies") {
-    return(visualize_tab_frequencies(x))
-  }
-
-  if (attr(x, "func") == "crosstab") {
-    return(visualize_crosstab(x))
-  }
-
-  warning(glue("No visualization implemented for this model."),
-          call. = FALSE)
-  NULL
+  return(warn_about_missing_visualization(x))
 }
