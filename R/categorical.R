@@ -191,15 +191,15 @@ col_percs <- function(x) {
   x / sum(x, na.rm = TRUE)
 }
 
-#' Visualize `tab_frequencies()` as one or many histogram(s)
-#'
-#' @param x a [tdcmm] model
-#'
-#' @return a [ggplot2] object
-#'
-#' @family tdcmm visualize
-#'
-#' @keywords internal
+## Visualize `tab_frequencies()` as one or many histogram(s)
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @keywords internal
 visualize_tab_frequencies <- function(x) {
   var_names <- attr(x, "params")$vars
   num_histograms <- length(var_names)
@@ -243,16 +243,16 @@ visualize_tab_frequencies <- function(x) {
   return(g)
 }
 
-#' Visualize `crosstab()` as horizontal stacked bar plot, either absolute or
-#' relative (depending on `percentages`).
-#'
-#' @param x a [tdcmm] model
-#'
-#' @return a [ggplot2] object
-#'
-#' @family tdcmm visualize
+## Visualize `crosstab()` as horizontal stacked bar plot, either absolute or
+## relative (depending on `percentages`).
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
 #
-#' @keywords internal
+## @keywords internal
 visualize_crosstab <- function(x) {
   independent_var_string <- attr(x, "params")$col_var
   dependent_var_strings <- attr(x, "params")$vars

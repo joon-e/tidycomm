@@ -212,6 +212,15 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
   (mx - my) / s
 }
 
+## Visualize `t_test()` as points with 95% CI ranges
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
 visualize_t_test <- function(x) {
   # get variables
   group_var_str <- attr(x, "params")$group_var

@@ -201,15 +201,15 @@ kurtosis <- function(x) {
   (sum((x - m)^4) / n) / (sum((x - m)^2) / n)^2
 }
 
-#' Visualize `describe()` as horizontal box plot
-#'
-#' @param x a [tdcmm] model
-#'
-#' @return a [ggplot2] object
-#'
-#' @family tdcmm visualize
+## Visualize `describe()` as horizontal box plot
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
 #
-#' @keywords internal
+## @keywords internal
 visualize_describe <- function(x) {
   x %>%
     dplyr::mutate(Variable = forcats::as_factor(.data$Variable),
@@ -228,15 +228,15 @@ visualize_describe <- function(x) {
     tdcmm_visual_defaults()$theme()
 }
 
-#' Visualize `describe_cat()` as horizontal bar plot
-#'
-#' @param x a [tdcmm] model
-#'
-#' @return a [ggplot2] object
-#'
-#' @family tdcmm visualize
-#'
-#' @keywords internal
+## Visualize `describe_cat()` as horizontal bar plot
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @keywords internal
 visualize_describe_cat <- function(x, stacked) {
   x %>%
     attr("data") %>%
