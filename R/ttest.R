@@ -258,8 +258,6 @@ visualize_t_test <- function(x) {
     dplyr::mutate(ci_95_ll = calculate_ci_ll(.data$M, .data$SD, .data$N),
                   ci_95_ul = calculate_ci_ul(.data$M, .data$SD, .data$N))
 
-  print(data)
-
   # build graph
   data %>%
     ggplot2::ggplot(ggplot2::aes(xmin = .data$ci_95_ll,
