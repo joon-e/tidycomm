@@ -118,8 +118,12 @@ model.tdcmm <- function(x, ...) {
 #' no additional arguments
 #' - [unianova]: plot with points and appended 95% confidence intervals;
 #' no additional arguments
-#' - [correlate]:
-#' - [to_correlation_matrix]:
+#' - [correlate]: plot as scatter with a bit of "jitter" (random noise) to
+#' better reflect categorical values; for more than 2 variables, a correlogram
+#' is plotted (just like for [to_correlation_matrix]); no additional arguments
+#' - [to_correlation_matrix]: plot as correlogram building on [GGally::ggpairs]
+#' with jittered scatter plots in lower half, histograms as diagonals, and
+#' correlation coefficients with 95% confidence intervals in upper half
 #' - [regress]:
 #'
 #' @param x `tdcmm` output

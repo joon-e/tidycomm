@@ -34,11 +34,11 @@ correlate <- function(data, ..., method = "pearson") {
   var_combs <- combn(var_strings, 2, simplify = FALSE)
   out <- purrr::map_dfr(var_combs, correlation_test, data, method)
 
-  return(new_tdcmm(out,
-                   func = "correlate",
-                   data = data,
-                   params = list(vars = var_strings,
-                                 method = method)))
+  return(new_tdcmm_crrltn(new_tdcmm(out,
+                                    func = "correlate",
+                                    data = data,
+                                    params = list(vars = var_strings,
+                                                  method = method))))
 }
 
 #' Create correlation matrix
@@ -77,12 +77,26 @@ to_correlation_matrix <- function(data) {
     dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
                   dplyr::everything())
 
-  return(new_tdcmm_cormatrix(
+  return(new_tdcmm_crrltn(
     new_tdcmm(out,
-              data = data,
+              data = attr(data, "data"),
               func = "to_correlation_matrix",
+              params = attr(data, "params"),
               model = list(data)))
   )
+}
+
+#' @export
+visualize.tdcmm_crrltn <- function(x, ...) {
+  if (attr(x, "func") == "correlate") {
+    return(visualize_correlate(x))
+  }
+
+  if (attr(x, "func") == "to_correlation_matrix") {
+    return(visualize_to_correlation_matrix(x))
+  }
+
+  return(warn_about_missing_visualization(x))
 }
 
 ### Internal functions ###
@@ -108,12 +122,13 @@ correlation_test <- function(var_comb, data, method) {
   yvar <- data[[y]]
 
   if (any(!is.numeric(xvar), !is.numeric(yvar))) {
-    warning(glue("At least one of {x} and {y} is not numeric, skipping computation."),
+    warning(glue("At least one of {x} and {y} is not numeric, ",
+                 "skipping computation."),
             call. = FALSE)
     return()
   }
 
-  cor_test <- cor.test(xvar, yvar, method = method)
+  cor_test <- stats::cor.test(xvar, yvar, method = method)
 
   if (method == "pearson") {
     name <- "r"
@@ -123,7 +138,7 @@ correlation_test <- function(var_comb, data, method) {
     name <- "rho"
   }
 
-  tibble(
+  tibble::tibble(
     x = x,
     y = y,
     !!name := cor_test$estimate,
@@ -133,14 +148,113 @@ correlation_test <- function(var_comb, data, method) {
   )
 }
 
+## Visualize `correlate()` as scatter plot. For more than 2 variables, a
+## [GGally::ggpairs] correlogram is plotted (just like when visualizing
+## `to_correlation_matrix()`). Visualizations are plotted with a bit of
+## "jitter" (random noise) to better reflect categorical values.
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_correlate <- function(x) {
+  if (nrow(x) > 1) {
+    return(visualize(to_correlation_matrix(x)))
+  }
+
+  attr(x, "data") %>%
+    ggplot2::ggplot(ggplot2::aes(x = !!sym(attr(x, "params")$vars[1]),
+                                 y = !!sym(attr(x, "params")$vars[2]))) +
+    ggplot2::geom_jitter(width = .3,
+                         height = .3) +
+    ggplot2::scale_x_continuous(attr(x, "params")$vars[1],
+                                n.breaks = 8) +
+    ggplot2::scale_y_continuous(attr(x, "params")$vars[2],
+                                n.breaks = 8) +
+    tdcmm_visual_defaults()$theme()
+}
+
+## Visualize `to_correlation_matrix()` as [GGally::ggpairs] correlogram.
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_to_correlation_matrix <- function(x) {
+  ggpairs_corrstats <- GGally::wrap(ggpairs_corrstats_helper,
+                                    method = attr(x, "params")$method)
+  attr(x, "data") %>%
+    dplyr::select(!!!syms(attr(x, "params")$vars)) %>%
+    GGally::ggpairs(cardinality_threshold = 12,
+                    axisLabels = "none",
+                    upper = list(continuous = ggpairs_corrstats,
+                                 discrete = ggpairs_corrstats,
+                                 combo = ggpairs_corrstats,
+                                 na = "na"),
+                    diag = list(continuous = "barDiag",
+                                discrete = "barDiag",
+                                na = "naDiag"),
+                    lower = list(continuous = "dot_no_facet",
+                                 discrete = "dot_no_facet",
+                                 combo = "dot_no_facet",
+                                 na = "na")) +
+    tdcmm_visual_defaults()$theme()
+}
+
+## Helper function to print correlation coefficients together with CIs.
+## Some inspiration taken from [GGally::ggally_cor] (CRAN version 2.1.2).
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+ggpairs_corrstats_helper <- function(data, mapping, ...,
+                                     method = "pearson") {
+
+  GGally::ggally_statistic(data = data,
+                           mapping = mapping,
+                           justify_text = "left",
+                           title = "",
+                           sep = "",
+                           text_fn = function(x, y) {
+                             cor_test <- stats::cor.test(x, y, method = method)
+                             if (method == "pearson") {
+                               glue("r = ",
+                                    format_value(cor_test$estimate["cor"], 3),
+                                    "\n",
+                                    format_pvalue(cor_test$p.value),
+                                    "\n",
+                                    "95% CI [",
+                                    format_value(cor_test$conf.int[1], 3),
+                                    ", ",
+                                    format_value(cor_test$conf.int[2], 3),
+                                    "]")
+                             } else if (method == "kendall") {
+                               glue("tau = ",
+                                    format_value(cor_test$estimate["tau"], 3),
+                                    "\n",
+                                    format_pvalue(cor_test$p.value))
+                             } else if (method == "spearman") {
+                               glue("rho = ",
+                                    format_value(cor_test$estimate["rho"], 3),
+                                    "\n",
+                                    format_pvalue(cor_test$p.value))
+                             }
+                           })
+}
 
 # Constructors ----
 
-new_tdcmm_cormatrix <- function(x) {
+new_tdcmm_crrltn <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_cormatrix", class(x))
+    class = c("tdcmm_crrltn", class(x))
   )
 }

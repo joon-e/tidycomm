@@ -34,6 +34,7 @@ Imports:
     car,
     dplyr,
     forcats,
+    GGally,
     ggplot2,
     glue,
     lm.beta,

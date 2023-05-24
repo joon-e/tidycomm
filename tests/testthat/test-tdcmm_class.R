@@ -98,11 +98,13 @@ test_that("correct subclasses are assigned to outputs", {
   expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE),
                   "tdcmm_ctgrcl")
 
-  # Correlation matrices with correlations
+  # Correlation
+  expect_s3_class(correlate(WoJ, work_experience, autonomy_selection),
+                  "tdcmm_crrltn")
   expect_s3_class(to_correlation_matrix(correlate(WoJ,
                                                   work_experience,
                                                   autonomy_selection)),
-                  "tdcmm_cormatrix")
+                  "tdcmm_crrltn")
 
   # t tests
   expect_s3_class(t_test(WoJ, temp_contract, autonomy_selection),
@@ -204,8 +206,12 @@ test_that("tdcmm contains adequate func names and param lists", {
   t <- to_correlation_matrix(t)
   expect_equal(attr(t, "func"), "to_correlation_matrix")
   expect_type(attr(t, "params"), "list")
+
+  # to_correlation_matrix uses its corresponding correlate params
   expect_equal(length(formals(to_correlation_matrix)) - 1, # reduced by piping data argument
-               length(attr(t, "params")))
+               0)
+  expect_equal(length(attr(t, "params")),
+               length(attr(model(t), "params")))
 
   t <- add_index(WoJ, ethical_flexibility, ethics_1, ethics_2, ethics_3)
   expect_equal(attr(t, "func"), "add_index")

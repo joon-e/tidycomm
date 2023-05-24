@@ -1,36 +1,46 @@
 context("Visualizations")
 
-test_that("implemented visualize() calls return ggplot2", {
+test_that("implemented visualize() calls return ggplot2 (gg)", {
   expect_s3_class(visualize(describe(WoJ, autonomy_selection)),
-                  "ggplot")
+                  "gg")
 
   expect_s3_class(visualize(describe_cat(WoJ, reach, employment)),
-                  "ggplot")
+                  "gg")
   expect_s3_class(visualize(describe_cat(WoJ, reach, employment),
                             stacked = FALSE),
-                  "ggplot")
+                  "gg")
 
   expect_s3_class(visualize(tab_frequencies(WoJ, employment)),
-                  "ggplot")
+                  "gg")
   expect_s3_class(visualize(tab_frequencies(WoJ, employment, reach)),
-                  "ggplot")
+                  "gg")
 
   expect_s3_class(visualize(crosstab(WoJ, reach, employment)),
-                  "ggplot")
+                  "gg")
   expect_s3_class(visualize(crosstab(WoJ, reach, employment, percentages = T)),
-                  "ggplot")
+                  "gg")
   expect_error(visualize(crosstab(WoJ, reach, employment, ethics_1)))
 
   expect_s3_class(visualize(t_test(WoJ, temp_contract, autonomy_selection)),
-                  "ggplot")
+                  "gg")
   expect_s3_class(visualize(t_test(WoJ, temp_contract,
                                    autonomy_selection, autonomy_emphasis)),
-                  "ggplot")
+                  "gg")
 
   expect_s3_class(visualize(unianova(WoJ, employment)),
-                  "ggplot")
+                  "gg")
   expect_s3_class(visualize(unianova(WoJ, employment, descriptives = T)),
-                  "ggplot")
+                  "gg")
   expect_s3_class(visualize(unianova(WoJ, employment, post_hoc = T)),
-                  "ggplot")
+                  "gg")
+
+  expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2)),
+                  "gg")
+  expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2, ethics_3)),
+                  "gg")
+  expect_s3_class(visualize(to_correlation_matrix(correlate(WoJ,
+                                                            ethics_1,
+                                                            ethics_2,
+                                                            ethics_3))),
+                  "gg")
 })
