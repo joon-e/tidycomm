@@ -69,29 +69,41 @@ upper half
 \item \code{\link[=regress]{regress()}}: plot regression results as scatter (without jitter) and an
 additional depicted model line with including its 95\% confidence intervals;
 alternatively, visual check inspection helpers can be plotted through the
-\code{which} parameter which can be set (in addition to the default "lm") to
-yield one of the following:
+\code{which} parameter which can be set to yield one of the following:
 \itemize{
+\item "lm" (default): plots a scatter plot (without jitter but instead with
+some transparency so that multiple data points in the same position appear
+as darker) per independent variable and adds a linear regression line with
+95\% confidence intervals to it; keep in mind that if you have, say, three
+independent variables, this visualization shows you three plots with one
+linear regression for each, so that the three models (i.e., the three
+colored lines) reflect only the particular combination of one independent
+and the dependent variable
 \item "scatter": like \code{\link[=to_correlation_matrix]{to_correlation_matrix()}}, a scatter plot between
 independent variables, histograms, and correlogram are produced to help
 determine independent errors and multicollinearity
 \item "residualsfitted" or "resfit": a residuals-versus-fitted plot is useful
 to determine distributions; for a normal distribution the colored line
 should ideally fit on the dashed line
-\item "pp": a probability-probability plot helps checking for multicollinearity
-whereby the data (here mostly the center data from within the IQR) should
-ideally align with the dashed line
-\item "qq": a quantile-quantile plot also helps checking for multicollinearity
-but focuses more on outliers; the data should also align with the dashed
-line
+\item "pp": a (normal) probability-probability plot helps checking for
+multicollinearity whereby the data (here mostly the center data from
+within the IQR) should ideally align with the dashed line
+\item "qq": a (normal) quantile-quantile plot helps checking for
+multicollinearity but focuses more on outliers; the data should align with
+the dashed line
 \item "scalelocation" or "scaloc": a scale-location (sometimes also called a
 spread-location) plot checks whether residuals are spread equally to help
 check for homoscedasticity; ideally, the colored line is horizontal and
 the data spreads more or less randomly
 \item "residualsleverage" or "reslev": a residuals-versus-leverage plot allows
 to check for influential outliers affecting the final model more than the
-rest of the data; ideally, no data is outside indicating dashed lines and
-thus shows high Cook's distance to the rest of the data
+rest of the data; ideally, no data is far off compared to the bulk of the
+the data and thus shows high Cook's distance to the rest; the colored line
+helps to identify the bulk of the data and the five most-distant outliers
+are labelled with their case number (i.e., the row number in the dataset);
+note that 5 is arbitrary here, meaning that they might not be too far off
+or there might be more than 5 noteworthy outliers in this model; interpret
+with care
 }
 }
 }

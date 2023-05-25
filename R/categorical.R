@@ -145,6 +145,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
   }
 }
 
+#' @rdname visualize
 #' @export
 visualize.tdcmm_ctgrcl <- function(x, ...) {
   if (attr(x, "func") == "tab_frequencies") {
@@ -211,7 +212,7 @@ visualize_tab_frequencies <- function(x) {
       rbind(attr(x, "data") %>%
               tab_frequencies(!!sym(variable)) %>%
               dplyr::mutate(var = variable,
-                            level = !!sym(variable)) %>%
+                            level = forcats::as_factor(!!sym(variable))) %>%
               dplyr::select(var, level, percent))
   }
 
@@ -219,7 +220,10 @@ visualize_tab_frequencies <- function(x) {
   g <- data %>%
     ggplot2::ggplot(ggplot2::aes(x = level,
                                  y = percent)) +
-    ggplot2::geom_bar(stat = "identity") +
+    ggplot2::geom_bar(stat = "identity",
+                      fill = tdcmm_visual_defaults()$main_color_1) +
+    ggplot2::facet_wrap(dplyr::vars(var),
+                        scales = "free_x") +
     ggplot2::scale_x_discrete(NULL) +
     ggplot2::scale_y_continuous(NULL,
                                 labels = percentage_labeller,
@@ -228,16 +232,11 @@ visualize_tab_frequencies <- function(x) {
     tdcmm_visual_defaults()$theme()
 
   # wrap depending on number of variables
-  if (num_histograms > 1) {
-    g <- g + ggplot2::facet_wrap(ggplot2::vars(var),
-                                 scales = "free_x")
-
-    if (num_histograms >= 4) {
-      warning(glue("Visualizing too many histograms at once might strongly ",
-                   "inhibit readability. Consider reducing the number of ",
-                   "variables in tab_frequencies() before calling visualize()."),
-              call. = FALSE)
-    }
+  if (num_histograms >= 5) {
+    warning(glue("Visualizing too many histograms at once might strongly ",
+                 "inhibit readability. Consider reducing the number of ",
+                 "variables in tab_frequencies() before calling visualize()."),
+            call. = FALSE)
   }
 
   return(g)
@@ -290,7 +289,8 @@ visualize_crosstab <- function(x) {
 
   if (attr(x, "params")$percentages) {
     g <- g +
-      ggplot2::geom_text(ggplot2::aes(label = percentage_labeller(.data$value)),
+      ggplot2::geom_text(ggplot2::aes(label = percentage_labeller(.data$value),
+                                      color = .data$level),
                          position = ggplot2::position_stack(vjust = .5)) +
       ggplot2::scale_x_continuous(NULL,
                                   labels = percentage_labeller,
@@ -298,7 +298,8 @@ visualize_crosstab <- function(x) {
                                   breaks = seq(0, 1, .1))
   } else {
     g <- g +
-      ggplot2::geom_text(ggplot2::aes(label = .data$value),
+      ggplot2::geom_text(ggplot2::aes(label = .data$value,
+                                      color = .data$level),
                          position = ggplot2::position_stack(vjust = .5)) +
       ggplot2::scale_x_continuous('N',
                                   limits = c(0, NA),
@@ -307,9 +308,12 @@ visualize_crosstab <- function(x) {
 
   g <- g +
     ggplot2::scale_y_discrete(NULL) +
-    ggplot2::scale_fill_brewer(NULL,
-                               palette = tdcmm_visual_defaults()$fill_qual_max12,
+    ggplot2::scale_fill_manual(NULL,
+                               values = tdcmm_visual_defaults()$main_colors,
                                guide = ggplot2::guide_legend(reverse = TRUE)) +
+    ggplot2::scale_color_manual(NULL,
+                                values = tdcmm_visual_defaults()$main_contrasts,
+                                guide = NULL) +
     tdcmm_visual_defaults()$theme() +
     ggplot2::theme(legend.position = "bottom")
 

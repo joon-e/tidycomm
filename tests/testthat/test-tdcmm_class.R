@@ -113,10 +113,10 @@ test_that("correct subclasses are assigned to outputs", {
   # uni anova
   expect_s3_class(unianova(WoJ, employment,
                            autonomy_selection, autonomy_emphasis),
-                  "tdcmm_uniaov")
+                  "tdcmm_nnv")
 
   # regression
-  expect_s3_class(regress(WoJ, autonomy_selection, ethics_1), "tdcmm_lm")
+  expect_s3_class(regress(WoJ, autonomy_selection, ethics_1), "tdcmm_rgrssn")
 })
 
 test_that("tdcmm provides model accessors", {

@@ -98,38 +98,126 @@ model.tdcmm <- function(x, ...) {
   }
   if (length(model) == 1) model[[1]] else model
 }
-#' Access visualization used to estimate output
+
+#' Visualize tidycomm output
 #'
 #' Returns [ggplot2] visualization appropriate to respective `tdcmm` model
 #' (see list below). Returns `NULL` (and a warning) if no visualization has
 #' been implemented for the particular model.
 #'
-#' - [describe]: horizontal box plot depicting a box from Q25 to Q75, a thick
+#' - [describe()]: horizontal box plot depicting a box from Q25 to Q75, a thick
 #' line for Mdn, and two whiskers to Min/Max respectively;
 #' no additional arguments
-#' - [describe_cat]: horizontal bar plot depicting number of occurrences;
+#' - [describe_cat()]: horizontal bar plot depicting number of occurrences;
 #' no additional arguments
-#' - [tab_frequencies]: either a histogram (if 1 variable is given) or multiple
-#' histograms wrapped, 4+ variables also issue a warning about readability;
+#' - [tab_frequencies()]: either a histogram (if 1 variable is given) or
+#' multiple histograms wrapped, 5+ variables issue a warning about readability;
 #' no additional arguments
-#' - [crosstab]: horizontal stacked bar plot, either absolute or relative
-#' (depending on the `percentages` argument in [crosstab])
-#' - [t_test]: plot with points and appended 95% confidence intervals;
+#' - [crosstab()]: horizontal stacked bar plot, either absolute or relative
+#' (depending on the `percentages` argument in [crosstab()])
+#' - [t_test()]: plot with points and appended 95% confidence intervals;
 #' no additional arguments
-#' - [unianova]: plot with points and appended 95% confidence intervals;
+#' - [unianova()]: plot with points and appended 95% confidence intervals;
 #' no additional arguments
-#' - [correlate]: plot as scatter with a bit of "jitter" (random noise) to
+#' - [correlate()]: plot as scatter with a bit of "jitter" (random noise) to
 #' better reflect categorical values; for more than 2 variables, a correlogram
-#' is plotted (just like for [to_correlation_matrix]); no additional arguments
-#' - [to_correlation_matrix]: plot as correlogram building on [GGally::ggpairs]
-#' with jittered scatter plots in lower half, histograms as diagonals, and
-#' correlation coefficients with 95% confidence intervals in upper half
-#' - [regress]:
+#' is plotted (just like for [to_correlation_matrix()]); no additional arguments
+#' - [to_correlation_matrix()]: plot as correlogram building on
+#' [GGally::ggpairs()] with jittered scatter plots in lower half, histograms as
+#' diagonals, and correlation coefficients with 95% confidence intervals in
+#' upper half
+#' - [regress()]: plot regression results as scatter (without jitter) and an
+#' additional depicted model line with including its 95% confidence intervals;
+#' alternatively, visual check inspection helpers can be plotted through the
+#' `which` parameter which can be set to yield one of the following:
+#'   - "lm" (default): plots a scatter plot (without jitter but instead with
+#'   some transparency so that multiple data points in the same position appear
+#'   as darker) per independent variable and adds a linear regression line with
+#'   95% confidence intervals to it; keep in mind that if you have, say, three
+#'   independent variables, this visualization shows you three plots with one
+#'   linear regression for each, so that the three models (i.e., the three
+#'   colored lines) reflect only the particular combination of one independent
+#'   and the dependent variable
+#'   - "scatter": like [to_correlation_matrix()], a scatter plot between
+#'   independent variables, histograms, and correlogram are produced to help
+#'   determine independent errors and multicollinearity
+#'   - "residualsfitted" or "resfit": a residuals-versus-fitted plot is useful
+#'   to determine distributions; for a normal distribution the colored line
+#'   should ideally fit on the dashed line
+#'   - "pp": a (normal) probability-probability plot helps checking for
+#'   multicollinearity whereby the data (here mostly the center data from
+#'   within the IQR) should ideally align with the dashed line
+#'   - "qq": a (normal) quantile-quantile plot helps checking for
+#'   multicollinearity but focuses more on outliers; the data should align with
+#'   the dashed line
+#'   - "scalelocation" or "scaloc": a scale-location (sometimes also called a
+#'   spread-location) plot checks whether residuals are spread equally to help
+#'   check for homoscedasticity; ideally, the colored line is horizontal and
+#'   the data spreads more or less randomly
+#'   - "residualsleverage" or "reslev": a residuals-versus-leverage plot allows
+#'   to check for influential outliers affecting the final model more than the
+#'   rest of the data; ideally, no data is far off compared to the bulk of the
+#'   the data and thus shows high Cook's distance to the rest; the colored line
+#'   helps to identify the bulk of the data and the five most-distant outliers
+#'   are labelled with their case number (i.e., the row number in the dataset);
+#'   note that 5 is arbitrary here, meaning that they might not be too far off
+#'   or there might be more than 5 noteworthy outliers in this model; interpret
+#'   with care
 #'
 #' @param x `tdcmm` output
 #' @param ... other arguments
 #'
-#' @returns A [ggplot2] object
+#' @return A [ggplot2] object
+#'
+#' @family visualize
+#'
+#' @examples
+#' WoJ %>%
+#'   describe() %>%
+#'   visualize()
+#'
+#' fbposts %>%
+#'   describe_cat() %>%
+#'   visualize()
+#'
+#' WoJ %>%
+#'   tab_frequencies(trust_parliament) %>%
+#'   visualize()
+#' fbposts %>%
+#'   tab_frequencies(pop_elite, pop_people, pop_othering) %>%
+#'   visualize()
+#'
+#' WoJ %>%
+#'   crosstab(reach, employment) %>%
+#'   visualize()
+#' fbposts %>%
+#'   crosstab(coder_id, type, percentages = T) %>%
+#'   visualize()
+#'
+#' WoJ %>%
+#'   t_test(temp_contract, autonomy_selection, autonomy_emphasis) %>%
+#'   visualize()
+#'
+#' WoJ %>%
+#'   unianova(country, autonomy_selection, autonomy_emphasis) %>%
+#'   visualize()
+#'
+#' fbposts %>%
+#'   correlate(pop_elite, pop_people) %>%
+#'   visualize()
+#' WoJ %>%
+#'   correlate(ethics_1, ethics_2, ethics_3, ethics_4) %>%
+#'   to_correlation_matrix() %>%
+#'   visualize()
+#'
+#' r <- WoJ %>% regress(autonomy_selection, temp_contract, work_experience, ethics_2)
+#' r %>% visualize() # same as r %>% visualize("lm")
+#' r %>% visualize("scatter")
+#' r %>% visualize("resfit")
+#' r %>% visualize("pp")
+#' r %>% visualize("qq")
+#' r %>% visualize("scaloc")
+#' r %>% visualize("reslev")
 #'
 #' @export
 visualize <- function(x, ...) {

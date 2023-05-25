@@ -68,7 +68,7 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
   }
 
   # Output
-  return(new_tdcmm_uniaov(
+  return(new_tdcmm_nnv(
     new_tdcmm(out,
               func = "unianova",
               data = data,
@@ -80,8 +80,9 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
   )
 }
 
+#' @rdname visualize
 #' @export
-visualize.tdcmm_uniaov <- function(x, ...) {
+visualize.tdcmm_nnv<- function(x, ...) {
   if (attr(x, "func") == "unianova") {
     return(visualize_unianova(x))
   }
@@ -217,12 +218,13 @@ visualize_unianova <- function(x) {
                                  y = .data$Variable_desc,
                                  color = .data$level)) +
     ggplot2::geom_pointrange(stat = "identity",
-                             position = ggplot2::position_dodge2(width = 0.9)) +
+                             position = ggplot2::position_dodge2(width = 0.9),
+                             linewidth = tdcmm_visual_defaults()$main_size) +
     ggplot2::scale_x_continuous(NULL,
                                 n.breaks = 8) +
     ggplot2::scale_y_discrete(NULL) +
-    ggplot2::scale_color_brewer(NULL,
-                                palette = tdcmm_visual_defaults()$fill_qual_max12,
+    ggplot2::scale_color_manual(NULL,
+                                values = tdcmm_visual_defaults()$main_colors,
                                 guide = ggplot2::guide_legend(reverse = TRUE)) +
     tdcmm_visual_defaults()$theme() +
     ggplot2::theme(legend.position = "bottom")
@@ -231,11 +233,11 @@ visualize_unianova <- function(x) {
 
 # Constructors ----
 
-new_tdcmm_uniaov <- function(x) {
+new_tdcmm_nnv <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_uniaov", class(x))
+    class = c("tdcmm_nnv", class(x))
   )
 }

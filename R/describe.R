@@ -153,6 +153,7 @@ describe_cat <- function(data, ...) {
                                    params = list(vars = vars_str))))
 }
 
+#' @rdname visualize
 #' @export
 visualize.tdcmm_dscrb <- function(x, ...) {
   if (attr(x, "func") == "describe") {
@@ -220,7 +221,11 @@ visualize_describe <- function(x) {
                                  xupper = .data$Q75,
                                  xmax = .data$Max,
                                  y = .data$Variable_desc)) +
-    ggplot2::geom_boxplot(stat = "identity") +
+    ggplot2::geom_boxplot(stat = "identity",
+                          fill = ggplot2::alpha(tdcmm_visual_defaults()$main_color_1,
+                                                .25),
+                          color = tdcmm_visual_defaults()$main_color_1,
+                          linewidth = tdcmm_visual_defaults()$main_size) +
     ggplot2::scale_x_continuous(NULL,
                                 limits = c(0, NA),
                                 n.breaks = 8) +
@@ -268,9 +273,9 @@ visualize_describe_cat <- function(x, stacked) {
                                 n.breaks = 10) +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_fill_manual(NULL,
-                               values = rep(tdcmm_visual_defaults()$fill_qual_1,
+                               values = rep(tdcmm_visual_defaults()$main_color_1,
                                             dplyr::n_distinct(attr(x, "data")$Value))) +
-    ggplot2::scale_color_manual(NULL, values = c("w" = "white",
+    ggplot2::scale_color_manual(NULL, values = c("w" = tdcmm_visual_defaults()$main_contrast_1,
                                                  "b" = "black")) +
     tdcmm_visual_defaults()$theme() +
     ggplot2::theme(legend.position = "none")

@@ -43,4 +43,15 @@ test_that("implemented visualize() calls return ggplot2 (gg)", {
                                                             ethics_2,
                                                             ethics_3))),
                   "gg")
+
+  r <- WoJ %>% regress(autonomy_selection, temp_contract, work_experience, ethics_2)
+  expect_s3_class(visualize(r), "gg")
+  expect_s3_class(visualize(r, "lm"), "gg")
+  expect_warning(v <- visualize(r, "scatter"))
+  expect_s3_class(v, "gg")
+  expect_s3_class(visualize(r, "resfit"), "gg")
+  expect_s3_class(visualize(r, "pp"), "gg")
+  expect_s3_class(visualize(r, "qq"), "gg")
+  expect_s3_class(visualize(r, "scaloc"), "gg")
+  expect_s3_class(visualize(r, "reslev"), "gg")
 })

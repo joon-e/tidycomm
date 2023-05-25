@@ -86,6 +86,7 @@ to_correlation_matrix <- function(data) {
   )
 }
 
+#' @rdname visualize
 #' @export
 visualize.tdcmm_crrltn <- function(x, ...) {
   if (attr(x, "func") == "correlate") {
@@ -169,7 +170,8 @@ visualize_correlate <- function(x) {
     ggplot2::ggplot(ggplot2::aes(x = !!sym(attr(x, "params")$vars[1]),
                                  y = !!sym(attr(x, "params")$vars[2]))) +
     ggplot2::geom_jitter(width = .3,
-                         height = .3) +
+                         height = .3,
+                         na.rm = TRUE) +
     ggplot2::scale_x_continuous(attr(x, "params")$vars[1],
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous(attr(x, "params")$vars[2],
@@ -187,22 +189,33 @@ visualize_correlate <- function(x) {
 #
 ## @keywords internal
 visualize_to_correlation_matrix <- function(x) {
-  ggpairs_corrstats <- GGally::wrap(ggpairs_corrstats_helper,
-                                    method = attr(x, "params")$method)
   attr(x, "data") %>%
     dplyr::select(!!!syms(attr(x, "params")$vars)) %>%
     GGally::ggpairs(cardinality_threshold = 12,
                     axisLabels = "none",
-                    upper = list(continuous = ggpairs_corrstats,
-                                 discrete = ggpairs_corrstats,
-                                 combo = ggpairs_corrstats,
+                    progress = FALSE,
+                    upper = list(continuous = GGally::wrap(ggpairs_corrstats_helper,
+                                                           method = attr(x, "params")$method),
+                                 discrete = GGally::wrap(ggpairs_corrstats_helper,
+                                                         method = attr(x, "params")$method),
+                                 combo = GGally::wrap(ggpairs_corrstats_helper,
+                                                      method = attr(x, "params")$method),
                                  na = "na"),
-                    diag = list(continuous = "barDiag",
-                                discrete = "barDiag",
+                    diag = list(continuous = GGally::wrap("barDiag",
+                                                          fill = tdcmm_visual_defaults()$main_color_1,
+                                                          bins = 30,
+                                                          na.rm = TRUE),
+                                discrete = GGally::wrap("barDiag",
+                                                        fill = tdcmm_visual_defaults()$main_color_1,
+                                                        bins = 30,
+                                                        na.rm = TRUE),
                                 na = "naDiag"),
-                    lower = list(continuous = "dot_no_facet",
-                                 discrete = "dot_no_facet",
-                                 combo = "dot_no_facet",
+                    lower = list(continuous = GGally::wrap("dot_no_facet",
+                                                           na.rm = TRUE),
+                                 discrete = GGally::wrap("dot_no_facet",
+                                                         na.rm = TRUE),
+                                 combo = GGally::wrap("dot_no_facet",
+                                                      na.rm = TRUE),
                                  na = "na")) +
     tdcmm_visual_defaults()$theme()
 }
@@ -215,12 +228,12 @@ visualize_to_correlation_matrix <- function(x) {
 ## @keywords internal
 ggpairs_corrstats_helper <- function(data, mapping, ...,
                                      method = "pearson") {
-
   GGally::ggally_statistic(data = data,
                            mapping = mapping,
                            justify_text = "left",
                            title = "",
                            sep = "",
+                           na.rm = TRUE,
                            text_fn = function(x, y) {
                              cor_test <- stats::cor.test(x, y, method = method)
                              if (method == "pearson") {

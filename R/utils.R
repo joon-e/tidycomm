@@ -8,10 +8,49 @@
 ##
 ## @keywords internal
 tdcmm_visual_defaults <- function() {
-  return(list(fill_qual_1 = "#858585",
-              fill_qual_max12 = "Set3",
-              fill_qual_inf = c("#858585", "#E2E2E2"),
-              theme = ggplot2::theme_minimal))
+  return(list(main_color_1 = "#00883A",
+              main_colors = c("#00883A",
+                              "#a6cee3",
+                              "#1f78b4",
+                              "#b2df8a",
+                              #"#33a02c", #replaced by main_color_1
+                              "#fb9a99",
+                              "#e31a1c",
+                              "#fdbf6f",
+                              "#ff7f00",
+                              "#cab2d6",
+                              "#6a3d9a",
+                              "#ffff99",
+                              "#b15928"),
+              main_contrast_1 = "#FFFFFF",
+              main_contrasts = c("#FFFFFF",
+                                 "#525252",
+                                 "#FFFFFF",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#FFFFFF",
+                                 "#525252",
+                                 "#FFFFFF"),
+              main_size = 0.95,
+              comparison_linetype = "dashed",
+              comparison_color = "#525252",
+              comparison_size = 0.85,
+              theme = function(...) {
+                return(ggplot2::theme_minimal() +
+                         ggplot2::theme(
+                           axis.line = ggplot2::element_line(color = "#8f8f8f"),
+                           axis.ticks = ggplot2::element_line(color = "#6b6b6b"),
+                           axis.title = ggplot2::element_text(),
+                           axis.title.x = ggplot2::element_text(vjust = -.5),
+                           axis.title.y = ggplot2::element_text(vjust = 2.5),
+                           strip.text = ggplot2::element_text(face = "bold"),
+                           ...
+                         ))
+              }))
 }
 
 
