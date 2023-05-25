@@ -26,7 +26,7 @@ column of result tibbles.}
 a \link{tdcmm} model
 }
 \description{
-Computes one-way ANOVAS for one group variable and specified test variables.
+Computes one-way ANOVAs for one group variable and specified test variables.
 If no variables are specified, all numeric (integer or double) variables are
 used.
 }
