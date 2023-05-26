@@ -15,10 +15,9 @@
 ## @family correlations
 ##
 ## @examples
-## WoJ %>% correlate_partial(ethics_1, ethics_2, ethics_3)
+## WoJ %>% correlate_partial(autonomy_selection, autonomy_emphasis, work_experience)
 ##
 ## @keywords internal
-
 correlate_partial <- function(data, ..., method = "pearson") {
 
   if (!method %in% c("pearson", "kendall", "spearman")) {

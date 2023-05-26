@@ -7,7 +7,7 @@
 correlate(data, ..., method = "pearson", partial = FALSE)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{...}{Variables to compute correlations for (column names). Leave empty
 to compute for all numeric variables in data.}
@@ -21,7 +21,7 @@ all combinations, i.e. pairs, of specified variables will be computed
 while controlling for the third variable.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes correlation coefficients for all combinations of the specified
@@ -31,7 +31,7 @@ variables are used.
 \examples{
 WoJ \%>\% correlate(ethics_1, ethics_2, ethics_3)
 WoJ \%>\% correlate()
-WoJ \%>\% correlate(ethics_1, ethics_2, ethics_3, partial = TRUE)
+WoJ \%>\% correlate(autonomy_selection, autonomy_emphasis, work_experience, partial = TRUE)
 
 }
 \concept{correlations}

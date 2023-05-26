@@ -32,7 +32,6 @@ Depends:
 Imports: 
     broom,
     car,
-    correlate_partial
     combinat,
     dplyr,
     forcats,
@@ -45,7 +44,6 @@ Imports:
     purrr,
     rlang,
     stats,
-    devel,
     stringr,
     tibble,
     tidyr

@@ -21,7 +21,7 @@
 #' @examples
 #' WoJ %>% correlate(ethics_1, ethics_2, ethics_3)
 #' WoJ %>% correlate()
-#' WoJ %>% correlate(ethics_1, ethics_2, ethics_3, partial = TRUE)
+#' WoJ %>% correlate(autonomy_selection, autonomy_emphasis, work_experience, partial = TRUE)
 #'
 #' @export
 correlate <- function(data, ..., method = "pearson", partial = FALSE) {
@@ -32,7 +32,7 @@ correlate <- function(data, ..., method = "pearson", partial = FALSE) {
       dplyr::select(!!!vars) %>%
       names()
     method_string <- method
-    result_correlate_partial <- correlate_partial(data, var_strings, method = method_string)
+    result_correlate_partial <- correlate_partial(data, ..., method = method_string)
     return(new_tdcmm(result_correlate_partial))
   }
 
