@@ -19,8 +19,7 @@
 #'
 #' WoJ %>%
 #'   reverse_scale(autonomy_emphasis) %>%
-#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_rev) %>%
-#'   visualize()
+#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_rev)
 reverse_scale <- function(data, scale_var,
                           name = paste0(as_label(expr({{ scale_var }})),
                                         "_rev")) {
@@ -63,8 +62,7 @@ reverse_scale <- function(data, scale_var,
 #'
 #' WoJ %>%
 #'   change_scale(autonomy_emphasis) %>%
-#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_0to1) %>%
-#'   visualize()
+#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_0to1)
 change_scale <- function(data, scale_var,
                          change_to_min = 0, change_to_max = 1,
                          name = paste0(as_label(expr({{ scale_var }})), "_",
@@ -115,8 +113,7 @@ change_scale <- function(data, scale_var,
 #'
 #' WoJ %>%
 #'   center_scale(autonomy_emphasis) %>%
-#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_centered) %>%
-#'   visualize()
+#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_centered)
 center_scale <- function(data, scale_var,
                          name = paste0(as_label(expr({{ scale_var }})),
                                        "_centered")) {
@@ -155,8 +152,7 @@ center_scale <- function(data, scale_var,
 #'
 #' WoJ %>%
 #'   z_scale(autonomy_emphasis) %>%
-#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_z) %>%
-#'   visualize()
+#'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_z)
 z_scale <- function(data, scale_var,
                     name = paste0(as_label(expr({{ scale_var }})),
                                   "_z")) {
