@@ -13,7 +13,8 @@
 ## @return Variables as symbols
 ##
 ## @keywords internal
-grab_vars <- function(data, vars, alternative = "numeric", exclude_vars = NULL) {
+grab_vars <- function(data, vars, alternative = "numeric",
+                      exclude_vars = NULL) {
   if (length(vars) == 0) {
     if (alternative == "numeric") {
       vars <- data %>%
@@ -36,7 +37,7 @@ grab_vars <- function(data, vars, alternative = "numeric", exclude_vars = NULL) 
     if (alternative == "all") {
       vars <- data %>%
         dplyr::ungroup() %>%
-        dplyr::select(-exclude_vars) %>%
+        dplyr::select(-tidyselect::all_of(exclude_vars)) %>%
         names() %>%
         syms()
     }
@@ -47,9 +48,27 @@ grab_vars <- function(data, vars, alternative = "numeric", exclude_vars = NULL) 
   } else {
     vars <- data %>%
       dplyr::ungroup() %>%
-      dplyr::select(!!!vars, -exclude_vars) %>%
+      dplyr::select(!!!vars, -tidyselect::all_of(exclude_vars)) %>%
       names() %>%
       syms()
   }
   return(vars)
 }
+
+# Formatters ----
+
+## Format a vector of values to printable string p-values
+format_pvalue <- function(x) {
+  single_val <- function(x) {
+    if (x < .001) {
+      return("p < 0.001")
+      } else {
+      return(glue("p = {format(round(x, 3), nsmall = 3)}"))
+      }
+  }
+  purrr::map_chr(x, single_val)
+}
+
+## Format a vector of values to printable string values with exact number of
+## decimal places
+format_value <- function(x, d) trimws(format(round(x, d), nsmall = d))

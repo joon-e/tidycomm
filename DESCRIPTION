@@ -31,15 +31,21 @@ Depends:
     R (>= 2.10)
 Imports: 
     broom,
+    car,
+    correlate_partial
     combinat,
     dplyr,
     forcats,
     glue,
+    lm.beta,
     magrittr,
     MBESS,
+    pillar,
     ppcor,
     purrr,
     rlang,
+    stats,
+    devel,
     stringr,
     tibble,
     tidyr
