@@ -46,8 +46,7 @@ WoJ \%>\% change_scale(autonomy_emphasis, change_to_min = 1, change_to_max = 10,
 
 WoJ \%>\%
   change_scale(autonomy_emphasis) \%>\%
-  tab_frequencies(autonomy_emphasis, autonomy_emphasis_0to1) \%>\%
-  visualize()
+  tab_frequencies(autonomy_emphasis, autonomy_emphasis_0to1)
 }
 \seealso{
 Other scaling: 

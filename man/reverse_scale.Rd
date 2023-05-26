@@ -36,8 +36,7 @@ WoJ \%>\% reverse_scale(autonomy_emphasis, name = "my_reversed_variable")
 
 WoJ \%>\%
   reverse_scale(autonomy_emphasis) \%>\%
-  tab_frequencies(autonomy_emphasis, autonomy_emphasis_rev) \%>\%
-  visualize()
+  tab_frequencies(autonomy_emphasis, autonomy_emphasis_rev)
 }
 \seealso{
 Other scaling: 

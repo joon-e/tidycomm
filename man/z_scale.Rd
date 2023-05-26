@@ -37,8 +37,7 @@ WoJ \%>\% z_scale(autonomy_emphasis, name = "my_zstdized_variable")
 
 WoJ \%>\%
   z_scale(autonomy_emphasis) \%>\%
-  tab_frequencies(autonomy_emphasis, autonomy_emphasis_z) \%>\%
-  visualize()
+  tab_frequencies(autonomy_emphasis, autonomy_emphasis_z)
 }
 \seealso{
 Other scaling: 

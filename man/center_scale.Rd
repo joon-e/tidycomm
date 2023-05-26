@@ -35,8 +35,7 @@ WoJ \%>\% center_scale(autonomy_emphasis, name = "my_centered_variable")
 
 WoJ \%>\%
   center_scale(autonomy_emphasis) \%>\%
-  tab_frequencies(autonomy_emphasis, autonomy_emphasis_centered) \%>\%
-  visualize()
+  tab_frequencies(autonomy_emphasis, autonomy_emphasis_centered)
 }
 \seealso{
 Other scaling: 
