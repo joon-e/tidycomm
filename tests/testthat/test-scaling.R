@@ -3,13 +3,23 @@ context("Scaling")
 test_that("scaling return values work", {
 
   # reverse_scale
-  WoJ_rev <- WoJ %>% reverse_scale(autonomy_emphasis)
+  expect_warning(reverse_scale(WoJ, autonomy_emphasis))
+  expect_true(tibble::is_tibble(suppressWarnings(reverse_scale(WoJ,
+                                                               autonomy_emphasis))))
+  WoJ_rev <- WoJ %>% reverse_scale(autonomy_emphasis,
+                                   lower_end = 1,
+                                   upper_end = 5)
   expect_true(tibble::is_tibble(WoJ_rev))
   expect_equal(dim(WoJ_rev),
                dim(WoJ) + c(0, 1))
   expect_true("autonomy_emphasis_rev" %in% names(WoJ_rev))
   expect_true("ae_rev" %in%
-                names(reverse_scale(WoJ, autonomy_emphasis, name = "ae_rev")))
+                names(reverse_scale(WoJ,
+                                    autonomy_emphasis,
+                                    name = "ae_rev",
+                                    lower_end = 1,
+                                    upper_end = 5)))
+
 
   # z_scale
   WoJ_z <- WoJ %>% z_scale(autonomy_emphasis)
@@ -46,7 +56,9 @@ test_that("scaling can handle false inputs", {
                           b = forcats::as_factor(c(1, 1, 1, 2)),
                           c = c("a", "b", "cde", NA_character_))
   expect_equal(sum(is.na(check$a)),
-               sum(is.na(reverse_scale(check, a)$a_rev)))
+               sum(is.na(reverse_scale(check, a,
+                                       lower_end = 1,
+                                       upper_end = 3)$a_rev)))
   expect_error(reverse_scale(check, b))
   expect_error(reverse_scale(check, c))
 
@@ -85,12 +97,20 @@ test_that("scaling returns correct scales", {
                  dplyr::filter(!is.na(autonomy_emphasis)) %>%
                  tab_frequencies(autonomy_emphasis) %>%
                  dplyr::pull(n),
-               WoJ %>%
-                 dplyr::filter(!is.na(autonomy_emphasis)) %>%
-                 reverse_scale(autonomy_emphasis) %>%
-                 tab_frequencies(autonomy_emphasis_rev) %>%
-                 dplyr::pull(n) %>%
-                 rev())
+               suppressWarnings(
+                 WoJ %>%
+                   dplyr::filter(!is.na(autonomy_emphasis)) %>%
+                   reverse_scale(autonomy_emphasis) %>%
+                   tab_frequencies(autonomy_emphasis_rev) %>%
+                   dplyr::pull(n) %>%
+                   rev()
+               ))
+  t <- tibble(s = c(-2, 2, 1, 0, 0, -2, NA, -1))
+  expect_equal(t$s,
+               t %>%
+                 reverse_scale(s, lower_end = -2, upper_end = 2) %>%
+                 reverse_scale(s_rev, lower_end = 2, upper_end = -2) %>%
+                 dplyr::pull(s_rev_rev))
 
   #z_scale
   check <- WoJ %>% z_scale(autonomy_emphasis)

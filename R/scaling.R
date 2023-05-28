@@ -1,13 +1,25 @@
 #' Reverse a numeric continuous scale
 #'
 #' Reverses a continuous scale into a new variable. A 5-1 scale thus turns into
-#' a 1-5 scale. Missing values are retained. This function really just subtracts
-#' each value from the maximum value which was incremented by one.
+#' a 1-5 scale. Missing values are retained. For a given continuous variable
+#' the lower and upper end of the scale should be provided. If they are not
+#' provided, the function assumes the scale's minimum and maximum value to
+#' represent these lower/upper ends (and issues a warning about this fact).
+#' This default behavior is prone to errors, however, because a scale may not
+#' include its actual lower and upper ends which might in turn affect correct
+#' reversing. Hence, it is strongly suggested to manually set the lower and
+#' upper bounds of the original continuous scale.
 #'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param scale_var a numeric variable for which the scale gets reversed
 #' @param name the name of the new variable. By default, this is the same name
 #' as the `scale_var` but suffixed with `_rev`.
+#' @param lower_end lower end of provided continuous scale (i.e., of scale_var)
+#' (default is to use minimum value of current values, which might not be the
+#' actual lower end of the scale)
+#' @param upper_end upper end of provided continuous scale (i.e., of scale_var)
+#' (default is to use maximum value of current values, which might not be the
+#' actual upper end of the scale)
 #'
 #' @return a [tdcmm] model
 #' @export
@@ -22,16 +34,45 @@
 #'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_rev)
 reverse_scale <- function(data, scale_var,
                           name = paste0(as_label(expr({{ scale_var }})),
-                                        "_rev")) {
+                                        "_rev"),
+                          lower_end = NULL,
+                          upper_end = NULL) {
+  scale_var_str <- as_label(expr({{ scale_var }}))
   scale_var_data <- data %>%
     dplyr::pull({{ scale_var }})
   if (!is.numeric(scale_var_data)) {
-    stop("... must be numeric.")
+    stop(glue("{scale_var_str} must be numeric."))
   }
-  reverse_base <- max(scale_var_data,
-                      na.rm = TRUE) + 1
+
+  warn_about_ends <- FALSE
+  if (is.null(lower_end) | !is.numeric(lower_end)) {
+    lower_end <- min(scale_var_data, na.rm = TRUE)
+    warn_about_ends <- TRUE
+  }
+
+  if (is.null(upper_end) | !is.numeric(upper_end)) {
+    upper_end <- max(scale_var_data, na.rm = TRUE)
+    warn_about_ends <- TRUE
+  }
+
+  if (warn_about_ends) {
+    warning(glue("Lower and/or upper end missing. Based on min/max values, ",
+                 "the original scale ({scale_var_str}) is assumed to range ",
+                 "from {lower_end}-{upper_end}. Specify lower_end and ",
+                 "upper_end to omit this warning."),
+            call. = FALSE)
+  }
+
+  scale_orig <- seq(lower_end, upper_end)
+  scale_rev <- rev(scale_orig)
+  mapped_scale <- as.list(scale_rev)
+  names(mapped_scale) <- scale_orig
+
+  mapped_scale[[".x"]] <- scale_var_data
+
   data %>%
-    dplyr::mutate(!!name := reverse_base - {{ scale_var }}) %>%
+    dplyr::mutate(!!name := do.call(dplyr::recode,
+                                    mapped_scale)) %>%
     new_tdcmm() %>%
     return()
 }
