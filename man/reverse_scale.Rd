@@ -11,7 +11,9 @@ reverse_scale(
      {
          scale_var
      }
- })), "_rev")
+ })), "_rev"),
+  lower_end = NULL,
+  upper_end = NULL
 )
 }
 \arguments{
@@ -21,14 +23,28 @@ reverse_scale(
 
 \item{name}{the name of the new variable. By default, this is the same name
 as the \code{scale_var} but suffixed with \verb{_rev}.}
+
+\item{lower_end}{lower end of provided continuous scale (i.e., of scale_var)
+(default is to use minimum value of current values, which might not be the
+actual lower end of the scale)}
+
+\item{upper_end}{upper end of provided continuous scale (i.e., of scale_var)
+(default is to use maximum value of current values, which might not be the
+actual upper end of the scale)}
 }
 \value{
 a \link{tdcmm} model
 }
 \description{
 Reverses a continuous scale into a new variable. A 5-1 scale thus turns into
-a 1-5 scale. Missing values are retained. This function really just subtracts
-each value from the maximum value which was incremented by one.
+a 1-5 scale. Missing values are retained. For a given continuous variable
+the lower and upper end of the scale should be provided. If they are not
+provided, the function assumes the scale's minimum and maximum value to
+represent these lower/upper ends (and issues a warning about this fact).
+This default behavior is prone to errors, however, because a scale may not
+include its actual lower and upper ends which might in turn affect correct
+reversing. Hence, it is strongly suggested to manually set the lower and
+upper bounds of the original continuous scale.
 }
 \examples{
 WoJ \%>\% reverse_scale(autonomy_emphasis)
