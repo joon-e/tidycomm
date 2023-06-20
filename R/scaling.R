@@ -56,10 +56,12 @@ reverse_scale <- function(data, scale_var,
   }
 
   if (warn_about_ends) {
-    warning(glue("Lower and/or upper end missing. Based on min/max values, ",
-                 "the original scale ({scale_var_str}) is assumed to range ",
-                 "from {lower_end}-{upper_end}. Specify lower_end and ",
-                 "upper_end to omit this warning."),
+    warning(glue("Lower and/or upper end missing. Based on the minimum and ",
+                 "maximum values observed in the data, the original scale ",
+                 "({scale_var_str}) is assumed to range from {lower_end} to ",
+                 "{upper_end}. To prevent this warning, please provide the ",
+                 "lower_end and upper_end values as arguments when calling the",
+                 " function."),
             call. = FALSE)
   }
 
