@@ -1,4 +1,4 @@
-#' Reverse a numeric continuous scale
+#' Reverse a numeric, logical, or date/time continuous scale
 #'
 #' Reverses a continuous scale into a new variable. A 5-1 scale thus turns into
 #' a 1-5 scale. Missing values are retained. For a given continuous variable
@@ -40,19 +40,49 @@ reverse_scale <- function(data, scale_var,
   scale_var_str <- as_label(expr({{ scale_var }}))
   scale_var_data <- data %>%
     dplyr::pull({{ scale_var }})
-  if (!is.numeric(scale_var_data)) {
-    stop(glue("{scale_var_str} must be numeric."))
+  if (!is.numeric(scale_var_data) &
+      !is.logical(scale_var_data) &
+      !lubridate::is.POSIXt(scale_var_data) &
+      !lubridate::is.Date(scale_var_data)) {
+
+    stop(glue("{scale_var_str} must be numeric, logical, or a date/time."))
   }
 
   warn_about_ends <- FALSE
-  if (is.null(lower_end) | !is.numeric(lower_end)) {
-    lower_end <- min(scale_var_data, na.rm = TRUE)
-    warn_about_ends <- TRUE
-  }
 
-  if (is.null(upper_end) | !is.numeric(upper_end)) {
-    upper_end <- max(scale_var_data, na.rm = TRUE)
-    warn_about_ends <- TRUE
+  if (lubridate::is.Date(scale_var_data) |
+      lubridate::is.POSIXt(scale_var_data)) {
+    # handle dates/times
+
+    if (is.null(lower_end)) {
+      lower_end <- min(scale_var_data, na.rm = TRUE)
+      warn_about_ends <- TRUE
+    }
+
+    if (is.null(upper_end)) {
+      upper_end <- max(scale_var_data, na.rm = TRUE)
+      warn_about_ends <- TRUE
+    }
+
+    if (!is.numeric(lower_end)) {
+      lower_end <- as.numeric(lower_end)
+    }
+
+    if (!is.numeric(upper_end)) {
+      upper_end <- as.numeric(upper_end)
+    }
+
+  } else {
+    # handle other data types
+    if (is.null(lower_end) | !is.numeric(lower_end)) {
+      lower_end <- min(scale_var_data, na.rm = TRUE)
+      warn_about_ends <- TRUE
+    }
+
+    if (is.null(upper_end) | !is.numeric(upper_end)) {
+      upper_end <- max(scale_var_data, na.rm = TRUE)
+      warn_about_ends <- TRUE
+    }
   }
 
   if (warn_about_ends) {
@@ -65,18 +95,58 @@ reverse_scale <- function(data, scale_var,
             call. = FALSE)
   }
 
-  scale_orig <- seq(lower_end, upper_end)
-  scale_rev <- rev(scale_orig)
-  mapped_scale <- as.list(scale_rev)
-  names(mapped_scale) <- scale_orig
+  if (lubridate::is.Date(scale_var_data) |
+      lubridate::is.POSIXt(scale_var_data)) {
 
-  mapped_scale[[".x"]] <- scale_var_data
+    # preserve timezone
+    tz <- lubridate::tz(scale_var_data)
 
-  data %>%
-    dplyr::mutate(!!name := do.call(dplyr::recode,
-                                    mapped_scale)) %>%
-    new_tdcmm() %>%
-    return()
+    # Convert dates to numeric values (number of days since a reference date)
+    numeric_dates <- as.numeric(scale_var_data)
+
+    # Reverse scale
+    scale_orig <- seq(from = as.numeric(lower_end),
+                      to = as.numeric(upper_end),
+                      length.out = length(numeric_dates))
+    scale_rev <- rev(scale_orig)
+    map_to_rev_scale <- stats::approxfun(scale_orig, scale_rev)
+    numeric_dates_rev <- map_to_rev_scale(numeric_dates)
+
+    # Convert numeric values back to dates
+    if(lubridate::is.Date(scale_var_data)) {
+      data %>%
+        dplyr::mutate(!!name := as.Date(numeric_dates_rev,
+                                        origin = "1970-01-01",
+                                        tz = tz)) %>%
+        new_tdcmm() %>%
+        return()
+    } else { # if(lubridate::is.POSIXt(scale_var_data)) {
+      data %>%
+        dplyr::mutate(!!name := as.POSIXct(numeric_dates_rev,
+                                           origin = "1970-01-01",
+                                           tz = tz)) %>%
+        new_tdcmm() %>%
+        return()
+    }
+
+  } else if (is.numeric(scale_var_data)) {
+    scale_orig <- seq(from = lower_end,
+                      to = upper_end,
+                      length.out = length(scale_var_data))
+    scale_rev <- rev(scale_orig)
+    map_to_rev_scale <- stats::approxfun(scale_orig, scale_rev)
+
+    data %>%
+      dplyr::mutate(!!name := map_to_rev_scale(!!sym(scale_var_str))) %>%
+      new_tdcmm() %>%
+      return()
+
+  } else { # if (is.logical(scale_var_data)) {
+    data %>%
+      dplyr::mutate(!!name := !{{ scale_var }}) %>%
+      new_tdcmm() %>%
+      return()
+  }
 }
 
 #' Rescale a numeric continuous scale to new minimum/maximum boundaries

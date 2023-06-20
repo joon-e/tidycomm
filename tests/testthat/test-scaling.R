@@ -19,6 +19,16 @@ test_that("scaling return values work", {
                                     name = "ae_rev",
                                     lower_end = 1,
                                     upper_end = 5)))
+  t_logidate <- tibble::tibble(a = c(T, F, F, T),
+                               b = seq(lubridate::now(),
+                                       lubridate::now() + lubridate::hours(3),
+                                       by = '1 hour'),
+                               c = seq(lubridate::today(),
+                                       lubridate::today() + lubridate::days(3),
+                                       by = '1 day'))
+  expect_true(tibble::is_tibble(suppressWarnings(reverse_scale(t_logidate, a))))
+  expect_true(tibble::is_tibble(suppressWarnings(reverse_scale(t_logidate, b))))
+  expect_true(tibble::is_tibble(suppressWarnings(reverse_scale(t_logidate, c))))
 
 
   # z_scale

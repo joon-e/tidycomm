@@ -2,7 +2,7 @@
 % Please edit documentation in R/scaling.R
 \name{reverse_scale}
 \alias{reverse_scale}
-\title{Reverse a numeric continuous scale}
+\title{Reverse a numeric, logical, or date/time continuous scale}
 \usage{
 reverse_scale(
   data,
