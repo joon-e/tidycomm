@@ -35,10 +35,11 @@ a \link{tdcmm} model
 }
 \description{
 Given a specified minimum and maximum, this function translates each value
-into a new value within this specified range, thereby keeping distances the
-same. Hence, mean and standard deviations change but. However, if both the
-original scale and the changed scale were to be z-standardized, they would
-turn out equal again.
+into a new value within this specified range. The transformation maintains
+the relative distances between values, resulting in changes to the mean and
+standard deviations. However, if both the original scale and the transformed
+scale are z-standardized, they will be equal again, indicating that the
+relative positions and distributions of the values remain consistent.
 }
 \examples{
 WoJ \%>\% change_scale(autonomy_emphasis)
