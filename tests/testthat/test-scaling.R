@@ -39,14 +39,19 @@ test_that("scaling return values work", {
   expect_true("ae_center" %in%
                 names(center_scale(WoJ, autonomy_emphasis, name = "ae_center")))
 
-  # change_scale
-  WoJ_changed <- WoJ %>% change_scale(autonomy_emphasis)
+  # minmax_scale
+  WoJ_changed <- WoJ %>% minmax_scale(autonomy_emphasis)
   expect_true(tibble::is_tibble(WoJ_changed))
   expect_equal(dim(WoJ_changed),
                dim(WoJ) + c(0, 1))
   expect_true("autonomy_emphasis_0to1" %in% names(WoJ_changed))
   expect_true("ae_change" %in%
-                names(change_scale(WoJ, autonomy_emphasis, name = "ae_change")))
+                names(minmax_scale(WoJ, autonomy_emphasis, name = "ae_change")))
+  expect_true("autonomy_emphasis_neg2to2" %in%
+                names(minmax_scale(WoJ,
+                                   autonomy_emphasis,
+                                   change_to_min = -2,
+                                   change_to_max = +2)))
 })
 
 test_that("scaling can handle false inputs", {
@@ -80,14 +85,14 @@ test_that("scaling can handle false inputs", {
   expect_error(center_scale(check, b))
   expect_error(center_scale(check, c))
 
-  #change_scale
+  #minmax_scale
   check <- tibble::tibble(a = c(1, 2, 3, NA),
                           b = forcats::as_factor(c(1, 1, 1, 2)),
                           c = c("a", "b", "cde", NA_character_))
   expect_equal(sum(is.na(check$a)),
-               sum(is.na(change_scale(check, a)$a_0to1)))
-  expect_error(center_scale(check, b))
-  expect_error(center_scale(check, c))
+               sum(is.na(minmax_scale(check, a)$a_0to1)))
+  expect_error(minmax_scale(check, b))
+  expect_error(minmax_scale(check, c))
 })
 
 test_that("scaling returns correct scales", {
@@ -141,10 +146,10 @@ test_that("scaling returns correct scales", {
                  round(),
                0)
 
-  #change_scale
+  #minmax_scale
   check <- WoJ %>%
     z_scale(autonomy_emphasis) %>%
-    change_scale(autonomy_emphasis, change_to_min = 1, change_to_max = 10) %>%
+    minmax_scale(autonomy_emphasis, change_to_min = 1, change_to_max = 10) %>%
     z_scale(autonomy_emphasis_1to10)
   expect_equal(min(check$autonomy_emphasis_1to10, na.rm = TRUE), 1)
   expect_equal(max(check$autonomy_emphasis_1to10, na.rm = TRUE), 10)

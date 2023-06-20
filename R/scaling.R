@@ -79,7 +79,7 @@ reverse_scale <- function(data, scale_var,
     return()
 }
 
-#' Change/Rescale a numeric continuous scale
+#' Rescale a numeric continuous scale to new minimum/maximum boundaries
 #'
 #' Given a specified minimum and maximum, this function translates each value
 #' into a new value within this specified range. The transformation maintains
@@ -92,7 +92,9 @@ reverse_scale <- function(data, scale_var,
 #' @param scale_var a numeric variable for which the scale gets changed
 #' @param name the name of the new variable. By default, this is the same name
 #' as `scale_var` but suffixed with `change_to_min` and `change_to_max` so that,
-#' for example, "variable" becomes "variable_3to5".
+#' for example, "variable" becomes "variable_3to5". Negative values are prefixed
+#' with "neg" to avoid invalid columns names (e.g., -3 to 3 becomes
+#' "variable_neg3to5").
 #' @param change_to_min numeric minimum of the new range (default is `0`)
 #' @param change_to_max numeric maximum of the new range (default is `1`)
 #'
@@ -101,16 +103,19 @@ reverse_scale <- function(data, scale_var,
 #' @family scaling
 #'
 #' @examples
-#' WoJ %>% change_scale(autonomy_emphasis)
-#' WoJ %>% change_scale(autonomy_emphasis, change_to_min = 1, change_to_max = 10, name = "my_changed_variable")
+#' WoJ %>% minmax_scale(autonomy_emphasis)
+#' WoJ %>% minmax_scale(autonomy_emphasis, change_to_min = 1, change_to_max = 10, name = "my_changed_variable")
 #'
 #' WoJ %>%
-#'   change_scale(autonomy_emphasis) %>%
+#'   minmax_scale(autonomy_emphasis) %>%
 #'   tab_frequencies(autonomy_emphasis, autonomy_emphasis_0to1)
-change_scale <- function(data, scale_var,
+minmax_scale <- function(data, scale_var,
                          change_to_min = 0, change_to_max = 1,
                          name = paste0(as_label(expr({{ scale_var }})), "_",
-                                       change_to_min, "to", change_to_max)) {
+                                       gsub("-", "neg",
+                                            paste0(change_to_min,
+                                                   "to",
+                                                   change_to_max)))) {
   scale_var_data <- data %>%
     dplyr::pull({{ scale_var }})
   if (!is.numeric(scale_var_data) &

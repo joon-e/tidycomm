@@ -57,7 +57,7 @@ WoJ \%>\%
 \seealso{
 Other scaling: 
 \code{\link{center_scale}()},
-\code{\link{change_scale}()},
+\code{\link{minmax_scale}()},
 \code{\link{z_scale}()}
 }
 \concept{scaling}
