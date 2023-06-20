@@ -4,10 +4,14 @@ context("t-Test")
 
 test_that("t_test returns tibble", {
 
-  t <- t_test(WoJ, temp_contract, autonomy_selection, autonomy_emphasis)
+  t1 <- t_test(WoJ, temp_contract, autonomy_selection, autonomy_emphasis)
+  t2 <- t_test(WoJ, autonomy_emphasis, mu = 4.00)
 
-  expect_true(tibble::is_tibble(t))
-  expect_equal(dim(t), c(2, 10))
+  expect_true(tibble::is_tibble(t1))
+  expect_equal(dim(t1), c(2, 10))
+
+  expect_true(tibble::is_tibble(t2))
+  expect_equal(dim(t2), c(1, 9))
 })
 
 test_that("t_test returns tibble when no variables are specified", {
@@ -24,6 +28,12 @@ test_that("t_test returns tibble with user-defined levels", {
 
   expect_true(tibble::is_tibble(t))
   expect_equal(dim(t), c(11, 10))
+})
+
+test_that("one-sample t_test does not interfere", {
+
+  expect_error(t_test(WoJ, temp_contract, autonomy_emphasis, mu = 4.00))
+  expect_error(t_test(WoJ, temp_contract, mu = 4.00))
 })
 
 
