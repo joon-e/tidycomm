@@ -7,12 +7,12 @@
 tab_frequencies(data, ...)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{...}{Variables to tabulate}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Tabulates frequencies for one or more categorical variable, including relative,

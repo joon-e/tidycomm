@@ -14,7 +14,7 @@ crosstab(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{col_var}{Independent (column) variable.}
 

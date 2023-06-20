@@ -7,7 +7,7 @@
 add_index(data, name, ..., type = "mean", na.rm = TRUE, cast.numeric = FALSE)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{name}{Name of the index column to compute.}
 
@@ -23,7 +23,7 @@ for index computation should be converted to numeric. Useful if computing
 indices from factor variables. Defaults to \code{FALSE}.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Add a rowwise mean or sum index of specific variables to the dataset.

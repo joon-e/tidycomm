@@ -14,7 +14,7 @@ regress(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{dependent_var}{The dependent variable on which the linear model is
 fitted. Specify as column name.}
@@ -28,14 +28,15 @@ two cases is being checked using a Durbin-Watson test}
 
 \item{check_multicollinearity}{if set, multicollinearity among all specified
 independent variables is being checked using the variance inflation factor
-(VIF) and the tolerance (1/VIF); can only be calculated if at least two
-independent variables are given all of which are numeric}
+(VIF) and the tolerance (1/VIF); this check can only be performed if at
+least two independent variables are provided, and all provided variables
+need to be numeric}
 
 \item{check_homoscedasticity}{if set, homoscedasticity is being checked
 using a Breusch-Pagan test}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes linear regression for all independent variables on the specified
