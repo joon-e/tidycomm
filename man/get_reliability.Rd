@@ -15,7 +15,7 @@ get_reliability(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{...}{Index variables created with \code{\link{add_index}}. Leave empty
 to get reliability estimates for all index variables.}
@@ -36,7 +36,7 @@ if using computationally intense computations (e. g., many bootstrapping
 samples) and many index variables.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Get reliability estimates of index variables created with \code{\link{add_index}}.

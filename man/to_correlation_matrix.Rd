@@ -7,10 +7,10 @@
 to_correlation_matrix(data)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} returned from \code{\link{correlate}}}
+\item{data}{a \link{tdcmm} model returned from \code{\link{correlate}}}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Turns the tibble exported from \code{\link{correlate}} into a correlation
