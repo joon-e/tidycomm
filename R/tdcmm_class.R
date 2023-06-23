@@ -119,9 +119,13 @@ model.tdcmm <- function(x, ...) {
 #' no additional arguments
 #' - [unianova()]: plot with points and appended 95% confidence intervals;
 #' no additional arguments
-#' - [correlate()]: plot as scatter with a bit of "jitter" (random noise) to
-#' better reflect categorical values; for more than 2 variables, a correlogram
-#' is plotted (just like for [to_correlation_matrix()]); no additional arguments
+#' - [correlate()]: plot as scatter; for more than 2 variables, a correlogram
+#' is plotted (just like for [to_correlation_matrix()]); use the `which`
+#' parameter to select how points are visualized:
+#'   - "jitter" adds a bit of random noise to each point to better reflect
+#'   categorical values
+#'   - "alpha" depicts points slightly transparent so that multiple points in
+#'   the same position are more easily visible
 #' - [correlate()]: for partial correlation, a scatter plot with some jitter is
 #' plotted using the residuals between the control variable and (a) the
 #' dependent as well as (b) the independent variable; no additional arguments
@@ -220,6 +224,9 @@ model.tdcmm <- function(x, ...) {
 #' fbposts %>%
 #'   correlate(pop_elite, pop_people) %>%
 #'   visualize()
+#' fbposts %>%
+#'   correlate(pop_elite, pop_people) %>%
+#'   visualize("alpha")
 #' WoJ %>%
 #'   correlate(autonomy_selection, ethics_1, work_experience, partial = TRUE) %>%
 #'   visualize()

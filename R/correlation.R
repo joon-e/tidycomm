@@ -108,13 +108,24 @@ to_correlation_matrix <- function(data) {
 }
 
 #' @rdname visualize
+#' @param which string to specify type of point visualization. One of
+#' "jitter" (default, random noise to better reflect categorical values ) or
+#' "alpha" (points appear slightly transparent so that multiple points in the
+#' same position are more easily visible); only affects regular correlation.
+#'
 #' @export
-visualize.tdcmm_crrltn <- function(x, ..., .design = design_lmu()) {
+visualize.tdcmm_crrltn <- function(x, which = "jitter", .design = design_lmu()) {
   if (attr(x, "func") == "correlate") {
+    if (!which %in% c("jitter", "alpha")) {
+      warning(glue('which must be one of "jitter" or "alpha". Since none ',
+                   'was provided, "jitter" is considered by default.'),
+              call. = FALSE)
+      which <- "jitter"
+    }
     if (attr(x, "params")$partial == TRUE) {
-      return(visualize_partial_correlation(x, .design))
+      return(visualize_partial_correlation(x, which, .design))
     } else {
-      return(visualize_correlate(x, .design))
+      return(visualize_correlate(x, which, .design))
     }
   }
 
@@ -180,23 +191,37 @@ correlation_test <- function(var_comb, data, method) {
 ## "jitter" (random noise) to better reflect categorical values.
 ##
 ## @param x a [tdcmm] model
+## @param which string to specify type of point visualization. One of
+## "jitter" (default, random noise to better reflect categorical values ) or
+## "alpha" (points appear slightly transparent so that multiple points in the
+## same position are more easily visible); only affects regular correlation.
 ##
 ## @return a [ggplot2] object
 ##
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_correlate <- function(x, design = design_lmu()) {
+visualize_correlate <- function(x, which = "jitter", design = design_lmu()) {
   if (nrow(x) > 1) {
     return(visualize(to_correlation_matrix(x), design))
   }
 
-  attr(x, "data") %>%
+  g <- attr(x, "data") %>%
     ggplot2::ggplot(ggplot2::aes(x = !!sym(attr(x, "params")$vars[1]),
-                                 y = !!sym(attr(x, "params")$vars[2]))) +
-    ggplot2::geom_jitter(width = .3,
-                         height = .3,
-                         na.rm = TRUE) +
+                                 y = !!sym(attr(x, "params")$vars[2])))
+
+  if (which == "jitter") {
+    g <- g +
+      ggplot2::geom_jitter(width = .3,
+                           height = .3,
+                           na.rm = TRUE)
+  } else {
+    g <- g +
+      ggplot2::geom_point(alpha = .2,
+                          na.rm = TRUE)
+  }
+
+  g +
     ggplot2::scale_x_continuous(attr(x, "params")$vars[1],
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous(attr(x, "params")$vars[2],
@@ -248,13 +273,17 @@ visualize_to_correlation_matrix <- function(x, design = design_lmu()) {
 ## Visualize `correlate(..., partial = TRUE)` as correlation between residuals
 ##
 ## @param x a [tdcmm] model
+## @param which string to specify type of point visualization. One of
+## "jitter" (default, random noise to better reflect categorical values ) or
+## "alpha" (points appear slightly transparent so that multiple points in the
+## same position are more easily visible); only affects regular correlation.
 ##
 ## @return a [ggplot2] object
 ##
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_partial_correlation <- function(x, design = design_lmu()) {
+visualize_partial_correlation <- function(x, which = "jitter", design = design_lmu()) {
   # prepare data
   data <- attr(x, "data") %>%
     stats::na.omit()
@@ -286,7 +315,7 @@ visualize_partial_correlation <- function(x, design = design_lmu()) {
                                     !!model2_name := model2_res)) %>%
     correlate(!!model1_name,
               !!model2_name) %>%
-    visualize(design)
+    visualize(which, design)
 }
 
 ## Helper function to print correlation coefficients together with CIs.

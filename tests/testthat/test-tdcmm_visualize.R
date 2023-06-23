@@ -36,6 +36,8 @@ test_that("implemented visualize() calls return ggplot2 (gg)", {
 
   expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2)),
                   "gg")
+  expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2), which = "alpha"),
+                  "gg")
   expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2, ethics_3)),
                   "gg")
   expect_s3_class(suppressWarnings(visualize(correlate(WoJ,
