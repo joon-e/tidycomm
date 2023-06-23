@@ -161,7 +161,7 @@ regress <- function(data,
 }
 
 #' @param which string to specify type of regression visualization. One of
-#' "lm" (default), "scatter", "residualsfitted" (or "resfit"), "pp", "qq",
+#' "lm" (default), "correlogram", "residualsfitted" (or "resfit"), "pp", "qq",
 #' "scalelocation" (or "scaloc"), "residualsleverage" (or "reslev"). See
 #' below for details.
 #'
@@ -170,8 +170,8 @@ regress <- function(data,
 visualize.tdcmm_rgrssn <- function(x, which = "lm", .design = design_lmu()) {
   if (attr(x, "func") == "regress") {
     which <- tolower(which)
-    if (which == "scatter") {
-      return(visualize_regress_scatter(x))
+    if (which == "correlogram") {
+      return(visualize_regress_correlogram(x, .design))
     }
     if (which == "residualsfitted" | which == "resfit") {
       return(visualize_regress_resfit(x, .design))
@@ -303,8 +303,8 @@ visualize_regress_lm <- function(x, design = design_lmu()) {
     design$theme()
 }
 
-## Visualize as scatter plot between independent variables, histograms, and
-## correlogram. Helps to determine indpendent errors and multicollinearity.
+## Visualize as correlogram between independent variables.
+## Helps to determine indpendent errors and multicollinearity.
 ##
 ## @param x a [tdcmm] model
 ##
@@ -315,7 +315,7 @@ visualize_regress_lm <- function(x, design = design_lmu()) {
 ## @see visualize.tdcmm_crrltn
 #
 ## @keywords internal
-visualize_regress_scatter <- function(x) {
+visualize_regress_correlogram <- function(x, design = design_lmu()) {
   if (length(attr(x, "checks")$factors) > 0) {
     factor_variables <- c()
     for (i in 1:length(attr(x, "checks")$factors)) {

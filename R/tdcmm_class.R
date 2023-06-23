@@ -141,9 +141,9 @@ model.tdcmm <- function(x, ...) {
 #'   linear regression for each, so that the three models (i.e., the three
 #'   colored lines) reflect only the particular combination of one independent
 #'   and the dependent variable
-#'   - "scatter": like [to_correlation_matrix()], a scatter plot between
-#'   independent variables, histograms, and correlogram are produced to help
-#'   determine independent errors and multicollinearity
+#'   - "correlogram": like [to_correlation_matrix()], a correlogram between
+#'   independent variables are produced to help determine independent errors
+#'   and multicollinearity
 #'   - "residualsfitted" or "resfit": a residuals-versus-fitted plot is useful
 #'   to determine distributions; for a normal distribution the colored line
 #'   should ideally fit on the dashed line
@@ -230,7 +230,7 @@ model.tdcmm <- function(x, ...) {
 #'
 #' r <- WoJ %>% regress(autonomy_selection, temp_contract, work_experience, ethics_2)
 #' r %>% visualize() # same as r %>% visualize("lm")
-#' r %>% visualize("scatter")
+#' r %>% visualize("correlogram")
 #' r %>% visualize("resfit")
 #' r %>% visualize("pp")
 #' r %>% visualize("qq")
