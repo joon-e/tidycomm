@@ -217,7 +217,7 @@ visualize_correlate <- function(x, which = "jitter", design = design_lmu()) {
                            na.rm = TRUE)
   } else {
     g <- g +
-      ggplot2::geom_point(alpha = .2,
+      ggplot2::geom_point(alpha = .25,
                           na.rm = TRUE)
   }
 
