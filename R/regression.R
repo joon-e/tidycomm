@@ -189,7 +189,7 @@ visualize.tdcmm_rgrssn <- function(x, which = "lm", .design = design_lmu()) {
       return(visualize_regress_reslev(x, .design))
     }
     if (which != "lm") {
-      warning(glue('which must be one of "lm", "scatter", "residualsfitted" ',
+      warning(glue('which must be one of "lm", "correlogram", "residualsfitted" ',
                    '(or "resfit"), "pp", "qq", "scalelocation" (or "scaloc"), ',
                    'or "residualsleverage" (or "reslev"). Since none was ',
                    'provided, "lm" is considered by default.'),
