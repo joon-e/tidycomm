@@ -11,29 +11,38 @@
 \alias{visualize.tdcmm_nnv}
 \title{Visualize tidycomm output}
 \usage{
-\method{visualize}{tdcmm_ctgrcl}(x, ...)
+\method{visualize}{tdcmm_ctgrcl}(x, ..., .design = design_lmu())
 
-\method{visualize}{tdcmm_crrltn}(x, ...)
+\method{visualize}{tdcmm_crrltn}(x, which = "jitter", .design = design_lmu())
 
-\method{visualize}{tdcmm_dscrb}(x, ...)
+\method{visualize}{tdcmm_dscrb}(x, ..., .design = design_lmu())
 
-\method{visualize}{tdcmm_rgrssn}(x, which = "lm")
+\method{visualize}{tdcmm_rgrssn}(x, which = "jitter", .design = design_lmu())
 
-visualize(x, ...)
+visualize(x, ..., .design = design_lmu())
 
-\method{visualize}{tdcmm_ttst}(x, ...)
+\method{visualize}{tdcmm_ttst}(x, ..., .design = design_lmu())
 
-\method{visualize}{tdcmm_nnv}(x, ...)
+\method{visualize}{tdcmm_nnv}(x, ..., .design = design_lmu())
 }
 \arguments{
 \item{x}{\code{tdcmm} output}
 
 \item{...}{other arguments}
 
+\item{.design}{a list to style the visualization; by default and good practice
+use one of the ready-made design functions' returns (e.g., \code{design_lmu()},
+\code{design_grey()}); you could, however, also provide your own list here which
+has to be a list with 9 keys: \code{main_color_1}, a vector of 12 \code{main_colors}, a
+corresponding \code{main_contrast_1} (the color of text to write on top of the
+main color) and a corresponding \code{main_contrasts}, the \code{main_size} (for
+lines), a \code{comparison_linetype}, \code{comparison_color}, and \code{comparison_size}
+for all lines that act as comparative lines, and a \link{ggplot2} \code{theme}}
+
 \item{which}{string to specify type of regression visualization. One of
-"lm" (default), "scatter", "residualsfitted" (or "resfit"), "pp", "qq",
-"scalelocation" (or "scaloc"), "residualsleverage" (or "reslev"). See
-below for details.}
+"jitter" (default), "alpha", "correlogram", "residualsfitted" (or "resfit"),
+"pp", "qq", "scalelocation" (or "scaloc"), "residualsleverage" (or "reslev").
+See below for details.}
 }
 \value{
 A \link{ggplot2} object
@@ -59,9 +68,18 @@ no additional arguments
 no additional arguments
 \item \code{\link[=unianova]{unianova()}}: plot with points and appended 95\% confidence intervals;
 no additional arguments
-\item \code{\link[=correlate]{correlate()}}: plot as scatter with a bit of "jitter" (random noise) to
-better reflect categorical values; for more than 2 variables, a correlogram
-is plotted (just like for \code{\link[=to_correlation_matrix]{to_correlation_matrix()}}); no additional arguments
+\item \code{\link[=correlate]{correlate()}}: plot as scatter; for more than 2 variables, a correlogram
+is plotted (just like for \code{\link[=to_correlation_matrix]{to_correlation_matrix()}}); use the \code{which}
+parameter to select how points are visualized:
+\itemize{
+\item "jitter" adds a bit of random noise to each point to better reflect
+categorical values
+\item "alpha" depicts points slightly transparent so that multiple points in
+the same position are more easily visible
+}
+\item \code{\link[=correlate]{correlate()}}: for partial correlation, a scatter plot with some jitter is
+plotted using the residuals between the control variable and (a) the
+dependent as well as (b) the independent variable; no additional arguments
 \item \code{\link[=to_correlation_matrix]{to_correlation_matrix()}}: plot as correlogram building on
 \code{\link[GGally:ggpairs]{GGally::ggpairs()}} with jittered scatter plots in lower half, histograms as
 diagonals, and correlation coefficients with 95\% confidence intervals in
@@ -71,17 +89,19 @@ additional depicted model line with including its 95\% confidence intervals;
 alternatively, visual check inspection helpers can be plotted through the
 \code{which} parameter which can be set to yield one of the following:
 \itemize{
-\item "lm" (default): plots a scatter plot (without jitter but instead with
-some transparency so that multiple data points in the same position appear
-as darker) per independent variable and adds a linear regression line with
-95\% confidence intervals to it; keep in mind that if you have, say, three
-independent variables, this visualization shows you three plots with one
-linear regression for each, so that the three models (i.e., the three
-colored lines) reflect only the particular combination of one independent
-and the dependent variable
-\item "scatter": like \code{\link[=to_correlation_matrix]{to_correlation_matrix()}}, a scatter plot between
-independent variables, histograms, and correlogram are produced to help
-determine independent errors and multicollinearity
+\item "jitter" (default): plots a scatter plot with jitter per independent
+variable and adds a linear regression line with 95\% confidence intervals
+to it; keep in mind that if you have, say, three independent variables,
+this visualization shows you three plots with one linear regression for
+each, so that the three models (i.e., the three colored lines) reflect
+only the particular combination of one independent and the dependent
+variable
+\item "alpha" (default): almost like \code{jitter} but instead of jitter it plots
+scatter plots with some transparency so that multiple data points in the
+same position appear as darker
+\item "correlogram": like \code{\link[=to_correlation_matrix]{to_correlation_matrix()}}, a correlogram between
+independent variables are produced to help determine independent errors
+and multicollinearity
 \item "residualsfitted" or "resfit": a residuals-versus-fitted plot is useful
 to determine distributions; for a normal distribution the colored line
 should ideally fit on the dashed line
@@ -106,6 +126,10 @@ or there might be more than 5 noteworthy outliers in this model; interpret
 with care
 }
 }
+
+Note that the returned \link{ggplot2} object can be modified easily by appending
+or overwriting individual geom's or scale's. See the examples below and the
+documentation of \link{ggplot2}.
 }
 \examples{
 WoJ \%>\%
@@ -141,19 +165,32 @@ WoJ \%>\%
 fbposts \%>\%
   correlate(pop_elite, pop_people) \%>\%
   visualize()
+fbposts \%>\%
+  correlate(pop_elite, pop_people) \%>\%
+  visualize("alpha")
+WoJ \%>\%
+  correlate(autonomy_selection, ethics_1, work_experience, partial = TRUE) \%>\%
+  visualize()
 WoJ \%>\%
   correlate(ethics_1, ethics_2, ethics_3, ethics_4) \%>\%
   to_correlation_matrix() \%>\%
   visualize()
 
 r <- WoJ \%>\% regress(autonomy_selection, temp_contract, work_experience, ethics_2)
-r \%>\% visualize() # same as r \%>\% visualize("lm")
-r \%>\% visualize("scatter")
+r \%>\% visualize() # same as r \%>\% visualize("jitter")
+r \%>\% visualize("alpha")
+r \%>\% visualize("correlogram")
 r \%>\% visualize("resfit")
 r \%>\% visualize("pp")
 r \%>\% visualize("qq")
 r \%>\% visualize("scaloc")
 r \%>\% visualize("reslev")
+
+# To overwrite a certain scale or geom, just append as you would with ggplot2
+fbposts \%>\%
+  describe_cat() \%>\%
+  visualize() +
+    ggplot2::scale_fill_grey()
 
 }
 \concept{visualize}
