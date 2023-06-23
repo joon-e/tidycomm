@@ -164,6 +164,10 @@ model.tdcmm <- function(x, ...) {
 #'   or there might be more than 5 noteworthy outliers in this model; interpret
 #'   with care
 #'
+#' Note that the returned [ggplot2] object can be modified easily by appending
+#' or overwriting individual geom's or scale's. See the examples below and the
+#' documentation of [ggplot2].
+#'
 #' @param x `tdcmm` output
 #' @param ... other arguments
 #'
@@ -218,6 +222,12 @@ model.tdcmm <- function(x, ...) {
 #' r %>% visualize("qq")
 #' r %>% visualize("scaloc")
 #' r %>% visualize("reslev")
+#'
+#' # To overwrite a certain scale or geom, just append as you would with ggplot2
+#' fbposts %>%
+#'   describe_cat() %>%
+#'   visualize() +
+#'     ggplot2::scale_fill_grey()
 #'
 #' @export
 visualize <- function(x, ...) {
