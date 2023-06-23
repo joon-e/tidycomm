@@ -161,13 +161,13 @@ regress <- function(data,
 }
 
 #' @param which string to specify type of regression visualization. One of
-#' "lm" (default), "correlogram", "residualsfitted" (or "resfit"), "pp", "qq",
-#' "scalelocation" (or "scaloc"), "residualsleverage" (or "reslev"). See
-#' below for details.
+#' "jitter" (default), "alpha", "correlogram", "residualsfitted" (or "resfit"),
+#' "pp", "qq", "scalelocation" (or "scaloc"), "residualsleverage" (or "reslev").
+#' See below for details.
 #'
 #' @rdname visualize
 #' @export
-visualize.tdcmm_rgrssn <- function(x, which = "lm", .design = design_lmu()) {
+visualize.tdcmm_rgrssn <- function(x, which = "jitter", .design = design_lmu()) {
   if (attr(x, "func") == "regress") {
     which <- tolower(which)
     if (which == "correlogram") {
@@ -188,14 +188,16 @@ visualize.tdcmm_rgrssn <- function(x, which = "lm", .design = design_lmu()) {
     if (which == "residualsleverage" | which == "reslev") {
       return(visualize_regress_reslev(x, .design))
     }
-    if (which != "lm") {
-      warning(glue('which must be one of "lm", "correlogram", "residualsfitted" ',
-                   '(or "resfit"), "pp", "qq", "scalelocation" (or "scaloc"), ',
+    if (!which %in% c("jitter", "alpha")) {
+      warning(glue('which must be one of "jitter", "alpha", "correlogram", ',
+                   '"residualsfitted" (or "resfit"), "pp", "qq", ',
+                   '"scalelocation" (or "scaloc"), ',
                    'or "residualsleverage" (or "reslev"). Since none was ',
-                   'provided, "lm" is considered by default.'),
+                   'provided, "jitter" is considered by default.'),
               call. = FALSE)
+      which <- "jitter"
     }
-    return(visualize_regress_lm(x, .design))
+    return(visualize_regress_lm(x, which, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -274,8 +276,8 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_regress_lm <- function(x, design = design_lmu()) {
-  attr(x, "data") %>%
+visualize_regress_lm <- function(x, which = "jitter", design = design_lmu()) {
+  g <- attr(x, "data") %>%
     dplyr::select(!!sym(attr(x, "params")$dependent_var),
                   !!!syms(attr(x, "params")$vars)) %>%
     dplyr::rename(dependent_var = !!sym(attr(x, "params")$dependent_var)) %>%
@@ -286,9 +288,19 @@ visualize_regress_lm <- function(x, design = design_lmu()) {
     dplyr::mutate(iv = forcats::fct(.data$iv,
                                     levels = attr(x, "params")$vars)) %>%
     ggplot2::ggplot(ggplot2::aes(x = .data$value,
-                                 y = .data$dependent_var)) +
-    ggplot2::geom_point(alpha = .25,
-                        na.rm = TRUE) +
+                                 y = .data$dependent_var))
+  if (which == "jitter") {
+    g <- g +
+      ggplot2::geom_jitter(width = .3,
+                           height = .3,
+                           na.rm = TRUE)
+  } else {
+    g <- g +
+      ggplot2::geom_point(alpha = .25,
+                          na.rm = TRUE)
+  }
+
+  g +
     ggplot2::geom_smooth(method = "lm",
                          se = TRUE,
                          level = .95,
@@ -333,7 +345,7 @@ visualize_regress_correlogram <- function(x, design = design_lmu()) {
     dplyr::select_if(is.numeric) %>%
     correlate() %>%
     to_correlation_matrix() %>%
-    visualize()
+    visualize(.design = design)
 }
 
 ## Visualize as residuals v. fitted plot.

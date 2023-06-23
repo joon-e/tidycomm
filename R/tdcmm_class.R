@@ -137,14 +137,16 @@ model.tdcmm <- function(x, ...) {
 #' additional depicted model line with including its 95% confidence intervals;
 #' alternatively, visual check inspection helpers can be plotted through the
 #' `which` parameter which can be set to yield one of the following:
-#'   - "lm" (default): plots a scatter plot (without jitter but instead with
-#'   some transparency so that multiple data points in the same position appear
-#'   as darker) per independent variable and adds a linear regression line with
-#'   95% confidence intervals to it; keep in mind that if you have, say, three
-#'   independent variables, this visualization shows you three plots with one
-#'   linear regression for each, so that the three models (i.e., the three
-#'   colored lines) reflect only the particular combination of one independent
-#'   and the dependent variable
+#'   - "jitter" (default): plots a scatter plot with jitter per independent
+#'   variable and adds a linear regression line with 95% confidence intervals
+#'   to it; keep in mind that if you have, say, three independent variables,
+#'   this visualization shows you three plots with one linear regression for
+#'   each, so that the three models (i.e., the three colored lines) reflect
+#'   only the particular combination of one independent and the dependent
+#'   variable
+#'   - "alpha" (default): almost like `jitter` but instead of jitter it plots
+#'   scatter plots with some transparency so that multiple data points in the
+#'   same position appear as darker
 #'   - "correlogram": like [to_correlation_matrix()], a correlogram between
 #'   independent variables are produced to help determine independent errors
 #'   and multicollinearity
@@ -236,7 +238,8 @@ model.tdcmm <- function(x, ...) {
 #'   visualize()
 #'
 #' r <- WoJ %>% regress(autonomy_selection, temp_contract, work_experience, ethics_2)
-#' r %>% visualize() # same as r %>% visualize("lm")
+#' r %>% visualize() # same as r %>% visualize("jitter")
+#' r %>% visualize("alpha")
 #' r %>% visualize("correlogram")
 #' r %>% visualize("resfit")
 #' r %>% visualize("pp")
