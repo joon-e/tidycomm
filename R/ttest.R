@@ -322,8 +322,7 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
 ## @keywords internal
 visualize_t_test <- function(x) {
   if ("mu" %in% names(attr(x, "params"))) {
-    stop("No visualization implemented for a one-sample t-test.",
-         call. = FALSE)
+    return(warn_about_missing_visualization(x))
   }
 
   # get variables
