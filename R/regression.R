@@ -167,26 +167,26 @@ regress <- function(data,
 #'
 #' @rdname visualize
 #' @export
-visualize.tdcmm_rgrssn <- function(x, which = "lm") {
+visualize.tdcmm_rgrssn <- function(x, which = "lm", .design = design_lmu()) {
   if (attr(x, "func") == "regress") {
     which <- tolower(which)
     if (which == "scatter") {
       return(visualize_regress_scatter(x))
     }
     if (which == "residualsfitted" | which == "resfit") {
-      return(visualize_regress_resfit(x))
+      return(visualize_regress_resfit(x, .design))
     }
     if (which == "pp") {
-      return(visualize_regress_pp(x))
+      return(visualize_regress_pp(x, .design))
     }
     if (which == "qq") {
-      return(visualize_regress_qq(x))
+      return(visualize_regress_qq(x, .design))
     }
     if (which == "scalelocation" | which == "scaloc") {
-      return(visualize_regress_scaloc(x))
+      return(visualize_regress_scaloc(x, .design))
     }
     if (which == "residualsleverage" | which == "reslev") {
-      return(visualize_regress_reslev(x))
+      return(visualize_regress_reslev(x, .design))
     }
     if (which != "lm") {
       warning(glue('which must be one of "lm", "scatter", "residualsfitted" ',
@@ -195,7 +195,7 @@ visualize.tdcmm_rgrssn <- function(x, which = "lm") {
                    'provided, "lm" is considered by default.'),
               call. = FALSE)
     }
-    return(visualize_regress_lm(x))
+    return(visualize_regress_lm(x, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -274,7 +274,7 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_regress_lm <- function(x) {
+visualize_regress_lm <- function(x, design = design_lmu()) {
   attr(x, "data") %>%
     dplyr::select(!!sym(attr(x, "params")$dependent_var),
                   !!!syms(attr(x, "params")$vars)) %>%
@@ -294,13 +294,13 @@ visualize_regress_lm <- function(x) {
                          level = .95,
                          formula = "y ~ x",
                          na.rm = TRUE,
-                         color = tdcmm_visual_defaults()$main_color_1,
-                         linewidth = tdcmm_visual_defaults()$main_size) +
+                         color = design$main_color_1,
+                         linewidth = design$main_size) +
     ggplot2::facet_wrap(dplyr::vars(iv),
                         scales = "free_x") +
     ggplot2::scale_x_continuous(NULL) +
     ggplot2::scale_y_continuous(attr(x, "params")$dependent_var) +
-    tdcmm_visual_defaults()$theme()
+    design$theme()
 }
 
 ## Visualize as scatter plot between independent variables, histograms, and
@@ -346,7 +346,7 @@ visualize_regress_scatter <- function(x) {
 ## @family tdcmm visualize
 ##
 ## @keywords internal
-visualize_regress_resfit <- function(x) {
+visualize_regress_resfit <- function(x, design = design_lmu()) {
   m <- model(x)
   mf <- ggplot2::fortify(m)
   lowess_fit <- dplyr::as_tibble(stats::lowess(x = mf$.fitted,
@@ -355,19 +355,19 @@ visualize_regress_resfit <- function(x) {
     ggplot2::ggplot(ggplot2::aes(x = .data$.fitted,
                                  y = .data$.resid)) +
     ggplot2::geom_hline(yintercept = 0,
-                        linetype = tdcmm_visual_defaults()$comparison_linetype,
-                        color = tdcmm_visual_defaults()$comparison_color,
-                        linewidth = tdcmm_visual_defaults()$main_size) +
+                        linetype = design$comparison_linetype,
+                        color = design$comparison_color,
+                        linewidth = design$main_size) +
     ggplot2::geom_point() +
     ggplot2::geom_path(data = lowess_fit,
                        ggplot2::aes(x = x, y = y),
-                       color = tdcmm_visual_defaults()$main_color_1,
-                       linewidth = tdcmm_visual_defaults()$main_size) +
+                       color = design$main_color_1,
+                       linewidth = design$main_size) +
     ggplot2::scale_x_continuous("Fitted",
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous("Residuals",
                                 n.breaks = 8) +
-    tdcmm_visual_defaults()$theme(panel.grid = ggplot2::element_blank())
+    design$theme(panel.grid = ggplot2::element_blank())
 }
 
 ## Visualize as probability-probability plot.
@@ -380,7 +380,7 @@ visualize_regress_resfit <- function(x) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_regress_pp <- function(x) {
+visualize_regress_pp <- function(x, design = design_lmu()) {
   x %>%
     model() %>%
     ggplot2::fortify() %>%
@@ -393,15 +393,15 @@ visualize_regress_pp <- function(x) {
                                  y = .data$.p_sample)) +
     ggplot2::geom_abline(intercept = 0,
                          slope = 1,
-                         color = tdcmm_visual_defaults()$comparison_color,
-                         linewidth = tdcmm_visual_defaults()$comparison_size,
-                         linetype = tdcmm_visual_defaults()$comparison_linetype) +
+                         color = design$comparison_color,
+                         linewidth = design$comparison_size,
+                         linetype = design$comparison_linetype) +
     ggplot2::geom_point(alpha = .25) +
     ggplot2::scale_x_continuous("Theoretical Probability",
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous("Sample Residual Probability",
                                 n.breaks = 8) +
-    tdcmm_visual_defaults()$theme(panel.grid = ggplot2::element_blank())
+    design$theme(panel.grid = ggplot2::element_blank())
 }
 
 ## Visualize as quantile-quantile plot.
@@ -414,18 +414,18 @@ visualize_regress_pp <- function(x) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_regress_qq <- function(x) {
+visualize_regress_qq <- function(x, design = design_lmu()) {
   x %>%
     model() %>%
     ggplot2::ggplot(ggplot2::aes(sample = .data$.stdresid)) +
     ggplot2::stat_qq(alpha = .25) +
-    ggplot2::geom_qq_line(color = tdcmm_visual_defaults()$main_color_1,
-                          linewidth = tdcmm_visual_defaults()$main_size) +
+    ggplot2::geom_qq_line(color = design$main_color_1,
+                          linewidth = design$main_size) +
     ggplot2::scale_x_continuous("Theoretical Quantiles",
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous("Sample Quantiles",
                                 n.breaks = 8) +
-    tdcmm_visual_defaults()$theme(panel.grid = ggplot2::element_blank())
+    design$theme(panel.grid = ggplot2::element_blank())
 }
 
 ## Visualize as scale-location plot.
@@ -438,7 +438,7 @@ visualize_regress_qq <- function(x) {
 ## @family tdcmm visualize
 ##
 ## @keywords internal
-visualize_regress_scaloc <- function(x) {
+visualize_regress_scaloc <- function(x, design = design_lmu()) {
   x %>%
     model() %>%
     ggplot2::ggplot(ggplot2::aes(x = .data$.fitted,
@@ -447,14 +447,14 @@ visualize_regress_scaloc <- function(x) {
                         alpha = .25) +
     ggplot2::stat_smooth(method = "loess",
                          se = FALSE,
-                         color = tdcmm_visual_defaults()$main_color_1,
-                         linewidth = tdcmm_visual_defaults()$main_size,
+                         color = design$main_color_1,
+                         linewidth = design$main_size,
                          formula = "y ~ x") +
     ggplot2::scale_x_continuous("Fitted Values",
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous(expression(sqrt("|Standardized Residuals|")),
                                 n.breaks = 8) +
-    tdcmm_visual_defaults()$theme(panel.grid = ggplot2::element_blank())
+    design$theme(panel.grid = ggplot2::element_blank())
 }
 
 ## Visualize as residuals v. leverage plot.
@@ -467,7 +467,7 @@ visualize_regress_scaloc <- function(x) {
 ## @family tdcmm visualize
 ##
 ## @keywords internal
-visualize_regress_reslev <- function(x) {
+visualize_regress_reslev <- function(x, design = design_lmu()) {
   data_labels <- x %>%
     model() %>%
     ggplot2::fortify() %>%
@@ -482,19 +482,19 @@ visualize_regress_reslev <- function(x) {
     ggplot2::geom_point(alpha = .25) +
     ggplot2::geom_smooth(method = "loess",
                          se = FALSE,
-                         color = tdcmm_visual_defaults()$main_color_1,
-                         linewidth = tdcmm_visual_defaults()$main_size,
+                         color = design$main_color_1,
+                         linewidth = design$main_size,
                          formula = "y ~ x") +
     ggplot2::geom_text(data = data_labels,
                        ggplot2::aes(label = .data$case_number),
                        check_overlap = TRUE,
                        nudge_x = .00075,
-                       color = tdcmm_visual_defaults()$main_color_1) +
+                       color = design$main_color_1) +
     ggplot2::scale_x_continuous("Leverage",
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous("Standardized Residuals",
                                 n.breaks = 8) +
-    tdcmm_visual_defaults()$theme(panel.grid = ggplot2::element_blank())
+    design$theme(panel.grid = ggplot2::element_blank())
 }
 
 # Constructors ----

@@ -155,13 +155,13 @@ describe_cat <- function(data, ...) {
 
 #' @rdname visualize
 #' @export
-visualize.tdcmm_dscrb <- function(x, ...) {
+visualize.tdcmm_dscrb <- function(x, ..., .design = design_lmu()) {
   if (attr(x, "func") == "describe") {
-    return(visualize_describe(x))
+    return(visualize_describe(x, .design))
   }
 
   if (attr(x, "func") == "describe_cat") {
-    return(visualize_describe_cat(x))
+    return(visualize_describe_cat(x, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -211,7 +211,7 @@ kurtosis <- function(x) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_describe <- function(x) {
+visualize_describe <- function(x, design = design_lmu()) {
   x %>%
     dplyr::mutate(Variable = forcats::as_factor(.data$Variable),
                   Variable_desc = forcats::fct_rev(.data$Variable)) %>%
@@ -222,15 +222,15 @@ visualize_describe <- function(x) {
                                  xmax = .data$Max,
                                  y = .data$Variable_desc)) +
     ggplot2::geom_boxplot(stat = "identity",
-                          fill = ggplot2::alpha(tdcmm_visual_defaults()$main_color_1,
+                          fill = ggplot2::alpha(design$main_color_1,
                                                 .25),
-                          color = tdcmm_visual_defaults()$main_color_1,
-                          linewidth = tdcmm_visual_defaults()$main_size) +
+                          color = design$main_color_1,
+                          linewidth = design$main_size) +
     ggplot2::scale_x_continuous(NULL,
                                 limits = c(0, NA),
                                 n.breaks = 8) +
     ggplot2::scale_y_discrete(NULL) +
-    tdcmm_visual_defaults()$theme()
+    design$theme()
 }
 
 ## Visualize `describe_cat()` as horizontal bar plot
@@ -242,7 +242,7 @@ visualize_describe <- function(x) {
 ## @family tdcmm visualize
 ##
 ## @keywords internal
-visualize_describe_cat <- function(x, stacked) {
+visualize_describe_cat <- function(x, design = design_lmu()) {
   x %>%
     attr("data") %>%
     dplyr::arrange(.data$Variable) %>%
@@ -273,11 +273,11 @@ visualize_describe_cat <- function(x, stacked) {
                                 n.breaks = 10) +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_fill_manual(NULL,
-                               values = rep(tdcmm_visual_defaults()$main_color_1,
+                               values = rep(design$main_color_1,
                                             dplyr::n_distinct(attr(x, "data")$Value))) +
-    ggplot2::scale_color_manual(NULL, values = c("w" = tdcmm_visual_defaults()$main_contrast_1,
+    ggplot2::scale_color_manual(NULL, values = c("w" = design$main_contrast_1,
                                                  "b" = "black")) +
-    tdcmm_visual_defaults()$theme() +
+    design$theme() +
     ggplot2::theme(legend.position = "none")
 }
 

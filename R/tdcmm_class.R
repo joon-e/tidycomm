@@ -173,6 +173,14 @@ model.tdcmm <- function(x, ...) {
 #'
 #' @param x `tdcmm` output
 #' @param ... other arguments
+#' @param .design a list to style the visualization; by default and good practice
+#' use one of the ready-made design functions' returns (e.g., `design_lmu()`,
+#' `design_grey()`); you could, however, also provide your own list here which
+#' has to be a list with 9 keys: `main_color_1`, a vector of 12 `main_colors`, a
+#' corresponding `main_contrast_1` (the color of text to write on top of the
+#' main color) and a corresponding `main_contrasts`, the `main_size` (for
+#' lines), a `comparison_linetype`, `comparison_color`, and `comparison_size`
+#' for all lines that act as comparative lines, and a [ggplot2] `theme`
 #'
 #' @return A [ggplot2] object
 #'
@@ -213,6 +221,9 @@ model.tdcmm <- function(x, ...) {
 #'   correlate(pop_elite, pop_people) %>%
 #'   visualize()
 #' WoJ %>%
+#'   correlate(autonomy_selection, ethics_1, work_experience, partial = TRUE) %>%
+#'   visualize()
+#' WoJ %>%
 #'   correlate(ethics_1, ethics_2, ethics_3, ethics_4) %>%
 #'   to_correlation_matrix() %>%
 #'   visualize()
@@ -233,11 +244,11 @@ model.tdcmm <- function(x, ...) {
 #'     ggplot2::scale_fill_grey()
 #'
 #' @export
-visualize <- function(x, ...) {
+visualize <- function(x, ..., .design = design_lmu()) {
   UseMethod("visualize")
 }
 
 #' @export
-visualize.tdcmm <- function(x, ...) {
+visualize.tdcmm <- function(x, ..., .design = design_lmu()) {
   return(warn_about_missing_visualization(x))
 }

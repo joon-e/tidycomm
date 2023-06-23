@@ -82,9 +82,9 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
 
 #' @rdname visualize
 #' @export
-visualize.tdcmm_nnv<- function(x, ...) {
+visualize.tdcmm_nnv<- function(x, ..., .design = design_lmu()) {
   if (attr(x, "func") == "unianova") {
-    return(visualize_unianova(x))
+    return(visualize_unianova(x, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -162,7 +162,7 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_unianova <- function(x) {
+visualize_unianova <- function(x, design = design_lmu()) {
   # get variables
   group_var_str <- attr(x, "params")$group_var
   group_var <- sym(group_var_str)
@@ -219,14 +219,14 @@ visualize_unianova <- function(x) {
                                  color = .data$level)) +
     ggplot2::geom_pointrange(stat = "identity",
                              position = ggplot2::position_dodge2(width = 0.9),
-                             linewidth = tdcmm_visual_defaults()$main_size) +
+                             linewidth = design$main_size) +
     ggplot2::scale_x_continuous(NULL,
                                 n.breaks = 8) +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_color_manual(NULL,
-                                values = tdcmm_visual_defaults()$main_colors,
+                                values = design$main_colors,
                                 guide = ggplot2::guide_legend(reverse = TRUE)) +
-    tdcmm_visual_defaults()$theme() +
+    design$theme() +
     ggplot2::theme(legend.position = "bottom")
 }
 

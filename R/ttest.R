@@ -86,9 +86,9 @@ t_test <- function(data, group_var, ...,
 
 #' @rdname visualize
 #' @export
-visualize.tdcmm_ttst <- function(x, ...) {
+visualize.tdcmm_ttst <- function(x, ..., .design = design_lmu()) {
   if (attr(x, "func") == "t_test") {
-    return(visualize_t_test(x))
+    return(visualize_t_test(x, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -320,7 +320,7 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_t_test <- function(x) {
+visualize_t_test <- function(x, design = design_lmu()) {
   if ("mu" %in% names(attr(x, "params"))) {
     return(warn_about_missing_visualization(x))
   }
@@ -379,14 +379,14 @@ visualize_t_test <- function(x) {
                                  color = .data$level)) +
     ggplot2::geom_pointrange(stat = "identity",
                              position = ggplot2::position_dodge2(width = 0.9),
-                             linewidth = tdcmm_visual_defaults()$main_size) +
+                             linewidth = design$main_size) +
     ggplot2::scale_x_continuous(NULL,
                                 n.breaks = 8) +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_color_manual(NULL,
-                                values = tdcmm_visual_defaults()$main_colors,
+                                values = design$main_colors,
                                 guide = ggplot2::guide_legend(reverse = TRUE)) +
-    tdcmm_visual_defaults()$theme() +
+    design$theme() +
     ggplot2::theme(legend.position = "bottom")
 }
 

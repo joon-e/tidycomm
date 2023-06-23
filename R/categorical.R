@@ -147,13 +147,13 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
 
 #' @rdname visualize
 #' @export
-visualize.tdcmm_ctgrcl <- function(x, ...) {
+visualize.tdcmm_ctgrcl <- function(x, ..., .design = design_lmu()) {
   if (attr(x, "func") == "tab_frequencies") {
-    return(visualize_tab_frequencies(x))
+    return(visualize_tab_frequencies(x, .design))
   }
 
   if (attr(x, "func") == "crosstab") {
-    return(visualize_crosstab(x))
+    return(visualize_crosstab(x, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -201,7 +201,7 @@ col_percs <- function(x) {
 ## @family tdcmm visualize
 ##
 ## @keywords internal
-visualize_tab_frequencies <- function(x) {
+visualize_tab_frequencies <- function(x, design = design_lmu()) {
   var_names <- attr(x, "params")$vars
   num_histograms <- length(var_names)
 
@@ -221,7 +221,7 @@ visualize_tab_frequencies <- function(x) {
     ggplot2::ggplot(ggplot2::aes(x = level,
                                  y = percent)) +
     ggplot2::geom_bar(stat = "identity",
-                      fill = tdcmm_visual_defaults()$main_color_1) +
+                      fill = design$main_color_1) +
     ggplot2::facet_wrap(dplyr::vars(var),
                         scales = "free_x") +
     ggplot2::scale_x_discrete(NULL) +
@@ -229,7 +229,7 @@ visualize_tab_frequencies <- function(x) {
                                 labels = percentage_labeller,
                                 limits = c(0, 1),
                                 breaks = seq(0, 1, .1)) +
-    tdcmm_visual_defaults()$theme()
+    design$theme()
 
   # wrap depending on number of variables
   if (num_histograms >= 5) {
@@ -252,7 +252,7 @@ visualize_tab_frequencies <- function(x) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_crosstab <- function(x) {
+visualize_crosstab <- function(x, design = design_lmu()) {
   independent_var_string <- attr(x, "params")$col_var
   dependent_var_strings <- attr(x, "params")$vars
   dependent_var_string <- dependent_var_strings[1]
@@ -309,12 +309,12 @@ visualize_crosstab <- function(x) {
   g <- g +
     ggplot2::scale_y_discrete(NULL) +
     ggplot2::scale_fill_manual(NULL,
-                               values = tdcmm_visual_defaults()$main_colors,
+                               values = design$main_colors,
                                guide = ggplot2::guide_legend(reverse = TRUE)) +
     ggplot2::scale_color_manual(NULL,
-                                values = tdcmm_visual_defaults()$main_contrasts,
+                                values = design$main_contrasts,
                                 guide = NULL) +
-    tdcmm_visual_defaults()$theme() +
+    design$theme() +
     ggplot2::theme(legend.position = "bottom")
 
   return(g)

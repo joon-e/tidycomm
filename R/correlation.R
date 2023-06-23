@@ -109,17 +109,17 @@ to_correlation_matrix <- function(data) {
 
 #' @rdname visualize
 #' @export
-visualize.tdcmm_crrltn <- function(x, ...) {
+visualize.tdcmm_crrltn <- function(x, ..., .design = design_lmu()) {
   if (attr(x, "func") == "correlate") {
     if (attr(x, "params")$partial == TRUE) {
-      return(visualize_partial_correlation(x))
+      return(visualize_partial_correlation(x, .design))
     } else {
-      return(visualize_correlate(x))
+      return(visualize_correlate(x, .design))
     }
   }
 
   if (attr(x, "func") == "to_correlation_matrix") {
-    return(visualize_to_correlation_matrix(x))
+    return(visualize_to_correlation_matrix(x, .design))
   }
 
   return(warn_about_missing_visualization(x))
@@ -186,9 +186,9 @@ correlation_test <- function(var_comb, data, method) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_correlate <- function(x) {
+visualize_correlate <- function(x, design = design_lmu()) {
   if (nrow(x) > 1) {
-    return(visualize(to_correlation_matrix(x)))
+    return(visualize(to_correlation_matrix(x), design))
   }
 
   attr(x, "data") %>%
@@ -201,7 +201,7 @@ visualize_correlate <- function(x) {
                                 n.breaks = 8) +
     ggplot2::scale_y_continuous(attr(x, "params")$vars[2],
                                 n.breaks = 8) +
-    tdcmm_visual_defaults()$theme()
+    design$theme()
 }
 
 ## Visualize `to_correlation_matrix()` as [GGally::ggpairs] correlogram.
@@ -213,7 +213,7 @@ visualize_correlate <- function(x) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_to_correlation_matrix <- function(x) {
+visualize_to_correlation_matrix <- function(x, design = design_lmu()) {
   attr(x, "data") %>%
     dplyr::select(!!!syms(attr(x, "params")$vars)) %>%
     GGally::ggpairs(cardinality_threshold = 12,
@@ -227,11 +227,11 @@ visualize_to_correlation_matrix <- function(x) {
                                                       method = attr(x, "params")$method),
                                  na = "na"),
                     diag = list(continuous = GGally::wrap("barDiag",
-                                                          fill = tdcmm_visual_defaults()$main_color_1,
+                                                          fill = design$main_color_1,
                                                           bins = 30,
                                                           na.rm = TRUE),
                                 discrete = GGally::wrap("barDiag",
-                                                        fill = tdcmm_visual_defaults()$main_color_1,
+                                                        fill = design$main_color_1,
                                                         bins = 30,
                                                         na.rm = TRUE),
                                 na = "naDiag"),
@@ -242,7 +242,7 @@ visualize_to_correlation_matrix <- function(x) {
                                  combo = GGally::wrap("dot_no_facet",
                                                       na.rm = TRUE),
                                  na = "na")) +
-    tdcmm_visual_defaults()$theme()
+    design$theme()
 }
 
 ## Visualize `correlate(..., partial = TRUE)` as correlation between residuals
@@ -254,7 +254,7 @@ visualize_to_correlation_matrix <- function(x) {
 ## @family tdcmm visualize
 #
 ## @keywords internal
-visualize_partial_correlation <- function(x) {
+visualize_partial_correlation <- function(x, design = design_lmu()) {
   # prepare data
   data <- attr(x, "data") %>%
     stats::na.omit()
@@ -286,7 +286,7 @@ visualize_partial_correlation <- function(x) {
                                     !!model2_name := model2_res)) %>%
     correlate(!!model1_name,
               !!model2_name) %>%
-    visualize()
+    visualize(design)
 }
 
 ## Helper function to print correlation coefficients together with CIs.
