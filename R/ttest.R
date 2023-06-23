@@ -5,9 +5,11 @@
 #' used.
 #'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
-#' @param group_var group variable (column name)
+#' @param group_var group variable (column name) to specify where to split two
+#'   samples (two-sample t-test) or which variable to compare a one-sample
+#'   t-test on
 #' @param ... test variables (column names). Leave empty to compute t-tests for
-#'   all numeric variables in data.
+#'   all numeric variables in data. Also leave empty for one-sample t-tests.
 #' @param var.equal a logical variable indicating whether to treat the two
 #'   variances as being equal. If `TRUE` then the pooled variance is used to
 #'   estimate the variance otherwise the Welch (or Satterthwaite) approximation
@@ -21,6 +23,10 @@
 #' @param case_var optional: case-identifying variable (column name). If you
 #'   set `paired = TRUE`, specifying a case variable will ensure that data
 #'   are properly sorted for a dependent t-test.
+#' @param mu optional: a number indicating the *true* value of the mean in the
+#'   general population (\eqn{\mu}). If set, a one-sample t-test (i.e., a
+#'   location test) is being calculated. Leave to `NULL` to calculate
+#'   two-sample t-test(s).
 #'
 #' @return a [tdcmm] model
 #'
@@ -31,26 +37,123 @@
 #' WoJ %>% t_test(temp_contract)
 #' WoJ %>% t_test(employment, autonomy_selection, autonomy_emphasis,
 #'   levels = c("Full-time", "Freelancer"))
+#' WoJ %>% t_test(autonomy_selection, mu = 3.62)
 #'
 #' @export
 t_test <- function(data, group_var, ...,
                    var.equal = TRUE, paired = FALSE, pooled_sd = TRUE,
-                   levels = NULL, case_var = NULL) {
+                   levels = NULL, case_var = NULL, mu = NULL) {
+
+  # Get group var name
+  group_var_str <- as_label(quo({{ group_var }}))
+
+  # Drop unused levels (if data is filtered)
+  data <- droplevels(data)
+
+  # run one-sample t-test if requested
+  if (!is.null(mu)) {
+    # Get vars
+    test_vars <- grab_vars(data, quos(...), alternative = "none")
+
+    if (length(test_vars) > 0) {
+      test_vars_string <- purrr::map_chr(test_vars, as_label)
+      stop(glue("If using the mu argument, a one-sample t-test is being ",
+                "calculated. This cannot interfere with a two-sample t-test. ",
+                "Please omit any test variables (i.e., ",
+                paste(test_vars_string, collapse = ", "),
+                ")."),
+           call. = FALSE)
+    } else {
+      return(one_sample_t_test(data, {{ group_var }}, group_var_str, mu))
+    }
+  }
 
   # Get vars
   test_vars <- grab_vars(data, quos(...))
   test_vars_string <- purrr::map_chr(test_vars, as_label)
 
-  # Get group var name
-  group_var_str <- as_label(quo({{ group_var }}))
+  # Filter group var if necessary
   if (group_var_str %in% test_vars_string) {
     test_vars <- syms(test_vars_string[test_vars_string != group_var_str])
   }
 
-  # Drop unused levels (if data is filtered)
-  data <- droplevels(data)
+  # if not one-sample, run two-sample t-test
+  return(two_sample_t_test(data,
+                           {{ group_var }}, group_var_str,
+                           {{ test_vars }},
+                           var.equal, paired, pooled_sd, levels, case_var))
+}
 
-  if (missing(levels)) {
+#' @rdname visualize
+#' @export
+visualize.tdcmm_ttst <- function(x, ...) {
+  if (attr(x, "func") == "t_test") {
+    return(visualize_t_test(x))
+  }
+
+  return(warn_about_missing_visualization(x))
+}
+
+### Internal functions ###
+
+## Run one-sample t-test
+##
+## Run actual one-sample or location t-test as specified
+##
+## @inheritParams t_test
+## @param group_var_str Stringified version of group variable
+##
+## @return a [tdcmm] model
+##
+## @family t-test
+##
+## @keywords internal
+one_sample_t_test <- function(data, group_var, group_var_str, mu) {
+  # Prepare data
+  data <- data %>%
+    dplyr::pull({{ group_var }})
+
+  if (!is.numeric(data)) {
+    stop(glue("Within a one-sample t-test, {group_var_str} must be numeric."),
+         call. = FALSE)
+  }
+
+  # Compute and Create output
+  tt <- t.test(data, mu = mu)
+  out <- tibble::tibble(
+    Variable = group_var_str,
+    M = mean(data, na.rm = TRUE),
+    SD = sd(data, na.rm = TRUE),
+    CI_95_LL = tt$conf.int[[1]],
+    CI_95_UL = tt$conf.int[[2]],
+    Mu = mu,
+    t = tt$statistic,
+    df = tt$parameter,
+    p = tt$p.value
+  )
+
+  # Output
+  return(new_tdcmm_ttest(
+    new_tdcmm(out, model = list(tt)))
+  )
+}
+
+## Run two-sample t-test
+##
+## Run actual two-sample t-test(s) as specified
+##
+## @inheritParams t_test
+## @param group_var_str Stringified version of group variable
+## @param test_vars Test variables
+##
+## @return a [tdcmm] model
+##
+## @family t-test
+##
+## @keywords internal
+two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
+                              var.equal, paired, pooled_sd, levels, case_var) {
+  if (is.null(levels)) {
     # Get levels
     levels <- data %>%
       dplyr::pull({{ group_var }}) %>%
@@ -63,9 +166,9 @@ t_test <- function(data, group_var, ...,
       stop("Grouping variable must have more than one level", call. = FALSE)
     } else if (length(levels) > 2) {
       warning(glue("{group_var_str} has more than 2 levels, defaulting to first two ",
-                         "({levels[1]} and {levels[2]}). ",
-                         "Consider filtering your data ",
-                         "or setting levels with the levels argument"),
+                   "({levels[1]} and {levels[2]}). ",
+                   "Consider filtering your data ",
+                   "or setting levels with the levels argument"),
               call. = FALSE)
       data <- data %>%
         dplyr::filter({{ group_var }} %in% levels[1:2]) %>%
@@ -127,18 +230,6 @@ t_test <- function(data, group_var, ...,
               model = model_list))
   )
 }
-
-#' @rdname visualize
-#' @export
-visualize.tdcmm_ttst <- function(x, ...) {
-  if (attr(x, "func") == "t_test") {
-    return(visualize_t_test(x))
-  }
-
-  return(warn_about_missing_visualization(x))
-}
-
-### Internal functions ###
 
 ## Format computed t-test
 ##

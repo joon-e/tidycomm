@@ -9,6 +9,10 @@
 #'   to compute for all numeric variables in data.
 #' @param method a character string indicating which correlation coefficient
 #'   is to be computed. One of "pearson" (default), "kendall", or "spearman"
+#' @param partial Logical indicating whether the pairwise partial correlation
+#' for three variables should be computed. Defaults to `FALSE`. If set to `TRUE`
+#' all combinations, i.e. pairs, of specified variables will be computed
+#' while controlling for the third variable.
 #'
 #' @return a [tdcmm] model
 #'
@@ -17,23 +21,34 @@
 #' @examples
 #' WoJ %>% correlate(ethics_1, ethics_2, ethics_3)
 #' WoJ %>% correlate()
+#' WoJ %>% correlate(autonomy_selection, autonomy_emphasis, work_experience, partial = TRUE)
 #'
 #' @export
-correlate <- function(data, ..., method = "pearson") {
-
+correlate <- function(data, ..., method = "pearson", partial = FALSE) {
+  
+  if (partial == TRUE) {
+    vars <- grab_vars(data, enquos(...), alternative = "none")
+    var_strings <- data %>%
+      dplyr::select(!!!vars) %>%
+      names()
+    method_string <- method
+    result_correlate_partial <- correlate_partial(data, ..., method = method_string)
+    return(new_tdcmm(result_correlate_partial))
+  }
+  
   if (!method %in% c("pearson", "kendall", "spearman")) {
     stop('method must be one of "pearson", "kendall" or "spearman"',
          call. = FALSE)
   }
-
+  
   vars <- grab_vars(data, enquos(...))
-
+  
   var_strings <- data %>%
     dplyr::select(!!!vars) %>%
     names()
   var_combs <- combn(var_strings, 2, simplify = FALSE)
   out <- purrr::map_dfr(var_combs, correlation_test, data, method)
-
+  
   return(new_tdcmm_crrltn(new_tdcmm(out,
                                     func = "correlate",
                                     data = data,
@@ -57,13 +72,13 @@ correlate <- function(data, ..., method = "pearson") {
 #'
 #' @export
 to_correlation_matrix <- function(data) {
-
+  
   estimate <- names(data)[3]
-
+  
   var_order <- data %>%
     dplyr::pull(.data$x) %>%
     unique()
-
+  
   out <- data %>%
     dplyr::select(x = 1, y = 2, cor = 3) %>%
     dplyr::bind_rows(
@@ -76,7 +91,7 @@ to_correlation_matrix <- function(data) {
     dplyr::rename(!!estimate := "x") %>%
     dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
                   dplyr::everything())
-
+  
   return(new_tdcmm_crrltn(
     new_tdcmm(out,
               data = attr(data, "data"),
@@ -92,11 +107,11 @@ visualize.tdcmm_crrltn <- function(x, ...) {
   if (attr(x, "func") == "correlate") {
     return(visualize_correlate(x))
   }
-
+  
   if (attr(x, "func") == "to_correlation_matrix") {
     return(visualize_to_correlation_matrix(x))
   }
-
+  
   return(warn_about_missing_visualization(x))
 }
 
@@ -121,16 +136,16 @@ correlation_test <- function(var_comb, data, method) {
   y <- var_comb[[2]]
   xvar <- data[[x]]
   yvar <- data[[y]]
-
+  
   if (any(!is.numeric(xvar), !is.numeric(yvar))) {
     warning(glue("At least one of {x} and {y} is not numeric, ",
                  "skipping computation."),
             call. = FALSE)
     return()
   }
-
+  
   cor_test <- stats::cor.test(xvar, yvar, method = method)
-
+  
   if (method == "pearson") {
     name <- "r"
   } else if (method == "kendall") {
@@ -138,7 +153,7 @@ correlation_test <- function(var_comb, data, method) {
   } else if (method == "spearman") {
     name <- "rho"
   }
-
+  
   tibble::tibble(
     x = x,
     y = y,
@@ -165,7 +180,7 @@ visualize_correlate <- function(x) {
   if (nrow(x) > 1) {
     return(visualize(to_correlation_matrix(x)))
   }
-
+  
   attr(x, "data") %>%
     ggplot2::ggplot(ggplot2::aes(x = !!sym(attr(x, "params")$vars[1]),
                                  y = !!sym(attr(x, "params")$vars[2]))) +
@@ -265,7 +280,7 @@ ggpairs_corrstats_helper <- function(data, mapping, ...,
 
 new_tdcmm_crrltn <- function(x) {
   stopifnot(is_tdcmm(x))
-
+  
   structure(
     x,
     class = c("tdcmm_crrltn", class(x))
