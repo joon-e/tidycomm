@@ -110,20 +110,20 @@ visualize.tdcmm_ttst <- function(x, ..., .design = design_lmu()) {
 ## @keywords internal
 one_sample_t_test <- function(data, group_var, group_var_str, mu) {
   # Prepare data
-  data <- data %>%
+  data_prepared <- data %>%
     dplyr::pull({{ group_var }})
 
-  if (!is.numeric(data)) {
+  if (!is.numeric(data_prepared)) {
     stop(glue("Within a one-sample t-test, {group_var_str} must be numeric."),
          call. = FALSE)
   }
 
   # Compute and Create output
-  tt <- t.test(data, mu = mu)
+  tt <- t.test(data_prepared, mu = mu)
   out <- tibble::tibble(
     Variable = group_var_str,
-    M = mean(data, na.rm = TRUE),
-    SD = sd(data, na.rm = TRUE),
+    M = mean(data_prepared, na.rm = TRUE),
+    SD = sd(data_prepared, na.rm = TRUE),
     CI_95_LL = tt$conf.int[[1]],
     CI_95_UL = tt$conf.int[[2]],
     Mu = mu,

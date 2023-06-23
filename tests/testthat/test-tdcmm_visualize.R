@@ -38,11 +38,11 @@ test_that("implemented visualize() calls return ggplot2 (gg)", {
                   "gg")
   expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2, ethics_3)),
                   "gg")
-  expect_s3_class(visualize(correlate(WoJ,
-                                      autonomy_selection,
-                                      autonomy_emphasis,
-                                      work_experience,
-                                      partial = TRUE)),
+  expect_s3_class(suppressWarnings(visualize(correlate(WoJ,
+                                                       autonomy_selection,
+                                                       autonomy_emphasis,
+                                                       work_experience,
+                                                       partial = TRUE))),
                   "gg")
   expect_s3_class(visualize(to_correlation_matrix(correlate(WoJ,
                                                             ethics_1,
