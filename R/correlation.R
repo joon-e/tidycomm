@@ -111,7 +111,11 @@ to_correlation_matrix <- function(data) {
 #' @export
 visualize.tdcmm_crrltn <- function(x, ...) {
   if (attr(x, "func") == "correlate") {
-    return(visualize_correlate(x))
+    if (attr(x, "params")$partial == TRUE) {
+      return(visualize_partial_correlation(x))
+    } else {
+      return(visualize_correlate(x))
+    }
   }
 
   if (attr(x, "func") == "to_correlation_matrix") {
@@ -239,6 +243,50 @@ visualize_to_correlation_matrix <- function(x) {
                                                       na.rm = TRUE),
                                  na = "na")) +
     tdcmm_visual_defaults()$theme()
+}
+
+## Visualize `correlate(..., partial = TRUE)` as correlation between residuals
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_partial_correlation <- function(x) {
+  # prepare data
+  data <- attr(x, "data") %>%
+    stats::na.omit()
+
+  # calculate individual models
+  model1 <- data %>%
+    regress(!!sym(attr(x, "params")$vars[1]),
+            !!sym(attr(x, "params")$vars[3])) %>%
+    model()
+
+  model2 <- data %>%
+    regress(!!sym(attr(x, "params")$vars[2]),
+            !!sym(attr(x, "params")$vars[3])) %>%
+    model()
+
+  # extracts residuals
+  model1_res <- stats::residuals(model1)
+  model2_res <- stats::residuals(model2)
+
+  # cbind and visualize
+  model1_name <- paste0('Residuals ',
+                        attr(x, "params")$vars[1], ' ~ ',
+                        attr(x, "params")$vars[3])
+  model2_name <- paste0('Residuals ',
+                        attr(x, "params")$vars[2], ' ~ ',
+                        attr(x, "params")$vars[3])
+  data %>%
+    dplyr::bind_cols(tibble::tibble(!!model1_name := model1_res,
+                                    !!model2_name := model2_res)) %>%
+    correlate(!!model1_name,
+              !!model2_name) %>%
+    visualize()
 }
 
 ## Helper function to print correlation coefficients together with CIs.

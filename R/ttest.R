@@ -110,20 +110,20 @@ visualize.tdcmm_ttst <- function(x, ...) {
 ## @keywords internal
 one_sample_t_test <- function(data, group_var, group_var_str, mu) {
   # Prepare data
-  data_prepared <- data %>%
+  data <- data %>%
     dplyr::pull({{ group_var }})
 
-  if (!is.numeric(data_prepared)) {
+  if (!is.numeric(data)) {
     stop(glue("Within a one-sample t-test, {group_var_str} must be numeric."),
          call. = FALSE)
   }
 
   # Compute and Create output
-  tt <- t.test(data_prepared, mu = mu)
+  tt <- t.test(data, mu = mu)
   out <- tibble::tibble(
     Variable = group_var_str,
-    M = mean(data_prepared, na.rm = TRUE),
-    SD = sd(data_prepared, na.rm = TRUE),
+    M = mean(data, na.rm = TRUE),
+    SD = sd(data, na.rm = TRUE),
     CI_95_LL = tt$conf.int[[1]],
     CI_95_UL = tt$conf.int[[2]],
     Mu = mu,
@@ -321,6 +321,11 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
 #
 ## @keywords internal
 visualize_t_test <- function(x) {
+  if ("mu" %in% names(attr(x, "params"))) {
+    stop("No visualization implemented for a one-sample t-test.",
+         call. = FALSE)
+  }
+
   # get variables
   group_var_str <- attr(x, "params")$group_var
   group_var <- sym(group_var_str)

@@ -122,6 +122,9 @@ model.tdcmm <- function(x, ...) {
 #' - [correlate()]: plot as scatter with a bit of "jitter" (random noise) to
 #' better reflect categorical values; for more than 2 variables, a correlogram
 #' is plotted (just like for [to_correlation_matrix()]); no additional arguments
+#' - [correlate()]: for partial correlation, a scatter plot with some jitter is
+#' plotted using the residuals between the control variable and (a) the
+#' dependent as well as (b) the independent variable; no additional arguments
 #' - [to_correlation_matrix()]: plot as correlogram building on
 #' [GGally::ggpairs()] with jittered scatter plots in lower half, histograms as
 #' diagonals, and correlation coefficients with 95% confidence intervals in
