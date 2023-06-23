@@ -80,7 +80,7 @@ t_test <- function(data, group_var, ...,
   # if not one-sample, run two-sample t-test
   return(two_sample_t_test(data,
                            {{ group_var }}, group_var_str,
-                           {{ test_vars }},
+                           {{ test_vars }}, test_vars_string,
                            var.equal, paired, pooled_sd, levels, case_var))
 }
 
@@ -110,20 +110,20 @@ visualize.tdcmm_ttst <- function(x, ...) {
 ## @keywords internal
 one_sample_t_test <- function(data, group_var, group_var_str, mu) {
   # Prepare data
-  data <- data %>%
+  data_prepared <- data %>%
     dplyr::pull({{ group_var }})
 
-  if (!is.numeric(data)) {
+  if (!is.numeric(data_prepared)) {
     stop(glue("Within a one-sample t-test, {group_var_str} must be numeric."),
          call. = FALSE)
   }
 
   # Compute and Create output
-  tt <- t.test(data, mu = mu)
+  tt <- t.test(data_prepared, mu = mu)
   out <- tibble::tibble(
     Variable = group_var_str,
-    M = mean(data, na.rm = TRUE),
-    SD = sd(data, na.rm = TRUE),
+    M = mean(data_prepared, na.rm = TRUE),
+    SD = sd(data_prepared, na.rm = TRUE),
     CI_95_LL = tt$conf.int[[1]],
     CI_95_UL = tt$conf.int[[2]],
     Mu = mu,
@@ -133,8 +133,13 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
   )
 
   # Output
-  return(new_tdcmm_ttest(
-    new_tdcmm(out, model = list(tt)))
+  return(new_tdcmm_ttst(
+    new_tdcmm(out,
+              func = "t_test",
+              data = data,
+              params = list(group_var = group_var_str,
+                            mu = mu),
+              model = list(tt)))
   )
 }
 
@@ -145,6 +150,7 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
 ## @inheritParams t_test
 ## @param group_var_str Stringified version of group variable
 ## @param test_vars Test variables
+## @param test_vars_str Stringified version of test variables
 ##
 ## @return a [tdcmm] model
 ##
@@ -152,6 +158,7 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
 ##
 ## @keywords internal
 two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
+                              test_vars_str,
                               var.equal, paired, pooled_sd, levels, case_var) {
   if (is.null(levels)) {
     # Get levels
@@ -221,7 +228,7 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
               func = "t_test",
               data = data,
               params = list(group_var = group_var_str,
-                            vars = test_vars_string,
+                            vars = test_vars_str,
                             var.equal = var.equal,
                             paired = paired,
                             pooled_sd = pooled_sd,

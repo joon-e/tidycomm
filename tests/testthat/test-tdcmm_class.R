@@ -228,7 +228,7 @@ test_that("tdcmm contains adequate func names and param lists", {
   t <- t_test(WoJ, temp_contract)
   expect_equal(attr(t, "func"), "t_test")
   expect_type(attr(t, "params"), "list")
-  expect_equal(length(formals(t_test)) - 1, # reduced by piping data argument
+  expect_equal(length(formals(t_test)) - 2, # reduced by piping data argument and stringified params
                length(attr(t, "params")))
 
   t <- unianova(WoJ, employment)

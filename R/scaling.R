@@ -118,14 +118,24 @@ reverse_scale <- function(data, scale_var,
         dplyr::mutate(!!name := as.Date(numeric_dates_rev,
                                         origin = "1970-01-01",
                                         tz = tz)) %>%
-        new_tdcmm() %>%
+        new_tdcmm(func = "reverse_scale",
+                  data = data,
+                  params = list(scale_var = scale_var_str,
+                                name = name,
+                                lower_end = lower_end,
+                                upper_end = upper_end)) %>%
         return()
     } else { # if(lubridate::is.POSIXt(scale_var_data)) {
       data %>%
         dplyr::mutate(!!name := as.POSIXct(numeric_dates_rev,
                                            origin = "1970-01-01",
                                            tz = tz)) %>%
-        new_tdcmm() %>%
+        new_tdcmm(func = "reverse_scale",
+                  data = data,
+                  params = list(scale_var = scale_var_str,
+                                name = name,
+                                lower_end = lower_end,
+                                upper_end = upper_end)) %>%
         return()
     }
 
@@ -138,13 +148,23 @@ reverse_scale <- function(data, scale_var,
 
     data %>%
       dplyr::mutate(!!name := map_to_rev_scale(!!sym(scale_var_str))) %>%
-      new_tdcmm() %>%
+      new_tdcmm(func = "reverse_scale",
+                data = data,
+                params = list(scale_var = scale_var_str,
+                              name = name,
+                              lower_end = lower_end,
+                              upper_end = upper_end)) %>%
       return()
 
   } else { # if (is.logical(scale_var_data)) {
     data %>%
       dplyr::mutate(!!name := !{{ scale_var }}) %>%
-      new_tdcmm() %>%
+      new_tdcmm(func = "reverse_scale",
+                data = data,
+                params = list(scale_var = scale_var_str,
+                              name = name,
+                              lower_end = lower_end,
+                              upper_end = upper_end)) %>%
       return()
   }
 }
@@ -204,11 +224,17 @@ minmax_scale <- function(data, scale_var,
     stop("... change_to_max must be larger than change_to_min.")
   }
 
+  scale_var_str <- as_label(expr({{ scale_var }}))
   data %>%
     dplyr::mutate(!!name := scales::rescale({{ scale_var }},
                                             to = c(change_to_min,
                                                    change_to_max))) %>%
-    new_tdcmm() %>%
+    new_tdcmm(func = "minmax_scale",
+              data = data,
+              params = list(scale_var = scale_var_str,
+                            change_to_min = change_to_min,
+                            change_to_max = change_to_max,
+                            name = name)) %>%
     return()
 }
 
@@ -241,11 +267,17 @@ center_scale <- function(data, scale_var,
   if (!is.numeric(scale_var_data)) {
     stop("... must be numeric.")
   }
+
+  scale_var_str <- as_label(expr({{ scale_var }}))
+
   data %>%
     dplyr::mutate(!!name := as.vector(scale({{ scale_var }},
                                             center = TRUE,
                                             scale = FALSE))) %>%
-    new_tdcmm() %>%
+    new_tdcmm(func = "center_scale",
+              data = data,
+              params = list(scale_var = scale_var_str,
+                            name = name)) %>%
     return()
 }
 
@@ -280,10 +312,16 @@ z_scale <- function(data, scale_var,
   if (!is.numeric(scale_var_data)) {
     stop("... must be numeric.")
   }
+
+  scale_var_str <- as_label(expr({{ scale_var }}))
+
   data %>%
     dplyr::mutate(!!name := as.vector(scale({{ scale_var }},
                                             center = TRUE,
                                             scale = TRUE))) %>%
-    new_tdcmm() %>%
+    new_tdcmm(func = "z_scale",
+              data = data,
+              params = list(scale_var = scale_var_str,
+                            name = name)) %>%
     return()
 }
