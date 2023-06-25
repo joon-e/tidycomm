@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 The first step in data exploration usually consists of univariate, descriptive analysis of all variables of interest. Tidycomm offers three basic functions to quickly output relevant statistics:
