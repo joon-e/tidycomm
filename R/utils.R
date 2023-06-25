@@ -1,5 +1,21 @@
 ### Internal functions ###
 
+## Helper function for indicating a lack of visualization
+##
+## @param a [tdcmm] model
+##
+## @return NULL
+##
+## @family tdcmm visualize
+##
+## @keywords internal
+warn_about_missing_visualization <- function(x) {
+  warning(glue("No visualization implemented for this model."),
+          call. = FALSE)
+  return(NULL)
+}
+
+
 ## Keep existing variables or get all numeric variables
 ##
 ## Keeps existing variables if they were specified in the function call or
@@ -55,6 +71,34 @@ grab_vars <- function(data, vars, alternative = "numeric",
   return(vars)
 }
 
+## Helper function to calculate lower level of confidence interval
+##
+## @param m mean
+## @param sd standard deviation
+## @param n number of cases
+## @param level level to calculate CI for (default is 95%)
+##
+## @return numeric
+##
+## @keywords internal
+calculate_ci_ll <- function(m, sd, n, level = .95) {
+  return(m - stats::qt(( 1 - (1-level)/2 ), df = n-1) * sd/sqrt(n))
+}
+
+## Helper function to calculate upper level of confidence interval
+##
+## @param m mean
+## @param sd standard deviation
+## @param n number of cases
+## @param level level to calculate CI for (default is 95%)
+##
+## @return numeric
+##
+## @keywords internal
+calculate_ci_ul <- function(m, sd, n, level = .95) {
+  return(m + stats::qt(( 1 - (1-level)/2 ), df = n-1) * sd/sqrt(n))
+}
+
 # Formatters ----
 
 ## Format a vector of values to printable string p-values
@@ -72,3 +116,16 @@ format_pvalue <- function(x) {
 ## Format a vector of values to printable string values with exact number of
 ## decimal places
 format_value <- function(x, d) trimws(format(round(x, d), nsmall = d))
+
+#' Helper function for labelling purposes
+#'
+#' @param numeric share between 0 and 1
+#'
+#' @return a string with formatted % (rounded and suffixed)
+#'
+#' @family tdcmm visualize
+#'
+#' @keywords internal
+percentage_labeller <-  function(x) {
+  return(paste0(round(100*x, 0), "%"))
+}

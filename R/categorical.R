@@ -16,6 +16,9 @@
 #'
 #' @export
 tab_frequencies <- function(data, ...) {
+  vars <- grab_vars(data, enquos(...))
+  vars_str <- purrr::map_chr(vars, as_label)
+
   grouping <- dplyr::groups(data)
 
   d <- data %>%
@@ -35,7 +38,10 @@ tab_frequencies <- function(data, ...) {
                 dplyr::select("cum_n", "cum_percent")
     )
 
-  return(new_tdcmm(out))
+  return(new_tdcmm_ctgrcl(new_tdcmm(out,
+                                    func = "tab_frequencies",
+                                    data = data,
+                                    params = list(vars = vars_str))))
 }
 
 #' Crosstab variables
@@ -70,6 +76,9 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     warning("Grouping variable(s) present in data will be ignored.",
             call. = FALSE)
   }
+
+  vars <- grab_vars(data, enquos(...))
+  vars_str <- purrr::map_chr(vars, as_label)
 
   cross_vars <- length(quos(...))
 
@@ -113,12 +122,41 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
     dplyr::bind_cols(xt_col_vars)
 
   if (chi_square) {
-    return(new_tdcmm_chi2(
-      new_tdcmm(out, model = list(chi2)))
-      )
+    return(new_tdcmm_ctgrcl(
+      new_tdcmm(out,
+                func = "crosstab",
+                data = data,
+                params = list(vars = vars_str,
+                              col_var = as_name(enquo(col_var)),
+                              add_total = add_total,
+                              percentages = percentages,
+                              chi_square = chi_square),
+                model = list(chi2))))
   } else {
-    return(new_tdcmm(out))
+    return(new_tdcmm_ctgrcl(
+      new_tdcmm(out,
+                func = "crosstab",
+                data = data,
+                params = list(vars = vars_str,
+                              col_var = as_name(enquo(col_var)),
+                              add_total = add_total,
+                              percentages = percentages,
+                              chi_square = chi_square))))
   }
+}
+
+#' @rdname visualize
+#' @export
+visualize.tdcmm_ctgrcl <- function(x, ..., .design = design_lmu()) {
+  if (attr(x, "func") == "tab_frequencies") {
+    return(visualize_tab_frequencies(x, .design))
+  }
+
+  if (attr(x, "func") == "crosstab") {
+    return(visualize_crosstab(x, .design))
+  }
+
+  return(warn_about_missing_visualization(x))
 }
 
 # Internal functions ----
@@ -154,23 +192,157 @@ col_percs <- function(x) {
   x / sum(x, na.rm = TRUE)
 }
 
+## Visualize `tab_frequencies()` as one or many histogram(s)
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @keywords internal
+visualize_tab_frequencies <- function(x, design = design_lmu()) {
+  var_names <- attr(x, "params")$vars
+  num_histograms <- length(var_names)
+
+  # collect data
+  data <- NULL
+  for (variable in var_names) {
+    data <- data %>%
+      rbind(attr(x, "data") %>%
+              tab_frequencies(!!sym(variable)) %>%
+              dplyr::mutate(var = variable,
+                            level = forcats::as_factor(!!sym(variable))) %>%
+              dplyr::select(.data$var, .data$level, .data$percent))
+  }
+
+  # visualize
+  g <- data %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$level,
+                                 y = .data$percent)) +
+    ggplot2::geom_bar(stat = "identity",
+                      fill = design$main_color_1) +
+    ggplot2::facet_wrap(dplyr::vars(var),
+                        scales = "free_x") +
+    ggplot2::scale_x_discrete(NULL) +
+    ggplot2::scale_y_continuous(NULL,
+                                labels = percentage_labeller,
+                                limits = c(0, 1),
+                                breaks = seq(0, 1, .1)) +
+    design$theme()
+
+  # wrap depending on number of variables
+  if (num_histograms >= 5) {
+    warning(glue("Visualizing too many histograms at once might strongly ",
+                 "inhibit readability. Consider reducing the number of ",
+                 "variables in tab_frequencies() before calling visualize()."),
+            call. = FALSE)
+  }
+
+  return(g)
+}
+
+## Visualize `crosstab()` as horizontal stacked bar plot, either absolute or
+## relative (depending on `percentages`).
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_crosstab <- function(x, design = design_lmu()) {
+  independent_var_string <- attr(x, "params")$col_var
+  dependent_var_strings <- attr(x, "params")$vars
+  dependent_var_string <- dependent_var_strings[1]
+
+  if (length(dependent_var_strings) > 1) {
+    stop(glue("Visualizing multiple crosstabs at once looks overwhelming. ",
+              "Consider reducing the number of variables in crosstab() to ",
+              "two before calling visualize()."),
+         call. = FALSE)
+  }
+
+  data <- x %>%
+    tidyr::pivot_longer(!c(!!sym(dependent_var_string)),
+                        names_to = "label_independent") %>%
+    dplyr::mutate(label_independent =
+                    forcats::as_factor(.data$label_independent),
+                  label_independent_desc =
+                    forcats::fct_rev(.data$label_independent)) %>%
+    dplyr::rename(level = !!sym(dependent_var_string))
+
+  if (length(dplyr::n_distinct(data$label_independent)) > 12) {
+    stop(glue("Cannot visualize crosstabs with more than 12 levels of the ",
+              "independent variable ({independent_var_string})."),
+         call. = FALSE)
+  }
+
+  # visualize
+  g <- data %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$value,
+                                 y = .data$label_independent_desc,
+                                 fill = .data$level)) +
+    ggplot2::geom_bar(stat = "identity",
+                      position = "stack")
+
+  if (attr(x, "params")$percentages) {
+    g <- g +
+      ggplot2::geom_text(ggplot2::aes(label = percentage_labeller(.data$value),
+                                      color = .data$level),
+                         position = ggplot2::position_stack(vjust = .5)) +
+      ggplot2::scale_x_continuous(NULL,
+                                  labels = percentage_labeller,
+                                  limits = c(0, 1),
+                                  breaks = seq(0, 1, .1))
+  } else {
+    g <- g +
+      ggplot2::geom_text(ggplot2::aes(label = .data$value,
+                                      color = .data$level),
+                         position = ggplot2::position_stack(vjust = .5)) +
+      ggplot2::scale_x_continuous('N',
+                                  limits = c(0, NA),
+                                  n.breaks = 10)
+  }
+
+  g <- g +
+    ggplot2::scale_y_discrete(NULL) +
+    ggplot2::scale_fill_manual(NULL,
+                               values = design$main_colors,
+                               guide = ggplot2::guide_legend(reverse = TRUE)) +
+    ggplot2::scale_color_manual(NULL,
+                                values = design$main_contrasts,
+                                guide = NULL) +
+    design$theme() +
+    ggplot2::theme(legend.position = "bottom")
+
+  return(g)
+}
+
 
 # Constructors ----
 
-new_tdcmm_chi2 <- function(x) {
+new_tdcmm_ctgrcl <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_chi2", class(x))
+    class = c("tdcmm_ctgrcl", class(x))
   )
 }
 
 # Formatting ----
 
 #' @export
-tbl_format_footer.tdcmm_chi2 <- function(x, ...) {
+tbl_format_footer.tdcmm_ctgrcl <- function(x, ...) {
   default_footer <- NextMethod()
+
+  if (attr(x, "func") != "crosstab" |
+      length(attr(x, "params")) == 0 |
+      is.null(attr(x, "model"))) {
+    return(default_footer)
+  }
 
   # Get values
   chi2 <- model(x)

@@ -146,18 +146,71 @@ regress <- function(data,
   model_checks[['factors']] <- checks_factors
 
   # return
-  return(new_tdcmm_lm(
+  return(new_tdcmm_rgrssn(
     new_tdcmm(model_tibble,
+              func = "regress",
+              data = data,
+              params = list(dependent_var = yvar_string,
+                            vars = xvars_string,
+                            check_independenterrors = check_independenterrors,
+                            check_multicollinearity = check_multicollinearity,
+                            check_homoscedasticity = check_homoscedasticity),
               model = list(model),
               checks = model_checks))
   )
+}
+
+#' @param which string to specify type of regression visualization. One of
+#' "jitter" (default), "alpha", "correlogram", "residualsfitted" (or "resfit"),
+#' "pp", "qq", "scalelocation" (or "scaloc"), "residualsleverage" (or "reslev").
+#' See below for details.
+#'
+#' @rdname visualize
+#' @export
+visualize.tdcmm_rgrssn <- function(x,
+                                   which = "jitter",
+                                   ...,
+                                   .design = design_lmu()) {
+  if (attr(x, "func") == "regress") {
+    which <- tolower(which)
+    if (which == "correlogram") {
+      return(visualize_regress_correlogram(x, .design))
+    }
+    if (which == "residualsfitted" | which == "resfit") {
+      return(visualize_regress_resfit(x, .design))
+    }
+    if (which == "pp") {
+      return(visualize_regress_pp(x, .design))
+    }
+    if (which == "qq") {
+      return(visualize_regress_qq(x, .design))
+    }
+    if (which == "scalelocation" | which == "scaloc") {
+      return(visualize_regress_scaloc(x, .design))
+    }
+    if (which == "residualsleverage" | which == "reslev") {
+      return(visualize_regress_reslev(x, .design))
+    }
+    if (!which %in% c("jitter", "alpha")) {
+      warning(glue('which must be one of "jitter", "alpha", "correlogram", ',
+                   '"residualsfitted" (or "resfit"), "pp", "qq", ',
+                   '"scalelocation" (or "scaloc"), ',
+                   'or "residualsleverage" (or "reslev"). Since none was ',
+                   'provided, "jitter" is considered by default.'),
+              call. = FALSE)
+      which <- "jitter"
+    }
+    return(visualize_regress_lm(x, which, .design))
+  }
+
+  return(warn_about_missing_visualization(x))
 }
 
 
 # Formatting ----
 
 #' @export
-tbl_format_footer.tdcmm_lm <- function(x, ...) {
+tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
   default_footer <- NextMethod()
   footers <- c(default_footer)
 
@@ -217,13 +270,256 @@ tbl_format_footer.tdcmm_lm <- function(x, ...) {
 
 ### Internal functions ###
 
+## Visualize as scatter plot with linear model.
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_regress_lm <- function(x, which = "jitter", design = design_lmu()) {
+  g <- attr(x, "data") %>%
+    dplyr::select(!!sym(attr(x, "params")$dependent_var),
+                  !!!syms(attr(x, "params")$vars)) %>%
+    dplyr::rename(dependent_var = !!sym(attr(x, "params")$dependent_var)) %>%
+    dplyr::mutate(dplyr::across(dplyr::where(is.factor),
+                                as.numeric)) %>%
+    tidyr::pivot_longer(c(!!!syms(attr(x, "params")$vars)),
+                        names_to = "iv") %>%
+    dplyr::mutate(iv = forcats::fct(.data$iv,
+                                    levels = attr(x, "params")$vars)) %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$value,
+                                 y = .data$dependent_var))
+  if (which == "jitter") {
+    g <- g +
+      ggplot2::geom_jitter(width = .3,
+                           height = .3,
+                           na.rm = TRUE)
+  } else {
+    g <- g +
+      ggplot2::geom_point(alpha = .25,
+                          na.rm = TRUE)
+  }
+
+  g +
+    ggplot2::geom_smooth(method = "lm",
+                         se = TRUE,
+                         level = .95,
+                         formula = "y ~ x",
+                         na.rm = TRUE,
+                         color = design$main_color_1,
+                         linewidth = design$main_size) +
+    ggplot2::facet_wrap(dplyr::vars(.data$iv),
+                        scales = "free_x") +
+    ggplot2::scale_x_continuous(NULL) +
+    ggplot2::scale_y_continuous(attr(x, "params")$dependent_var) +
+    design$theme()
+}
+
+## Visualize as correlogram between independent variables.
+## Helps to determine indpendent errors and multicollinearity.
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @see visualize.tdcmm_crrltn
+#
+## @keywords internal
+visualize_regress_correlogram <- function(x, design = design_lmu()) {
+  if (length(attr(x, "checks")$factors) > 0) {
+    factor_variables <- c()
+    for (i in 1:length(attr(x, "checks")$factors)) {
+      factor_variables <- c(factor_variables,
+                            attr(x, "checks")$factors[[i]][[1]])
+    }
+    warning(glue("only numeric variables will be included in this plot, ",
+                 "all factor variables (",
+                 paste(factor_variables, collapse = ", "),
+                 ") have been dropped for this visualization"),
+            call. = FALSE)
+  }
+  attr(x, "data") %>%
+    dplyr::select(!!!syms(attr(x, "params")$vars)) %>%
+    dplyr::select_if(is.numeric) %>%
+    correlate() %>%
+    to_correlation_matrix() %>%
+    visualize(.design = design)
+}
+
+## Visualize as residuals v. fitted plot.
+## Useful for determining distributions.
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @keywords internal
+visualize_regress_resfit <- function(x, design = design_lmu()) {
+  m <- model(x)
+  mf <- ggplot2::fortify(m)
+  lowess_fit <- dplyr::as_tibble(stats::lowess(x = mf$.fitted,
+                                               y = mf$.resid))
+  mf %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$.fitted,
+                                 y = .data$.resid)) +
+    ggplot2::geom_hline(yintercept = 0,
+                        linetype = design$comparison_linetype,
+                        color = design$comparison_color,
+                        linewidth = design$main_size) +
+    ggplot2::geom_point() +
+    ggplot2::geom_path(data = lowess_fit,
+                       ggplot2::aes(x = .data$x,
+                                    y = .data$y),
+                       color = design$main_color_1,
+                       linewidth = design$main_size) +
+    ggplot2::scale_x_continuous("Fitted",
+                                n.breaks = 8) +
+    ggplot2::scale_y_continuous("Residuals",
+                                n.breaks = 8) +
+    design$theme(panel.grid = ggplot2::element_blank())
+}
+
+## Visualize as probability-probability plot.
+## Useful for checking multicollinearity (focus on the IQR).
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_regress_pp <- function(x, design = design_lmu()) {
+  x %>%
+    model() %>%
+    ggplot2::fortify() %>%
+    tibble::as_tibble() %>%
+    dplyr::mutate(.p_theoretical = (1:dplyr::n())/dplyr::n()-.5/dplyr::n(),
+                  .p_sample = sort(stats::pnorm(.data$.stdresid,
+                                                mean(.data$.stdresid),
+                                                sd(.data$.stdresid)))) %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$.p_theoretical,
+                                 y = .data$.p_sample)) +
+    ggplot2::geom_abline(intercept = 0,
+                         slope = 1,
+                         color = design$comparison_color,
+                         linewidth = design$comparison_size,
+                         linetype = design$comparison_linetype) +
+    ggplot2::geom_point(alpha = .25) +
+    ggplot2::scale_x_continuous("Theoretical Probability",
+                                n.breaks = 8) +
+    ggplot2::scale_y_continuous("Sample Residual Probability",
+                                n.breaks = 8) +
+    design$theme(panel.grid = ggplot2::element_blank())
+}
+
+## Visualize as quantile-quantile plot.
+## Useful for checking multicollinearity (focus on outliers).
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_regress_qq <- function(x, design = design_lmu()) {
+  x %>%
+    model() %>%
+    ggplot2::ggplot(ggplot2::aes(sample = .data$.stdresid)) +
+    ggplot2::stat_qq(alpha = .25) +
+    ggplot2::geom_qq_line(color = design$main_color_1,
+                          linewidth = design$main_size) +
+    ggplot2::scale_x_continuous("Theoretical Quantiles",
+                                n.breaks = 8) +
+    ggplot2::scale_y_continuous("Sample Quantiles",
+                                n.breaks = 8) +
+    design$theme(panel.grid = ggplot2::element_blank())
+}
+
+## Visualize as scale-location plot.
+## Useful for checking homoscedasticity.
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @keywords internal
+visualize_regress_scaloc <- function(x, design = design_lmu()) {
+  x %>%
+    model() %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$.fitted,
+                                 y = sqrt(abs(.data$.stdresid)))) +
+    ggplot2::geom_point(na.rm = T,
+                        alpha = .25) +
+    ggplot2::stat_smooth(method = "loess",
+                         se = FALSE,
+                         color = design$main_color_1,
+                         linewidth = design$main_size,
+                         formula = "y ~ x") +
+    ggplot2::scale_x_continuous("Fitted Values",
+                                n.breaks = 8) +
+    ggplot2::scale_y_continuous(expression(sqrt("|Standardized Residuals|")),
+                                n.breaks = 8) +
+    design$theme(panel.grid = ggplot2::element_blank())
+}
+
+## Visualize as residuals v. leverage plot.
+## Useful for checking for influential single cases ("outliers").
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+##
+## @keywords internal
+visualize_regress_reslev <- function(x, design = design_lmu()) {
+  data_labels <- x %>%
+    model() %>%
+    ggplot2::fortify() %>%
+    dplyr::as_tibble() %>%
+    tibble::rownames_to_column(var = "case_number") %>%
+    dplyr::slice_max(.data$.cooksd,
+                     n = 5)
+  x %>%
+    model() %>%
+    ggplot2::ggplot(ggplot2::aes(x = .data$.hat,
+                                 y = .data$.stdresid)) +
+    ggplot2::geom_point(alpha = .25) +
+    ggplot2::geom_smooth(method = "loess",
+                         se = FALSE,
+                         color = design$main_color_1,
+                         linewidth = design$main_size,
+                         formula = "y ~ x") +
+    ggplot2::geom_text(data = data_labels,
+                       ggplot2::aes(label = .data$case_number),
+                       check_overlap = TRUE,
+                       nudge_x = .00075,
+                       color = design$main_color_1) +
+    ggplot2::scale_x_continuous("Leverage",
+                                n.breaks = 8) +
+    ggplot2::scale_y_continuous("Standardized Residuals",
+                                n.breaks = 8) +
+    design$theme(panel.grid = ggplot2::element_blank())
+}
+
 # Constructors ----
 
-new_tdcmm_lm <- function(x) {
+new_tdcmm_rgrssn <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_lm", class(x))
+    class = c("tdcmm_rgrssn", class(x))
   )
 }

@@ -110,7 +110,15 @@ get_reliability <- function(data, ..., type = "alpha",
   }
 
   # Output
-  return(new_tdcmm(reli_df))
+  return(new_tdcmm(reli_df,
+                   func = "get_reliability",
+                   data = data,
+                   params = list(vars = purrr::map_chr(test_vars, as_label),
+                                 type = type,
+                                 interval.type = interval.type,
+                                 bootstrap.samples = bootstrap.samples,
+                                 conf.level = conf.level,
+                                 progress = progress)))
 }
 
 ### Internal functions ###

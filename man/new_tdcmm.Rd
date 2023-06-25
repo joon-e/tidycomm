@@ -5,12 +5,16 @@
 \alias{is_tdcmm}
 \title{\code{tdcmm} output constructor}
 \usage{
-new_tdcmm(x, model = NULL, checks = NULL)
+new_tdcmm(x, func, data, model = NULL, checks = NULL, params = list())
 
 is_tdcmm(x)
 }
 \arguments{
 \item{x}{A \link[tibble:tibble-package]{tibble}.}
+
+\item{func}{Function name called that produced this model.}
+
+\item{data}{The \link{tibble} that served as input to the function.}
 
 \item{model}{A list of model object(s) used in preparation of the output.
 Defaults to \code{NULL}. A single model should be wrapped in a list of length
@@ -18,6 +22,9 @@ Defaults to \code{NULL}. A single model should be wrapped in a list of length
 
 \item{checks}{A list of assumption check object(s) used in preparation of the
 output. Defaults to \code{NULL}.}
+
+\item{params}{A named list of parameters originally passed to the call.
+Defaults to an empty list.}
 }
 \description{
 Creates a new \code{tdcmm} class output object.

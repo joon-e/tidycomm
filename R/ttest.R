@@ -80,8 +80,18 @@ t_test <- function(data, group_var, ...,
   # if not one-sample, run two-sample t-test
   return(two_sample_t_test(data,
                            {{ group_var }}, group_var_str,
-                           {{ test_vars }},
+                           {{ test_vars }}, test_vars_string,
                            var.equal, paired, pooled_sd, levels, case_var))
+}
+
+#' @rdname visualize
+#' @export
+visualize.tdcmm_ttst <- function(x, ..., .design = design_lmu()) {
+  if (attr(x, "func") == "t_test") {
+    return(visualize_t_test(x, .design))
+  }
+
+  return(warn_about_missing_visualization(x))
 }
 
 ### Internal functions ###
@@ -100,20 +110,20 @@ t_test <- function(data, group_var, ...,
 ## @keywords internal
 one_sample_t_test <- function(data, group_var, group_var_str, mu) {
   # Prepare data
-  data <- data %>%
+  data_prepared <- data %>%
     dplyr::pull({{ group_var }})
 
-  if (!is.numeric(data)) {
+  if (!is.numeric(data_prepared)) {
     stop(glue("Within a one-sample t-test, {group_var_str} must be numeric."),
          call. = FALSE)
   }
 
   # Compute and Create output
-  tt <- t.test(data, mu = mu)
+  tt <- t.test(data_prepared, mu = mu)
   out <- tibble::tibble(
     Variable = group_var_str,
-    M = mean(data, na.rm = TRUE),
-    SD = sd(data, na.rm = TRUE),
+    M = mean(data_prepared, na.rm = TRUE),
+    SD = sd(data_prepared, na.rm = TRUE),
     CI_95_LL = tt$conf.int[[1]],
     CI_95_UL = tt$conf.int[[2]],
     Mu = mu,
@@ -123,8 +133,13 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
   )
 
   # Output
-  return(new_tdcmm_ttest(
-    new_tdcmm(out, model = list(tt)))
+  return(new_tdcmm_ttst(
+    new_tdcmm(out,
+              func = "t_test",
+              data = data,
+              params = list(group_var = group_var_str,
+                            mu = mu),
+              model = list(tt)))
   )
 }
 
@@ -135,6 +150,7 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
 ## @inheritParams t_test
 ## @param group_var_str Stringified version of group variable
 ## @param test_vars Test variables
+## @param test_vars_str Stringified version of test variables
 ##
 ## @return a [tdcmm] model
 ##
@@ -142,6 +158,7 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
 ##
 ## @keywords internal
 two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
+                              test_vars_str,
                               var.equal, paired, pooled_sd, levels, case_var) {
   if (is.null(levels)) {
     # Get levels
@@ -206,8 +223,18 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
   }
 
   # Output
-  return(new_tdcmm_ttest(
-    new_tdcmm(out, model = model_list))
+  return(new_tdcmm_ttst(
+    new_tdcmm(out,
+              func = "t_test",
+              data = data,
+              params = list(group_var = group_var_str,
+                            vars = test_vars_str,
+                            var.equal = var.equal,
+                            paired = paired,
+                            pooled_sd = pooled_sd,
+                            levels = levels,
+                            case_var = case_var),
+              model = model_list))
   )
 }
 
@@ -284,13 +311,92 @@ cohens_d <- function(x, y, pooled_sd = TRUE, na.rm = TRUE) {
   (mx - my) / s
 }
 
+## Visualize `t_test()` as points with 95% CI ranges
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_t_test <- function(x, design = design_lmu()) {
+  if ("mu" %in% names(attr(x, "params"))) {
+    return(warn_about_missing_visualization(x))
+  }
+
+  # get variables
+  group_var_str <- attr(x, "params")$group_var
+  group_var <- sym(group_var_str)
+
+  test_vars_str <- attr(x, "params")$vars
+  test_vars_str <- test_vars_str[test_vars_str != group_var_str]
+  test_vars <- syms(test_vars_str)
+
+  data <- attr(x, "data")
+  levels <- attr(x, "params")$levels
+  level_names <- levels %>%
+    stringr::str_replace_all(" ", "_") %>%
+    stringr::str_sub(1, 10)
+  n_str <- paste("N", level_names, sep = "_")
+
+  # collect n
+  n <- NULL
+  for (test_var_str in test_vars_str) {
+    n <- n %>%
+      rbind(tibble::tibble(Variable = test_var_str,
+                           !!n_str[1] := (
+                             data %>%
+                               dplyr::filter({{ group_var }} == levels[1]) %>%
+                               nrow()
+                           ),
+                           !!n_str[2] := (
+                             data %>%
+                               dplyr::filter({{ group_var }} == levels[2]) %>%
+                               nrow()
+                           )))
+  }
+
+  # merge
+  data <- x %>%
+    dplyr::select(-c("Delta_M", "t", "df", "p", "d")) %>%
+    dplyr::left_join(n, by = "Variable") %>%
+    tidyr::pivot_longer(tidyselect::ends_with(level_names),
+                        names_to = "level") %>%
+    dplyr::mutate(var = stringr::str_split_i(.data$level, "_", 1),
+                  level = stringr::str_split_i(.data$level, "_", 2)) %>%
+    tidyr::pivot_wider(names_from = "var",
+                       values_from = "value") %>%
+    dplyr::mutate(ci_95_ll = calculate_ci_ll(.data$M, .data$SD, .data$N),
+                  ci_95_ul = calculate_ci_ul(.data$M, .data$SD, .data$N))
+
+  # build graph
+  data %>%
+    ggplot2::ggplot(ggplot2::aes(xmin = .data$ci_95_ll,
+                                 x = .data$M,
+                                 xmax = .data$ci_95_ul,
+                                 y = .data$Variable,
+                                 color = .data$level)) +
+    ggplot2::geom_pointrange(stat = "identity",
+                             position = ggplot2::position_dodge2(width = 0.9),
+                             linewidth = design$main_size) +
+    ggplot2::scale_x_continuous(NULL,
+                                n.breaks = 8) +
+    ggplot2::scale_y_discrete(NULL) +
+    ggplot2::scale_color_manual(NULL,
+                                values = design$main_colors,
+                                guide = ggplot2::guide_legend(reverse = TRUE)) +
+    design$theme() +
+    ggplot2::theme(legend.position = "bottom")
+}
+
 # Constructors ----
 
-new_tdcmm_ttest <- function(x) {
+new_tdcmm_ttst <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_ttest", class(x))
+    class = c("tdcmm_ttst", class(x))
   )
 }

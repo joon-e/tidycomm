@@ -1,6 +1,6 @@
 #' Compute one-way ANOVAs
 #'
-#' Computes one-way ANOVAS for one group variable and specified test variables.
+#' Computes one-way ANOVAs for one group variable and specified test variables.
 #' If no variables are specified, all numeric (integer or double) variables are
 #' used.
 #'
@@ -68,9 +68,26 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
   }
 
   # Output
-  return(new_tdcmm_uniaov(
-    new_tdcmm(out, model = model_list))
+  return(new_tdcmm_nnv(
+    new_tdcmm(out,
+              func = "unianova",
+              data = data,
+              params = list(group_var = group_var_string,
+                            vars = test_vars_string,
+                            descriptives = descriptives,
+                            post_hoc = post_hoc),
+              model = model_list))
   )
+}
+
+#' @rdname visualize
+#' @export
+visualize.tdcmm_nnv<- function(x, ..., .design = design_lmu()) {
+  if (attr(x, "func") == "unianova") {
+    return(visualize_unianova(x, .design))
+  }
+
+  return(warn_about_missing_visualization(x))
 }
 
 ### Internal functions ###
@@ -136,14 +153,91 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
   return(aov_df)
 }
 
+## Visualize `unianova()` as points with 95% CI ranges
+##
+## @param x a [tdcmm] model
+##
+## @return a [ggplot2] object
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_unianova <- function(x, design = design_lmu()) {
+  # get variables
+  group_var_str <- attr(x, "params")$group_var
+  group_var <- sym(group_var_str)
+
+  test_vars_str <- attr(x, "params")$vars
+  test_vars_str <- test_vars_str[test_vars_str != group_var_str]
+  test_vars <- syms(test_vars_str)
+
+  # if not inclusive of descriptives, re-do the call respectively
+  if (!attr(x, "params")$descriptives) {
+    x <- unianova(attr(x, "data"),
+                  !!group_var,
+                  !!!test_vars,
+                  descriptives = TRUE,
+                  post_hoc = FALSE)
+  }
+
+  # prepare data
+  data <- x %>%
+    dplyr::select("Var", tidyselect::starts_with(c("M_", "SD_")))
+
+  n <- attr(x, "data") %>%
+    dplyr::count({{ group_var }}, name = "N") %>%
+    tidyr::pivot_wider(names_from = {{ group_var }},
+                       values_from = "N",
+                       names_prefix = "N_")
+
+  data <- data %>%
+    dplyr::bind_cols(n) %>%
+    tidyr::pivot_longer(-c("Var"),
+                        names_to = "level") %>%
+    dplyr::mutate(var = stringr::str_split_i(.data$level, "_", 1),
+                  level = stringr::str_split_i(.data$level, "_", 2)) %>%
+    tidyr::pivot_wider(names_from = "var",
+                       values_from = "value") %>%
+    dplyr::mutate(ci_95_ll = calculate_ci_ll(.data$M, .data$SD, .data$N),
+                  ci_95_ul = calculate_ci_ul(.data$M, .data$SD, .data$N))
+
+  # last check
+  if (length(dplyr::n_distinct(data$level)) > 12) {
+    stop(glue("Cannot visualize ANOVAs with more than 12 levels of the ",
+              "group variable ({group_var_str})."),
+         call. = FALSE)
+  }
+
+  # visualize
+  data %>%
+    dplyr::mutate(Variable = forcats::as_factor(.data$Var),
+                  Variable_desc = forcats::fct_rev(.data$Variable)) %>%
+    ggplot2::ggplot(ggplot2::aes(xmin = .data$ci_95_ll,
+                                 x = .data$M,
+                                 xmax = .data$ci_95_ul,
+                                 y = .data$Variable_desc,
+                                 color = .data$level)) +
+    ggplot2::geom_pointrange(stat = "identity",
+                             position = ggplot2::position_dodge2(width = 0.9),
+                             linewidth = design$main_size) +
+    ggplot2::scale_x_continuous(NULL,
+                                n.breaks = 8) +
+    ggplot2::scale_y_discrete(NULL) +
+    ggplot2::scale_color_manual(NULL,
+                                values = design$main_colors,
+                                guide = ggplot2::guide_legend(reverse = TRUE)) +
+    design$theme() +
+    ggplot2::theme(legend.position = "bottom")
+}
+
 
 # Constructors ----
 
-new_tdcmm_uniaov <- function(x) {
+new_tdcmm_nnv <- function(x) {
   stopifnot(is_tdcmm(x))
 
   structure(
     x,
-    class = c("tdcmm_uniaov", class(x))
+    class = c("tdcmm_nnv", class(x))
   )
 }

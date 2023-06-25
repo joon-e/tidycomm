@@ -35,6 +35,8 @@ Imports:
     combinat,
     dplyr,
     forcats,
+    GGally,
+    ggplot2,
     glue,
     lm.beta,
     lubridate,
@@ -48,13 +50,13 @@ Imports:
     stats,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests: 
     covr,
     knitr,
     rmarkdown,
-    testthat (>= 2.1.0),
-    tidyselect
+    testthat (>= 2.1.0)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
