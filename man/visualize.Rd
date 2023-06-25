@@ -151,7 +151,7 @@ WoJ \%>\%
   crosstab(reach, employment) \%>\%
   visualize()
 fbposts \%>\%
-  crosstab(coder_id, type, percentages = T) \%>\%
+  crosstab(coder_id, type, percentages = TRUE) \%>\%
   visualize()
 
 WoJ \%>\%

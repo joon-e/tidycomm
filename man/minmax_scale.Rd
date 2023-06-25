@@ -45,7 +45,10 @@ relative positions and distributions of the values remain consistent.
 }
 \examples{
 WoJ \%>\% minmax_scale(autonomy_emphasis)
-WoJ \%>\% minmax_scale(autonomy_emphasis, change_to_min = 1, change_to_max = 10, name = "my_changed_variable")
+WoJ \%>\% minmax_scale(autonomy_emphasis,
+                     change_to_min = 1,
+                     change_to_max = 10,
+                     name = "my_changed_variable")
 
 WoJ \%>\%
   minmax_scale(autonomy_emphasis) \%>\%
