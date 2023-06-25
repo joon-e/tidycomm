@@ -13,11 +13,11 @@
 \usage{
 \method{visualize}{tdcmm_ctgrcl}(x, ..., .design = design_lmu())
 
-\method{visualize}{tdcmm_crrltn}(x, which = "jitter", .design = design_lmu())
+\method{visualize}{tdcmm_crrltn}(x, which = "jitter", ..., .design = design_lmu())
 
 \method{visualize}{tdcmm_dscrb}(x, ..., .design = design_lmu())
 
-\method{visualize}{tdcmm_rgrssn}(x, which = "jitter", .design = design_lmu())
+\method{visualize}{tdcmm_rgrssn}(x, which = "jitter", ..., .design = design_lmu())
 
 visualize(x, ..., .design = design_lmu())
 
