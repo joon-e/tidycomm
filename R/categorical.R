@@ -338,7 +338,9 @@ new_tdcmm_ctgrcl <- function(x) {
 tbl_format_footer.tdcmm_ctgrcl <- function(x, ...) {
   default_footer <- NextMethod()
 
-  if (attr(x, "func") != "crosstab" | length(attr(x, "params")) == 0) {
+  if (attr(x, "func") != "crosstab" |
+      length(attr(x, "params")) == 0 |
+      is.null(attr(x, "model"))) {
     return(default_footer)
   }
 
