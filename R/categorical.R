@@ -218,8 +218,8 @@ visualize_tab_frequencies <- function(x, design = design_lmu()) {
 
   # visualize
   g <- data %>%
-    ggplot2::ggplot(ggplot2::aes(x = level,
-                                 y = percent)) +
+    ggplot2::ggplot(ggplot2::aes(x = .data$level,
+                                 y = .data$percent)) +
     ggplot2::geom_bar(stat = "identity",
                       fill = design$main_color_1) +
     ggplot2::facet_wrap(dplyr::vars(var),

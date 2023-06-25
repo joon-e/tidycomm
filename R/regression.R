@@ -308,7 +308,7 @@ visualize_regress_lm <- function(x, which = "jitter", design = design_lmu()) {
                          na.rm = TRUE,
                          color = design$main_color_1,
                          linewidth = design$main_size) +
-    ggplot2::facet_wrap(dplyr::vars(iv),
+    ggplot2::facet_wrap(dplyr::vars(.data$iv),
                         scales = "free_x") +
     ggplot2::scale_x_continuous(NULL) +
     ggplot2::scale_y_continuous(attr(x, "params")$dependent_var) +
@@ -372,7 +372,8 @@ visualize_regress_resfit <- function(x, design = design_lmu()) {
                         linewidth = design$main_size) +
     ggplot2::geom_point() +
     ggplot2::geom_path(data = lowess_fit,
-                       ggplot2::aes(x = x, y = y),
+                       ggplot2::aes(x = .data$x,
+                                    y = .data$y),
                        color = design$main_color_1,
                        linewidth = design$main_size) +
     ggplot2::scale_x_continuous("Fitted",

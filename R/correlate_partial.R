@@ -52,8 +52,9 @@ correlate_partial <- function(data, ..., method = "pearson") {
   # ensure completeness
   data_rows <- nrow(data)
   data <- data %>%
-    dplyr::select(!!!vars) %>%
-    dplyr::filter(stats::complete.cases(.))
+    dplyr::select(!!!vars)
+  data <- data %>%
+    dplyr::filter(stats::complete.cases(data))
   delta <- data_rows - nrow(data)
   if (delta > 0) {
     warning(glue("Only complete cases without any missing values allowed. {delta} cases were removed."),

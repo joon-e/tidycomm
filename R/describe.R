@@ -265,8 +265,8 @@ visualize_describe_cat <- function(x, design = design_lmu()) {
                                  label = .data$Value_desc)) +
     ggplot2::geom_bar(stat = "identity",
                       position = ggplot2::position_dodge2(width = 0.9)) +
-    ggplot2::geom_text(ggplot2::aes(hjust = label_placement,
-                                    color = label_color),
+    ggplot2::geom_text(ggplot2::aes(hjust = .data$label_placement,
+                                    color = .data$label_color),
                        position = ggplot2::position_dodge2(width = 0.9)) +
     ggplot2::scale_x_continuous('N',
                                 limits = c(0, NA),
