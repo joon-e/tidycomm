@@ -213,7 +213,7 @@ visualize_tab_frequencies <- function(x, design = design_lmu()) {
               tab_frequencies(!!sym(variable)) %>%
               dplyr::mutate(var = variable,
                             level = forcats::as_factor(!!sym(variable))) %>%
-              dplyr::select(var, level, percent))
+              dplyr::select(.data$var, .data$level, .data$percent))
   }
 
   # visualize
