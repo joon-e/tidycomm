@@ -114,7 +114,10 @@ to_correlation_matrix <- function(data) {
 #' same position are more easily visible); only affects regular correlation.
 #'
 #' @export
-visualize.tdcmm_crrltn <- function(x, which = "jitter", .design = design_lmu()) {
+visualize.tdcmm_crrltn <- function(x,
+                                   which = "jitter",
+                                   ...,
+                                   .design = design_lmu()) {
   if (attr(x, "func") == "correlate") {
     if (!which %in% c("jitter", "alpha")) {
       warning(glue('which must be one of "jitter" or "alpha". Since none ',

@@ -167,7 +167,10 @@ regress <- function(data,
 #'
 #' @rdname visualize
 #' @export
-visualize.tdcmm_rgrssn <- function(x, which = "jitter", .design = design_lmu()) {
+visualize.tdcmm_rgrssn <- function(x,
+                                   which = "jitter",
+                                   ...,
+                                   .design = design_lmu()) {
   if (attr(x, "func") == "regress") {
     which <- tolower(which)
     if (which == "correlogram") {
