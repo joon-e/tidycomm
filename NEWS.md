@@ -1,3 +1,23 @@
+# tidycomm 0.3.0
+
+## New features
+* Converted `tibble` returns into `tdcmm/tibble` return objects (they behave just like tibbles but are in essence our own objects now)
+* Added partial correlation in `correlate(..., partial = TRUE)`
+* Added linear regression `regress()`
+* Added one-sample t-test `t_test(..., my = ...)`
+* Added `reverse_scale()`, `minmax_scale()`, `z_scale()`, and `center_scale()` to shift and modify continuous scales
+* Added `tab_percentiles()`
+* Added `visualize()` to visualize almost everything
+* Added `snscomments` and `incvlcomments` as additional data sets
+
+## Minor changes
+* Changed `unianova()` and `t_test()` to build on `leveneTest()`
+* Allowed `test_icr()` to work with grouped data
+* Converted all code examples in documentation to be built on `tidycomm`-provided data sets
+
+## Bugfixes
+* Unified output to coherent number of after-comma digits
+
 # tidycomm 0.2.0
 
 ## New features
