@@ -1,6 +1,6 @@
 Package: tidycomm
 Title: Data Modification and Analysis for Communication Research
-Version: 0.2.1
+Version: 0.3.0
 Authors@R: 
     person(given = "Julian",
            family = "Unkel",
