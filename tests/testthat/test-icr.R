@@ -84,3 +84,33 @@ test_that("test_icr prints a specific error message when using empty ucm", {
                "Empty units-coders matrix detected")
 
 })
+
+test_that("test_icr prints a specific error message when forgetting to specifiy unit_var and coder_var", {
+  data <- tibble(
+    unit = c(1, 1, 2, 2, 3, 3),
+    coder = c('a', 'b', 'a', 'c', 'b', 'c'),
+    code = rnorm(6)
+  )
+
+  expect_error(data %>% test_icr(code),
+               "Please provide both a variable with unit identifiers and a variable with coder identifiers.")
+
+})
+
+test_that("test_icr works with grouped data", {
+  data <- data.frame(
+    "group" = c(1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5),
+    "R1"    = c(1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0),
+    "R2"    = c(1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0),
+    "R3"    = c(1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0))
+
+  data <- data %>%
+    dplyr::mutate(post_id = dplyr::row_number()) %>%
+    tidyr::pivot_longer(R1:R3, names_to = "coder_id", values_to = "code") %>%
+    dplyr::group_by(group)
+
+  t1 <- data %>%
+    test_icr(post_id, coder_id, code)
+
+  expect_equal(dim(t1), c(5, 9))
+})

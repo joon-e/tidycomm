@@ -113,6 +113,7 @@ model.tdcmm <- function(x, ...) {
 #' - [tab_frequencies()]: either a histogram (if 1 variable is given) or
 #' multiple histograms wrapped, 5+ variables issue a warning about readability;
 #' no additional arguments
+#' - [tab_percentiles()]: quantile plot
 #' - [crosstab()]: horizontal stacked bar plot, either absolute or relative
 #' (depending on the `percentages` argument in [crosstab()])
 #' - [t_test()]: plot with points and appended 95% confidence intervals;

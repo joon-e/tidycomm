@@ -38,6 +38,7 @@ fbposts \%>\% describe_cat(type)
 }
 \seealso{
 Other descriptives: 
-\code{\link{describe}()}
+\code{\link{describe}()},
+\code{\link{tab_percentiles}()}
 }
 \concept{descriptives}

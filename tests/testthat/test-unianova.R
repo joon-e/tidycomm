@@ -14,9 +14,9 @@ test_that("unianova returns tibble", {
   expect_true(tibble::is_tibble(t2))
   expect_true(tibble::is_tibble(t3))
 
-  expect_equal(dim(t1), c(2, 6))
-  expect_equal(dim(t2), c(2, 12))
-  expect_equal(dim(t3), c(2, 7))
+  expect_equal(dim(t1), c(2, 9))
+  expect_equal(dim(t2), c(2, 15))
+  expect_equal(dim(t3), c(2, 10))
 })
 
 test_that("t_test returns tibble when no variables are specified", {
@@ -29,9 +29,9 @@ test_that("t_test returns tibble when no variables are specified", {
   expect_true(tibble::is_tibble(t2))
   expect_true(tibble::is_tibble(t3))
 
-  expect_equal(dim(t1), c(11, 6))
-  expect_equal(dim(t2), c(11, 12))
-  expect_equal(dim(t3), c(11, 7))
+  expect_equal(dim(t1), c(11, 9))
+  expect_equal(dim(t2), c(11, 15))
+  expect_equal(dim(t3), c(11, 10))
 })
 
 
@@ -40,5 +40,5 @@ test_that("unianova works with spaces in column names", {
     dplyr::select(employment, `autonomy selection` = autonomy_selection) %>%
     unianova(employment)
 
-  expect_equal(dim(t1), c(1, 6))
+  expect_equal(dim(t1), c(1, 8))
 })

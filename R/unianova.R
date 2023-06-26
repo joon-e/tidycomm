@@ -2,7 +2,8 @@
 #'
 #' Computes one-way ANOVAs for one group variable and specified test variables.
 #' If no variables are specified, all numeric (integer or double) variables are
-#' used.
+#' used. A Levene's test will automatically determine whether a classic ANOVA is used.
+#' Otherwise Welch's ANOVA with a (Satterthwaite's) approximation to the degrees of freedom is used.
 #'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param group_var group variable (column name)
@@ -11,9 +12,10 @@
 #' @param descriptives a logical indicating whether descriptive statistics (mean
 #'   & standard deviation) for all group levels should be added to the returned
 #'   tibble. Defaults to `FALSE`.
-#' @param post_hoc a logical indicating whether post-hoc tests (Tukey's HSD)
-#'   should be computed. Results of the post-hoc test will be added in a list
-#'   column of result tibbles.
+#' @param post_hoc a logical value indicating whether post-hoc tests should be performed.
+#' Tukey's HSD is employed when the assumption of equal variances is met, whereas the Games-Howell test is
+#' automatically applied when this assumption is violated. The results of the
+#' post-hoc test will be added to a list column in the resulting tibble.
 #'
 #' @return a [tdcmm] model
 #'
@@ -26,6 +28,11 @@
 #'
 #' @export
 unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALSE) {
+
+  # Check if group_var is provided
+  if (missing(group_var)) {
+    stop("Please provide at least one variable.")
+  }
 
   # Get vars
   test_vars <- grab_vars(data, quos(...))
@@ -44,28 +51,72 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
   }
 
   # Main function
-  model_list <- list()
-  out <- NULL
+  model_list_annova <- list()
+  model_list_levene <- list()
+  out_annova <- NULL
+  out_levene <- NULL
   for (test_var in test_vars) {
 
-    # preparation
+    # Compute Levene test
     group_var_string <- as_label(enquo(group_var))
     test_var_string <- as_label(enquo(test_var))
+
+    levene_test <- suppressWarnings(
+      car::leveneTest(as.formula(
+        paste0("`", test_var_string, "` ~ `", group_var_str, "`")),
+        data = data)
+    )
+
+    levene_row <- data.frame(
+      Variable = as.character(test_var),
+      Levene_p = round(levene_test$`Pr(>F)`[1], digits = 3)
+    )
+
+    # preparation
     formula <- as.formula(paste("`", test_var_string, "`",
                                 " ~ ",
                                 "`", group_var_string, "`",
                                 sep = ""))
 
-    # Compute and create output
-    aov_model <- aov(formula, data)
-    aov_model_row <- format_aov(aov_model, {{ test_var }}, data, {{ group_var }},
-                                descriptives, post_hoc)
+    # Compute and create output based on Levene's test
+    if (levene_row$Levene_p < 0.05) {
+      # Unequal variances, use Welch's ANOVA
+      equal_var_assumption <- FALSE
+      aov_model <- misty::test.welch(formula, data, effsize = TRUE, output = FALSE, posthoc = TRUE)
+    } else {
+      # Equal variances, use regular ANOVA
+      equal_var_assumption <- TRUE
+      aov_model <- misty::aov.b(formula, data, effsize = TRUE, output = FALSE, posthoc = TRUE)
+    }
 
-    # collect
-    model_list[[length(model_list) + 1]] <- aov_model
-    out <- out %>%
+    aov_model_row <- format_aov(aov_model, {{ test_var }}, data, {{ group_var }},
+                                descriptives, post_hoc, equal_var_assumption)
+
+    # Collect ANOVA
+    model_list_annova[[length(model_list_annova) + 1]] <- aov_model
+    out_annova <- out_annova %>%
       dplyr::bind_rows(aov_model_row)
+
+    # Collect levene test
+    if (equal_var_assumption == FALSE)
+      levene_row <- levene_row %>%
+      dplyr::mutate(var_equal = "FALSE")
+    else {
+      levene_row <- levene_row %>%
+        dplyr::mutate(var_equal = "TRUE")
+    }
+
+    model_list_levene[[length(model_list_levene) + 1]] <- levene_row
+    out_levene <- out_levene %>%
+      dplyr::bind_rows(levene_row)
   }
+
+  if (levene_row$Levene_p < 0.05) {
+    # Unequal variances, Welch's ANOVA used
+    message(glue("The significant result from Levene's test suggests unequal variances among the groups, violating standard ANOVA assumptions. This necessitates the use of Welch's ANOVA, which is robust against heteroscedasticity."))
+  }
+
+  out <- dplyr::full_join(out_annova, out_levene, by = "Variable")
 
   # Output
   return(new_tdcmm_nnv(
@@ -76,7 +127,7 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
                             vars = test_vars_string,
                             descriptives = descriptives,
                             post_hoc = post_hoc),
-              model = model_list))
+              model = model_list_annova))
   )
 }
 
@@ -106,26 +157,57 @@ visualize.tdcmm_nnv<- function(x, ..., .design = design_lmu()) {
 ##
 ## @keywords internal
 format_aov <- function(aov_model, test_var, data, group_var, descriptives,
-                       post_hoc) {
+                       post_hoc, equal_var_assumption) {
 
   test_var_string <- as_label(enquo(test_var))
-  aov_s <- broom::tidy(aov_model)
+  group_var_string <- as_label(enquo(group_var))
 
-  aov_df <- tibble(
-    Var = test_var_string,
-    `F` = aov_s$statistic[1],
-    df_num = aov_s$df[1],
-    df_denom = aov_s$df[2],
-    p = aov_s$p.value[1],
-    eta_squared = aov_s$sumsq[1] / sum(aov_s$sumsq)
-  )
+  if (equal_var_assumption == TRUE) {
+    F_val <- aov_model$result[[2]][5]
+    df_number <- aov_model$result[[2]][3]
+    p <- aov_model$result[[2]][6]
+    eta_squared <- aov_model$result[[2]][7]
+    omega_squared <- aov_model$result[[2]][8]
+
+    aov_df <- tibble::tibble(
+      Variable = test_var_string,
+      `F` = pillar::num(F_val$F[1], digits = 3),
+      df_num = round(df_number[1,1], digits = 0),
+      df_denom = round(df_number[2,1], digits = 0),
+      p = pillar::num(p$pval[1], digits = 3),
+      eta_squared = pillar::num(eta_squared$eta.sq[1], digits = 3)
+    )
+  }
+  else {
+    F_val <- aov_model$result[[2]][1]
+    df_num <- aov_model$result[[2]][2]
+    df_denom <- aov_model$result[[2]][3]
+    p <- aov_model$result[[2]][4]
+    eta_squared <- aov_model$result[[2]][5]
+    omega_squared <- aov_model$result[[2]][6]
+
+    aov_df <- tibble::tibble(
+      Variable = test_var_string,
+      `F` = pillar::num(F_val$F, digits = 3),
+      df_num = round(df_num$df1, digits = 0),
+      df_denom = round(df_denom$df2, digits = 0),
+      p = pillar::num(p$pval, digits = 3),
+      omega_squared = pillar::num(omega_squared$omega.sq, digits = 3)
+    )
+  }
 
   if (descriptives) {
     desc_df <- data %>%
       dplyr::group_by({{ group_var }}) %>%
       dplyr::summarise(M = mean({{ test_var }}, na.rm = TRUE),
-                       SD = sd({{ test_var }}, na.rm = TRUE)) %>%
-      tidyr::gather("stat", "val", "M", "SD")
+                       SD = sd({{ test_var }}, na.rm = TRUE)
+      ) %>%
+      dplyr::mutate_if(is.numeric, format, 3) %>%
+      dplyr::mutate(M = as.numeric(.data$M),
+                    SD = as.numeric(.data$SD)) %>%
+      tidyr::pivot_longer(cols = c("M", "SD"),
+                          names_to = "stat",
+                          values_to = "val")
 
     desc_df <- desc_df %>%
       dplyr::group_by({{ group_var }}) %>%
@@ -141,10 +223,22 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
   }
 
   if (post_hoc) {
+    # Grab the post hoc tibble from the misty::test.welch object
+    posthoc <- aov_model$result[3]
+    posthoc <- posthoc$posthoc
+    posthoc <- posthoc %>%
+      dplyr::rename(Delta_M = m.diff,
+                    p = pval,
+                    conf_lower = m.low,
+                    conf_upper = m.upp) %>%
+      dplyr::mutate(Group_Var = group_var_string) %>%
+      dplyr::mutate(contrast = stringr::str_c(group1, group2, sep = "-")) %>%
+      dplyr::select(-c(group1, group2, d.low, d.upp)) %>%
+      dplyr::select(Group_Var, contrast, Delta_M, conf_lower, conf_upper, p, d, tidyselect::everything())
+
     ph_df <- tibble::tibble(
-      post_hoc = list(
-        broom::tidy(TukeyHSD(aov_model))
-      ))
+      post_hoc = list(posthoc)
+    )
 
     aov_df <- aov_df %>%
       dplyr::bind_cols(ph_df)
@@ -173,16 +267,16 @@ visualize_unianova <- function(x, design = design_lmu()) {
 
   # if not inclusive of descriptives, re-do the call respectively
   if (!attr(x, "params")$descriptives) {
-    x <- unianova(attr(x, "data"),
+    x <- suppressMessages(unianova(attr(x, "data"),
                   !!group_var,
                   !!!test_vars,
                   descriptives = TRUE,
-                  post_hoc = FALSE)
+                  post_hoc = FALSE))
   }
 
   # prepare data
   data <- x %>%
-    dplyr::select("Var", tidyselect::starts_with(c("M_", "SD_")))
+    dplyr::select("Variable", tidyselect::starts_with(c("M_", "SD_")))
 
   n <- attr(x, "data") %>%
     dplyr::count({{ group_var }}, name = "N") %>%
@@ -192,7 +286,7 @@ visualize_unianova <- function(x, design = design_lmu()) {
 
   data <- data %>%
     dplyr::bind_cols(n) %>%
-    tidyr::pivot_longer(-c("Var"),
+    tidyr::pivot_longer(-c("Variable"),
                         names_to = "level") %>%
     dplyr::mutate(var = stringr::str_split_i(.data$level, "_", 1),
                   level = stringr::str_split_i(.data$level, "_", 2)) %>%
@@ -210,7 +304,7 @@ visualize_unianova <- function(x, design = design_lmu()) {
 
   # visualize
   data %>%
-    dplyr::mutate(Variable = forcats::as_factor(.data$Var),
+    dplyr::mutate(Variable = forcats::as_factor(.data$Variable),
                   Variable_desc = forcats::fct_rev(.data$Variable)) %>%
     ggplot2::ggplot(ggplot2::aes(xmin = .data$ci_95_ll,
                                  x = .data$M,
