@@ -123,7 +123,7 @@
 #' incivil and intolerant user comments, Journal of Computer-Mediated
 #' Communication, Volume 28, Issue 4, https://doi.org/10.1093/jcmc/zmad018
 #'
-#' @format A data frame with variables:
+#' @format A data frame of 3856 observations nested in 964 participants and 22 variables:
 #' \describe{
 #'   \item{participant_num}{Numeric id of the participant}
 #'   \item{age}{Age of the participant}

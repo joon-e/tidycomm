@@ -5,7 +5,7 @@
 \alias{incvlcomments}
 \title{Incivil Comments Data}
 \format{
-A data frame with variables:
+A data frame of 3856 observations nested in 964 participants and 22 variables:
 \describe{
 \item{participant_num}{Numeric id of the participant}
 \item{age}{Age of the participant}

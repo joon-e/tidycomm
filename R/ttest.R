@@ -48,9 +48,8 @@ t_test <- function(data, group_var, ...,
                    levels = NULL, case_var = NULL, mu = NULL) {
 
   # Add warning for the var.equal deprecation
-  if (var.equal != TRUE) {
-    warning("The 'var.equal' parameter is deprecated and will be removed in future versions. A Levene's test will
-            automatically evaluate whether variances should be treated as equal.",
+  if (!missing(var.equal)) {
+    warning("The 'var.equal' parameter is deprecated and will be removed in future versions. A Levene's test will automatically evaluate whether variances should be treated as equal.",
             immediate. = TRUE)
   }
 

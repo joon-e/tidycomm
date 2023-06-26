@@ -8,13 +8,13 @@
 #'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model that contains the numeric data to be tabulated.
 #' @param ... Variables within the data for which to tabulate the percentiles. If no variables are provided, all numeric variables are used.
-#' @param levels a numeric vector specifying the percentiles to compute. Defaults to c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9).
+#' @param levels a numeric vector specifying the percentiles to compute. Defaults to c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0).
 #'
 #' @return a [tdcmm] model
 #'
 #' @examples
 #' WoJ %>% tab_percentiles(work_experience)
-#' WoJ %>% tab_frequencies(work_experience, autonomy_emphasis)
+#' WoJ %>% tab_percentiles(work_experience, autonomy_emphasis)
 #'
 #' @family descriptives
 #'
@@ -30,7 +30,7 @@ tab_percentiles <- function(data, ..., levels = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 
 
   # Check if vars is empty and all vars are numeric
   if (length(vars) == 0) {
-    stop("No numeric variables found to describe")
+    stop("No numeric variables found to calculate percentiles for.")
   }
 
   if (!all(purrr::map_lgl(data %>%
@@ -94,7 +94,7 @@ visualize.tdcmm_prcntl <- function(x, ..., .design = design_lmu()) {
 ## @keywords internal
 calc_percentiles <- function(var, percentile) {
   # Create a tibble containing the variable
-  tibble(var = var) %>%
+  tibble::tibble(var = var) %>%
     # Compute the percentile
     dplyr::summarise(percentile = quantile(var, probs = percentile, na.rm = TRUE)) %>%
     # Extract the computed percentile value from the tibble
@@ -122,17 +122,18 @@ visualize_tab_percentiles <- function(x, design = design_lmu()) {
   # visualize quartiles
   data %>%
     ggplot2::ggplot(ggplot2::aes(x = attr(x, "params")$levels * 100, y = attr(x, "params")$values)) +
-    ggplot2::geom_vline(xintercept = 25, linetype="solid", color = "darkgrey", size = 0.4) +
-    ggplot2::geom_vline(xintercept = 50, linetype="solid", color = "darkgrey", size = 0.4) +
-    ggplot2::geom_vline(xintercept = 75, linetype="solid", color = "darkgrey", size = 0.4) +
-    ggplot2::geom_vline(xintercept = 100, linetype="solid", color = "darkgrey", size = 0.4) +
+    ggplot2::geom_vline(xintercept = 25, linetype="solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 50, linetype="solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 75, linetype="solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 100, linetype="solid", color = design$comparison_color, size = 0.4) +
     ggplot2::geom_point() +
-    ggplot2::scale_x_continuous(labels = scales::percent_format(scale = 1)) +
+    ggplot2::scale_x_continuous(labels = scales::percent_format(scale = 1),
+                                breaks = attr(x, "params")$levels * 100) +
     ggplot2::labs(x = "Percentiles", y = attr(x, "params")$vars[1])  +
-    ggplot2::annotate("text", x = 8.5, y = max(y_var), label = "Quartile 1", hjust = 0, vjust = -0.5, size = 1.8) +
-    ggplot2::annotate("text", x = 33.5, y = max(y_var), label = "Quartile 2", hjust = 0, vjust = -0.5, size = 1.8) +
-    ggplot2::annotate("text", x = 58.5, y = max(y_var), label = "Quartile 3", hjust = 0, vjust = -0.5, size = 1.8) +
-    ggplot2::annotate("text", x = 83.5, y = max(y_var), label = "Quartile 4", hjust = 0, vjust = -0.5, size = 1.8) +
+    ggplot2::annotate("text", x = 8.5, y = max(y_var), label = "Quartile 1", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::annotate("text", x = 33.5, y = max(y_var), label = "Quartile 2", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::annotate("text", x = 58.5, y = max(y_var), label = "Quartile 3", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::annotate("text", x = 83.5, y = max(y_var), label = "Quartile 4", hjust = 0, vjust = -0.7, size = 1.8) +
     design$theme()
 }
 

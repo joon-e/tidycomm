@@ -15,7 +15,7 @@ tab_percentiles(
 
 \item{...}{Variables within the data for which to tabulate the percentiles. If no variables are provided, all numeric variables are used.}
 
-\item{levels}{a numeric vector specifying the percentiles to compute. Defaults to c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9).}
+\item{levels}{a numeric vector specifying the percentiles to compute. Defaults to c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0).}
 }
 \value{
 a \link{tdcmm} model
@@ -29,7 +29,7 @@ ranking. As NA is not a value, it cannot be ordered in relation to actual number
 }
 \examples{
 WoJ \%>\% tab_percentiles(work_experience)
-WoJ \%>\% tab_frequencies(work_experience, autonomy_emphasis)
+WoJ \%>\% tab_percentiles(work_experience, autonomy_emphasis)
 
 }
 \seealso{
