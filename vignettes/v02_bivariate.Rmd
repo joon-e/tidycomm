@@ -124,7 +124,7 @@ These can then be unnested with `tidyr::unnest()`:
 ```{r}
 WoJ %>% 
   unianova(employment, autonomy_selection, autonomy_emphasis, post_hoc = TRUE) %>% 
-  dplyr::select(Var, post_hoc) %>% 
+  dplyr::select(Variable, post_hoc) %>% 
   tidyr::unnest(post_hoc)
 ```
 

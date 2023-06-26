@@ -149,19 +149,19 @@ test_that("tdcmm provides model accessors", {
 
   # uni anova with aov/lm
   expect_s3_class(model(unianova(WoJ, employment, autonomy_selection)),
-                  "aov")
+                  "misty.object")
   expect_s3_class(model(unianova(WoJ, employment, autonomy_selection,
                                  descriptives = TRUE, post_hoc = TRUE)),
-                  "aov")
+                  "misty.object")
   expect_length(model(unianova(WoJ, employment,
                                autonomy_selection, autonomy_emphasis)),
                 2)
   expect_s3_class(model(unianova(WoJ, employment,
                                  autonomy_selection, autonomy_emphasis))[[1]],
-                  "aov")
+                  "misty.object")
   expect_s3_class(model(unianova(WoJ, employment,
                                  autonomy_selection, autonomy_emphasis))[[2]],
-                  "aov")
+                  "misty.object")
 
   # regression with lm
   expect_s3_class(model(regress(WoJ, autonomy_selection, ethics_1)),

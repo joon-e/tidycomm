@@ -69,3 +69,84 @@
 #'     3 = "attacks other 'others'"}
 #' }
 "fbposts"
+
+#' SNS Comments data
+#'
+#' A dataset of 630 German participants in an online experiment. The experiment
+#' investigated the effects of user comments on social network sites (SNS) on
+#' individuals' perceptions of journalistic quality. The researchers varied the
+#' subject of the article (factor 1: 'Copyright directive' or 'Social housing'),
+#' the order of comment presentation (factor 2: before or after the
+#' article) and the valence of the comments (factor 3: positive or negative).
+#'
+#' This dataset was created from the OSF project: \url{https://osf.io/r867v/},
+#' corresponding to the paper:
+#' Kümpel, A. S., & Unkel, J. (2020). Negativity wins at last: How presentation
+#' order and valence of user comments affect perceptions of journalistic quality.
+#' Journal of Media Psychology: Theories, Methods, and Applications, 32(2), 89–99.
+#' \url{https://doi.org/10.1027/1864-1105/a000261}
+#'
+#' @format A data frame of 630 observations and 15 variables:
+#' \describe{
+#'   \item{age}{Age of the participant}
+#'   \item{gender}{Gender of the participant, either 'female' or 'not female'}
+#'   \item{education}{Level of formal education of the participant, either 'low formal education' or 'high formal education'}
+#'   \item{need_cognition}{Index measuring the psychological trait of a person to enjoy thinking, calculated from several survey items}
+#'   \item{prior_knowledge}{Index measuring a person's prior knowledge of the presented subject of the article, calculated from several survey items}
+#'   \item{group}{Numeric id of the group that the participant was in during the experiment}
+#'   \item{issue}{Subject of the article that the participant was given to read, either 'Copyright directive' or 'Social housing'}
+#'   \item{order}{Order of the comments that the participant was exposed to, either 'Comments after', 'Comments before', or 'Control group'}
+#'   \item{valence}{Valence of the comments that the participant was exposed to, either 'Negative', 'Positive', or 'Control group'}
+#'   \item{control_group}{Indicates whether the participant was in the 'Control group' or 'Experimental group'}
+#'   \item{medium_evaluation}{Index measuring participant's evaluation of the medium's quality, calculated from several survey items}
+#'   \item{article_evaluation}{Index measuring participant's evaluation of the article's quality, calculated from several survey items}
+#'   \item{comments_quality}{Participant's perception of the quality of the comments}
+#'   \item{comments_valence}{Participant's perception of the valence of the comments}
+#'   \item{article_elaboration}{Participant's measure of how much attention they put in reading the article}
+#' }
+#' @source \url{https://osf.io/r867v/}
+"snscomments"
+
+#' Incivil Comments Data
+#'
+#' A dataset of a preregistered factorial survey experiment with a nationally
+#' representative sample of 964 German online users. Participants were presented
+#' with manipulated user comments that included statements associated with
+#' incivil discourse (such as profanity and attacks on arguments) and
+#' intolerant discourse (such as offensive stereotyping and violent threats).
+#' Participants rated the comments, e.g. offensiveness, harm to society, and
+#' their intention to delete the comment containing the statement.
+#'
+#' The dataset was created from the OSF project: [Differential perceptions of and reactions to incivil and intolerant user comments](https://osf.io/w92vj),
+#' corresponding to the paper:
+#' Kümpel, A. S., Unkel, J (2023). Differential perceptions of and reactions to
+#' incivil and intolerant user comments, Journal of Computer-Mediated
+#' Communication, Volume 28, Issue 4, https://doi.org/10.1093/jcmc/zmad018
+#'
+#' @format A data frame with variables:
+#' \describe{
+#'   \item{participant_num}{Numeric id of the participant}
+#'   \item{age}{Age of the participant}
+#'   \item{male}{Gender of the participant, either 'male' or 'not male'}
+#'   \item{high_education}{Level of formal education of the participant, either 'high formal education' or 'low formal education'}
+#'   \item{comment_num}{Numeric id of the comment that the participant was exposed to}
+#'   \item{issue}{The subject of the comment that the participant was exposed to, either 'Gender', 'Abortion', 'Climate', or 'Migration'}
+#'   \item{profanity}{Whether the comment contained profanities as an indicator of incivility}
+#'   \item{attacks_argument}{Whether the comment contained attacks towards arguments as an indicator of incivility}
+#'   \item{offensive_stereotyping}{Whether the comment contained offensive stereotypes as an indicator of intolerant discourse}
+#'   \item{violent_threats}{Whether the comment contained violent threats as an indicator of intolerant discourse}
+#'   \item{offensiveness}{Rate statement whether the comment is being perceived as offensive & hostile (Scale from 1 to 7)}
+#'   \item{adequacy}{Rate statement whether the comment is being perceived as necessary & accurate (Scale from 1 to 7)}
+#'   \item{harm_to_society}{Rate statement whether the comment is being perceived as harmful to society (Scale from 1 to 7)}
+#'   \item{deletion_intention}{Whether the participant wants to delete the comment}
+#'   \item{similarity_poster}{How similar the participant feels to the person who created the post (Scale from 1 to 7)}
+#'   \item{similarity_group}{How similar the participant feels to the group of people criticized in the post (Scale from 1 to 7)}
+#'   \item{attitude_gender}{Rate agreement with statements on gender policies (Scale from 1 to 7)}
+#'   \item{attitude_abortion}{Rate agreement with statements on abortion (Scale from 1 to 7)}
+#'   \item{attitude_migration}{Rate agreement with statements on migration (Scale from 1 to 7)}
+#'   \item{attitude_climate}{Rate agreement with statements on climate change (Scale from 1 to 7)}
+#'   \item{left_right_placement}{Placement on a political spectrum from left to right (Scale from 1 to 9)}
+#'   \item{freedom_of_speech}{Rate agreement with statements about the freedom of speech and expression (Scale from 1 to 7)}
+#' }
+#' @source \url{https://osf.io/w92vj}
+"incvlcomments"

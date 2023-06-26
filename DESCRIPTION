@@ -29,8 +29,7 @@ URL: https://joon-e.github.io/tidycomm/
 BugReports: https://github.com/joon-e/tidycomm/issues
 Depends:
     R (>= 2.10)
-Imports: 
-    broom,
+Imports:
     car,
     combinat,
     dplyr,
@@ -42,6 +41,7 @@ Imports:
     lubridate,
     magrittr,
     MBESS,
+	misty,
     pillar,
     ppcor,
     purrr,

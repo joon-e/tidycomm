@@ -2,7 +2,9 @@
 #'
 #' Computes t-tests for one group variable and specified test variables.
 #' If no variables are specified, all numeric (integer or double) variables are
-#' used.
+#' used. A Levene's test will automatically determine whether the pooled variance is used to
+#' estimate the variance. Otherwise the Welch (or Satterthwaite) approximation
+#' to the degrees of freedom is used.
 #'
 #' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param group_var group variable (column name) to specify where to split two
@@ -10,10 +12,10 @@
 #'   t-test on
 #' @param ... test variables (column names). Leave empty to compute t-tests for
 #'   all numeric variables in data. Also leave empty for one-sample t-tests.
-#' @param var.equal a logical variable indicating whether to treat the two
+#' @param var.equal this parameter is deprecated (previously: a logical variable indicating whether to treat the two
 #'   variances as being equal. If `TRUE` then the pooled variance is used to
 #'   estimate the variance otherwise the Welch (or Satterthwaite) approximation
-#'   to the degrees of freedom is used. Defaults to `TRUE`.
+#'   to the degrees of freedom is used. Defaults to `TRUE`).
 #' @param paired a logical indicating whether you want a paired t-test. Defaults
 #'   to `FALSE`.
 #' @param pooled_sd a logical indicating whether to use the pooled standard
@@ -40,9 +42,22 @@
 #' WoJ %>% t_test(autonomy_selection, mu = 3.62)
 #'
 #' @export
+#' @export
 t_test <- function(data, group_var, ...,
                    var.equal = TRUE, paired = FALSE, pooled_sd = TRUE,
                    levels = NULL, case_var = NULL, mu = NULL) {
+
+  # Add warning for the var.equal deprecation
+  if (var.equal != TRUE) {
+    warning("The 'var.equal' parameter is deprecated and will be removed in future versions. A Levene's test will
+            automatically evaluate whether variances should be treated as equal.",
+            immediate. = TRUE)
+  }
+
+  # Check if group_var is provided
+  if (missing(group_var)) {
+    stop("Please provide at least one variable.")
+  }
 
   # Get group var name
   group_var_str <- as_label(quo({{ group_var }}))
@@ -150,7 +165,6 @@ one_sample_t_test <- function(data, group_var, group_var_str, mu) {
 ## @inheritParams t_test
 ## @param group_var_str Stringified version of group variable
 ## @param test_vars Test variables
-## @param test_vars_str Stringified version of test variables
 ##
 ## @return a [tdcmm] model
 ##
@@ -199,9 +213,12 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
 
   data <- dplyr::select(data, {{ group_var }}, !!!test_vars)
 
+
   # Main function
-  model_list <- list()
-  out <- NULL
+  model_list_t <- list()
+  model_list_levene <- list()
+  out_t <- NULL
+  out_levene <- NULL
   for (test_var in test_vars) {
 
     # Split data
@@ -212,14 +229,55 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
       dplyr::filter({{ group_var }} == levels[2]) %>%
       dplyr::pull({{ test_var }})
 
-    # Compute and Create output
-    tt <- t.test(x, y, var.equal = var.equal, paired = paired)
-    tt_row <- format_t_test({{ test_var }}, tt, x, y, levels, pooled_sd)
+    # Compute Levene test
+    test_var_string <- as_label(enquo(test_var))
 
-    # collect
-    model_list[[length(model_list) + 1]] <- tt
-    out <- out %>%
+    levene_test <- suppressWarnings(
+      car::leveneTest(as.formula(as.formula(
+      paste0("`", test_var_string, "` ~ `", group_var_str, "`"))),
+      data = data)
+    )
+
+    levene_row <- data.frame(
+      Variable = as.character(test_var),
+      Levene_p = round(levene_test$`Pr(>F)`[1], digits = 3)
+    )
+
+    # Compute output based on Levene's test
+    if (levene_row$Levene_p < 0.05) {
+      # Unequal variances, use Welch's ttest
+      tt <- t.test(x, y, var.equal = FALSE, paired = paired)
+
+    } else {
+      # Equal variances, use regular ttest
+      tt <- t.test(x, y, var.equal = TRUE, paired = paired)
+    }
+
+    # Create output
+    tt_row <- format_t_test(!!test_var, tt, x, y, levels, pooled_sd)
+
+    # Collect t_test
+    model_list_t[[length(model_list_t) + 1]] <- tt
+    out_t <- out_t %>%
       dplyr::bind_rows(tt_row)
+
+    # Collect levene test
+    model_list_levene[[length(model_list_levene) + 1]] <- levene_row
+    out_levene <- out_levene %>%
+      dplyr::bind_rows(levene_row)
+  }
+
+  out <- dplyr::full_join(out_t, out_levene, by = "Variable")
+
+  if (levene_row$Levene_p < 0.05) {
+    # Unequal variances, Welch's ANOVA used
+    out <- out %>%
+      dplyr::mutate(var_equal = "FALSE")
+    message(glue("The significant result from Levene's test suggests unequal variances among the groups, violating standard t-test assumptions. This necessitates the use of Welch's t-test, which is robust against heteroscedasticity."))
+  } else {
+    # Equal variances, regular ANOVA used
+    out <- out %>%
+      dplyr::mutate(var_equal = "TRUE")
   }
 
   # Output
@@ -234,7 +292,7 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
                             pooled_sd = pooled_sd,
                             levels = levels,
                             case_var = case_var),
-              model = model_list))
+              model = model_list_t))
   )
 }
 
@@ -265,15 +323,15 @@ format_t_test <- function(test_var, tt, x, y, levels, pooled_sd) {
 
   tibble::tibble(
     Variable = test_var_str,
-    !!M_str[1] := mean(x, na.rm = TRUE),
-    !!SD_str[1] := sd(x, na.rm = TRUE),
-    !!M_str[2] := mean(y, na.rm = TRUE),
-    !!SD_str[2] := sd(y, na.rm = TRUE),
-    Delta_M = mean(x, na.rm = TRUE) - mean(y, na.rm = TRUE),
-    t = tt$statistic,
-    df = tt$parameter,
-    p = tt$p.value,
-    d = cohens_d(x, y, pooled_sd, na.rm = TRUE)
+    !!M_str[1] := pillar::num(mean(x, na.rm = TRUE), digits = 3),
+    !!SD_str[1] := pillar::num(sd(x, na.rm = TRUE), digits = 3),
+    !!M_str[2] := pillar::num(mean(y, na.rm = TRUE), digits = 3),
+    !!SD_str[2] := pillar::num(sd(y, na.rm = TRUE), digits = 3),
+    Delta_M = pillar::num(mean(x, na.rm = TRUE) - mean(y, na.rm = TRUE), digits = 3),
+    t = pillar::num(tt$statistic, digits = 3),
+    df = round(tt$parameter, digits = 0),
+    p = pillar::num(tt$p.value, digits = 3),
+    d = pillar::num(cohens_d(x, y, pooled_sd, na.rm = TRUE), digits = 3)
   )
 }
 

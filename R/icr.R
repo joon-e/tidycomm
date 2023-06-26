@@ -66,25 +66,37 @@ test_icr <- function(data, unit_var, coder_var, ...,
                      agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
                      cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE,
                      lotus = FALSE, s_lotus = FALSE
-                     ) {
+) {
 
-  # Check for grouping
-  if (dplyr::is.grouped_df(data)) {
-    warning("test_icr does not support grouped data yet. Groups will be dropped.",
-            call. = FALSE)
-    data <- dplyr::ungroup(data)
+  # Check if unit_var and coder_var are provided
+  if (missing(unit_var) | missing(coder_var)) {
+    stop("Please provide both a variable with unit identifiers and a variable with coder identifiers.")
   }
 
   exclude_vars <- c(as_label(expr({{ unit_var }})), as_label(expr({{ coder_var }})))
   test_vars <- grab_vars(data, enquos(...), alternative = "all", exclude_vars = exclude_vars)
   test_vars_str <- purrr::map_chr(test_vars, as_label)
 
-
-  # Map icr computation over test_vars
-  out <- purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},
-                        levels, na.omit,
-                        agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
-                        lotus, s_lotus)
+  # If the data is grouped, use group_map function
+  if (dplyr::is.grouped_df(data)) {
+    out <- data %>% dplyr::group_map(.f = function(.x, .y) {
+      tmp_out <- purrr::map_dfr(test_vars, compute_icr, .x, {{ unit_var }}, {{ coder_var }},
+                                levels, na.omit,
+                                agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
+                                lotus, s_lotus)
+      # Add the group variable to the resulting data frames
+      dplyr::mutate(tmp_out, group = .y[[1]])
+    })
+    # Bind all data frames together and reorder resulting data frame
+    out <- dplyr::bind_rows(out) %>%
+      dplyr::select(group, tidyselect::everything())
+  } else {
+    # Map icr computation over test_vars
+    out <- purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},
+                          levels, na.omit,
+                          agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
+                          lotus, s_lotus)
+  }
 
   # Output
   return(new_tdcmm(out,
@@ -118,10 +130,10 @@ test_icr <- function(data, unit_var, coder_var, ...,
 ##
 ## @keywords internal
 compute_icr <- function(test_var, data, unit_var, coder_var,
-                     levels = c(), na.omit = FALSE,
-                     agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
-                     cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE,
-                     lotus = FALSE, s_lotus = FALSE) {
+                        levels = c(), na.omit = FALSE,
+                        agreement = TRUE, holsti = TRUE, kripp_alpha = TRUE,
+                        cohens_kappa = FALSE, fleiss_kappa = FALSE, brennan_prediger = FALSE,
+                        lotus = FALSE, s_lotus = FALSE) {
 
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var}})
 
@@ -151,8 +163,8 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
       ucm <- na.omit(ucm)
     } else {
       warning(glue("Variable '{var_string}' contains missing values.",
-                         "Consider setting na.omit = TRUE or recoding missing values",
-                         .sep = " "),
+                   "Consider setting na.omit = TRUE or recoding missing values",
+                   .sep = " "),
               call. = FALSE)
     }
   }

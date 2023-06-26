@@ -48,6 +48,7 @@ fbposts \%>\% describe(n_pictures)
 }
 \seealso{
 Other descriptives: 
-\code{\link{describe_cat}()}
+\code{\link{describe_cat}()},
+\code{\link{tab_percentiles}()}
 }
 \concept{descriptives}

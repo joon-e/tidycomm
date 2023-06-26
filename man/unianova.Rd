@@ -18,9 +18,10 @@ all numeric variables in data.}
 & standard deviation) for all group levels should be added to the returned
 tibble. Defaults to \code{FALSE}.}
 
-\item{post_hoc}{a logical indicating whether post-hoc tests (Tukey's HSD)
-should be computed. Results of the post-hoc test will be added in a list
-column of result tibbles.}
+\item{post_hoc}{a logical value indicating whether post-hoc tests should be performed.
+Tukey's HSD is employed when the assumption of equal variances is met, whereas the Games-Howell test is
+automatically applied when this assumption is violated. The results of the
+post-hoc test will be added to a list column in the resulting tibble.}
 }
 \value{
 a \link{tdcmm} model
@@ -28,7 +29,8 @@ a \link{tdcmm} model
 \description{
 Computes one-way ANOVAs for one group variable and specified test variables.
 If no variables are specified, all numeric (integer or double) variables are
-used.
+used. A Levene's test will automatically determine whether a classic ANOVA is used.
+Otherwise Welch's ANOVA with a (Satterthwaite's) approximation to the degrees of freedom is used.
 }
 \examples{
 WoJ \%>\% unianova(employment, autonomy_selection, autonomy_emphasis)

@@ -26,10 +26,10 @@ t-test on}
 \item{...}{test variables (column names). Leave empty to compute t-tests for
 all numeric variables in data. Also leave empty for one-sample t-tests.}
 
-\item{var.equal}{a logical variable indicating whether to treat the two
+\item{var.equal}{this parameter is deprecated (previously: a logical variable indicating whether to treat the two
 variances as being equal. If \code{TRUE} then the pooled variance is used to
 estimate the variance otherwise the Welch (or Satterthwaite) approximation
-to the degrees of freedom is used. Defaults to \code{TRUE}.}
+to the degrees of freedom is used. Defaults to \code{TRUE}).}
 
 \item{paired}{a logical indicating whether you want a paired t-test. Defaults
 to \code{FALSE}.}
@@ -55,7 +55,9 @@ a \link{tdcmm} model
 \description{
 Computes t-tests for one group variable and specified test variables.
 If no variables are specified, all numeric (integer or double) variables are
-used.
+used. A Levene's test will automatically determine whether the pooled variance is used to
+estimate the variance. Otherwise the Welch (or Satterthwaite) approximation
+to the degrees of freedom is used.
 }
 \examples{
 WoJ \%>\% t_test(temp_contract, autonomy_selection, autonomy_emphasis)
