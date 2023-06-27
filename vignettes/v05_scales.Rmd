@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
-Tidycomm provides four functions to easily translate continuous scales and to standardize them:
+Tidycomm provides four functions to easily transform continuous scales and to standardize them:
 
 - `reverse_scale()` simply turns a scale upside down
 - `minmax_scale()` down- or upsizes a scale to new minimum/maximum while retaining distances

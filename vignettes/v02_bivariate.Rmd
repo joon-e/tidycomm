@@ -132,7 +132,7 @@ WoJ %>%
 
 ## Compute one-way ANOVAs
 
-`unianova()` will compute one-way ANOVAs for one group variable and one or more test variables. Output includes test statistics and $\eta^2$ effect size estimates.
+`unianova()` will compute one-way ANOVAs for one group variable and one or more test variables. Output includes test statistics, $\eta^2$ effect size estimates, and $\omega^2$, if Welch's approximation is used to account for unequal variances.
 
 ```{r}
 WoJ %>% 
