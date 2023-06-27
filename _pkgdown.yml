@@ -9,6 +9,7 @@ reference:
   - title: "Univariate analysis"
     contents:
       - describe
+      - tab_percentiles
       - describe_cat
       - tab_frequencies
   - title: "Bivariate analysis"
@@ -18,16 +19,26 @@ reference:
       - unianova
       - correlate
       - to_correlation_matrix
+      - regress
   - title: "Data modification"
     contents:
       - add_index
+      - reverse_scale
+      - minmax_scale
+      - center_scale
+      - z_scale
   - title: "Reliability tests"
     contents:
       - get_reliability
   - title: "Intercoder reliability"
     contents:
       - test_icr
+  - title: "Visualization"
+    contents:
+      - visualize
   - title: "Sample data"
     contents:
       - WoJ
       - fbposts
+      - snscomments
+      - incvlcomments
