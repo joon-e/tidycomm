@@ -14,6 +14,10 @@
 * Changed `unianova()` and `t_test()` to build on `leveneTest()`
 * Allowed `test_icr()` to work with grouped data
 * Converted all code examples in documentation to be built on `tidycomm`-provided data sets
+* Added `omega_squared`, `Levene_p`, and `var_equal` columns to default return from `unianova()`
+* Added `d`, `se`, `t`, and `df`
+* Removed `null.value` from list of return values in `unianova()` post-hoc test
+* Renamed `unianova()` return column names to `Variable` (previously: `Var`), `Group_Var` (prev. `term`), `Delta_M` (prev. `estimate`), `p` (prev. `adj.p.value`), `conf.lower` and `conf.upper` (prev. `conf.low` and `conf.high`)
 
 ## Bugfixes
 * Unified output to coherent number of after-comma digits
