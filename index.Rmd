@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 Tidycomm provides convenience functions for common tasks in communication research. All functions follow the style and syntax of the [tidyverse](https://www.tidyverse.org/).
 
-Currently, tidycomm includes functions for various methods of univariate and bivariate data description and analysis, data modification, and intercoder reliability tests. 
+Currently, tidycomm includes functions for various methods of univariate and bivariate data description and analysis, data modification, visualization, and intercoder reliability tests. 
 
 ## Installation
 
@@ -68,9 +68,23 @@ fbposts %>% # Facebook post codings sample data
   test_icr(post_id, coder_id)
 ```
 
+Almost all functions also come with integrated visualizations. So to visualize your results you can easily just append `visualize()` to the end of your commands:
+
+```{r}
+snscomments %>% # experimental social-media-post perception sample data
+  dplyr::filter(group == 3) %>% 
+  t_test(gender, 
+         medium_evaluation, 
+         article_evaluation, 
+         comments_quality, 
+         comments_valence) %>% 
+  visualize()
+```
+
 For detailed examples, see the following articles:
 
 * [Univariate analysis of continuous and categorical variables](https://joon-e.github.io/tidycomm/articles/v01_univariate.html)
 * [Bivariate analysis of continuous and/or categorical variables](https://joon-e.github.io/tidycomm/articles/v02_bivariate.html)
 * [Adding indices and computing reliability estimates](https://joon-e.github.io/tidycomm/articles/v03_reliability.html)
 * [Intercoder reliability tests](https://joon-e.github.io/tidycomm/articles/v04_icr.html)
+* [Modification of scales](https://joon-e.github.io/tidycomm/articles/v05_scales.html)
