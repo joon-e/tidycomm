@@ -233,7 +233,7 @@ WoJ %>%
           check_homoscedasticity = TRUE)
 ```
 
-For linear regressions, a number of visualizations is possible. The default one is the visualization of the result(s), is that the dependent variable is correlated with each of the independent variables separately and a linear model is presented in these:
+For linear regressions, a number of visualizations are possible. The default one is the visualization of the result(s), is that the dependent variable is correlated with each of the independent variables separately and a linear model is presented in these:
 
 ```{r}
 WoJ %>% 
