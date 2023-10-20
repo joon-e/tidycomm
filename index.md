@@ -114,3 +114,4 @@ For detailed examples, see the following articles:
     estimates](https://joon-e.github.io/tidycomm/articles/v03_reliability.html)
 -   [Intercoder reliability
     tests](https://joon-e.github.io/tidycomm/articles/v04_icr.html)
+-   [Changing the scale of variables](https://joon-e.github.io/tidycomm/articles/v05_scales.html)

@@ -8,7 +8,7 @@ test_that("correlate(partial=TRUE) returns tibble", {
                          partial = TRUE)
 
   expect_true(tibble::is_tibble(t))
-  expect_equal(dim(t), c(3, 6))
+  expect_equal(dim(t), c(3, 7))
 })
 
 test_that("correlate(partial=TRUE) returns tibble for other methods", {
@@ -22,11 +22,11 @@ test_that("correlate(partial=TRUE) returns tibble for other methods", {
 
   expect_true(tibble::is_tibble(t1))
   expect_true("rho" %in% names(t1))
-  expect_equal(dim(t1), c(3, 6))
+  expect_equal(dim(t1), c(3, 7))
 
   expect_true(tibble::is_tibble(t2))
   expect_true("tau" %in% names(t2))
-  expect_equal(dim(t2), c(3, 6))
+  expect_equal(dim(t2), c(3, 7))
 })
 
 test_that("correlate(partial=TRUE) calculates correct results for Pearson correlations", {
@@ -44,6 +44,8 @@ test_that("correlate(partial=TRUE) works with tidyselect helpers", {
   expect_error(WoJ %>% correlate(tidyselect::starts_with("ethics"),
                                  partial = TRUE),
                "The computation cannot be performed due to an excessive number of variables provided. Please provide exactly three variables.")
+  t1 <- WoJ %>% correlate(tidyselect::num_range("ethics_", 1:3), partial = TRUE)
+  expect_equal(dim(t1), c(3, 7))
 })
 
 ## Possible errors

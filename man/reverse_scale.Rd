@@ -6,34 +6,36 @@
 \usage{
 reverse_scale(
   data,
-  scale_var,
-  name = paste0(as_label(expr({
-     {
-         scale_var
-     }
- })), "_rev"),
+  ...,
   lower_end = NULL,
-  upper_end = NULL
+  upper_end = NULL,
+  name = NULL,
+  overwrite = FALSE
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
+\item{data}{A \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model.}
 
-\item{scale_var}{a numeric variable for which the scale gets reversed}
+\item{...}{Numeric variables to be reverse scaled. If none are provided,
+all numeric columns will be scaled.}
 
-\item{name}{the name of the new variable. By default, this is the same name
-as the \code{scale_var} but suffixed with \verb{_rev}.}
+\item{lower_end}{Lower end of provided continuous scale (default is to use
+minimum value of current values, which might not be the
+actual lower end of the scale).}
 
-\item{lower_end}{lower end of provided continuous scale (i.e., of scale_var)
-(default is to use minimum value of current values, which might not be the
-actual lower end of the scale)}
+\item{upper_end}{Upper end of provided continuous scale (default is to use
+maximum value of current values, which might not be the actual upper end of
+the scale).}
 
-\item{upper_end}{upper end of provided continuous scale (i.e., of scale_var)
-(default is to use maximum value of current values, which might not be the
-actual upper end of the scale)}
+\item{name}{Optional name for the new reversed variable when a single
+variable is provided. By default, the name will be the original variable
+name suffixed with \verb{_rev}.}
+
+\item{overwrite}{Logical. If \code{TRUE}, it overwrites the original variable(s)
+with the reversed values. If \code{FALSE} (default), a new variable(s) is created.}
 }
 \value{
-a \link{tdcmm} model
+A \link{tdcmm} model with the reversed variable(s).
 }
 \description{
 Reverses a continuous scale into a new variable. A 5-1 scale thus turns into
@@ -47,17 +49,21 @@ reversing. Hence, it is strongly suggested to manually set the lower and
 upper bounds of the original continuous scale.
 }
 \examples{
-WoJ \%>\% reverse_scale(autonomy_emphasis)
-WoJ \%>\% reverse_scale(autonomy_emphasis, name = "my_reversed_variable")
-
+WoJ \%>\% reverse_scale(autonomy_emphasis, lower_end = 0, upper_end = 1)
+WoJ \%>\% reverse_scale(autonomy_emphasis, name = "my_reversed_variable",
+lower_end = 0, upper_end = 1)
+WoJ \%>\% reverse_scale(overwrite = TRUE)
 WoJ \%>\%
-  reverse_scale(autonomy_emphasis) \%>\%
+  reverse_scale(autonomy_emphasis, lower_end = 0, upper_end = 1) \%>\%
   tab_frequencies(autonomy_emphasis, autonomy_emphasis_rev)
 }
 \seealso{
 Other scaling: 
 \code{\link{center_scale}()},
+\code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},
+\code{\link{recode_cat_scale}()},
+\code{\link{setna_scale}()},
 \code{\link{z_scale}()}
 }
 \concept{scaling}

@@ -203,8 +203,8 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
                        SD = sd({{ test_var }}, na.rm = TRUE)
       ) %>%
       dplyr::mutate_if(is.numeric, format, 3) %>%
-      dplyr::mutate(M = as.numeric(.data$M),
-                    SD = as.numeric(.data$SD)) %>%
+      dplyr::mutate(M = as.numeric(M),
+                    SD = as.numeric(SD)) %>%
       tidyr::pivot_longer(cols = c("M", "SD"),
                           names_to = "stat",
                           values_to = "val")
@@ -214,15 +214,15 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
       dplyr::mutate(order_var = dplyr::cur_group_id()) %>%
       dplyr::ungroup() %>%
       tidyr::unite("name", "order_var", "stat", {{ group_var }}) %>%
-      dplyr::mutate(name = stringr::str_replace_all(.data$name, " ", "_")) %>%
-      tidyr::spread(.data$name, .data$val) %>%
+      dplyr::mutate(name = stringr::str_replace_all(name, " ", "_")) %>%
+      tidyr::spread(name, val) %>%
       dplyr::rename_all(stringr::str_replace, "\\d*_", "")
 
     aov_df <- aov_df %>%
       dplyr::bind_cols(desc_df)
   }
 
-  if (post_hoc) {
+  if (post_hoc && equal_var_assumption == FALSE) {
     # Grab the post hoc tibble from the misty::test.welch object
     posthoc <- aov_model$result[3]
     posthoc <- posthoc$posthoc
@@ -234,8 +234,78 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
       dplyr::mutate(Group_Var = group_var_string) %>%
       dplyr::mutate(contrast = stringr::str_c(group1, group2, sep = "-")) %>%
       dplyr::select(-c(group1, group2, d.low, d.upp)) %>%
-      dplyr::select(Group_Var, contrast, Delta_M, conf_lower, conf_upper, p, d, tidyselect::everything())
+      dplyr::select(Group_Var, contrast, Delta_M, conf_lower, conf_upper, p, d, tidyselect::everything()) %>%
+      dplyr::mutate(df = as.double(as.integer(df)))
 
+    ph_df <- tibble::tibble(
+      post_hoc = list(posthoc)
+      )
+    aov_df <- aov_df %>%
+      dplyr::bind_cols(ph_df)
+  }
+
+  if (post_hoc && equal_var_assumption == TRUE) {
+    posthoc <- aov_model$result[3]
+    posthoc <- posthoc$posthoc
+
+    # Get descriptive statistics from aov.b output
+    descript <- aov_model$result[1]
+    groups <- descript[[1]][,1]
+
+    # Initialize vectors to hold the t, se, and df values
+    t_values <- vector("numeric", length = nrow(posthoc))
+    se_values <- vector("numeric", length = nrow(posthoc))
+    df_values <- vector("numeric", length = nrow(posthoc))
+
+    counter <- 1
+
+    # Loop over each group
+    for (i in 1:(length(groups) - 1)) {
+      for (j in (i + 1):length(groups)) {
+
+        # Get the necessary statistics from the descript output
+        n1 <- descript$descript[,2][i]
+        n2 <- descript$descript[,2][j]
+        sd1 <- descript$descript[,5][i]
+        sd2 <- descript$descript[,5][j]
+        M1 <- descript$descript[,4][i]
+        M2 <- descript$descript[,4][j]
+
+        # Calculate SE, df and t for each group comparison
+        se <- sqrt((sd1^2 / n1) + (sd2^2 / n2))
+        df <- n1 + n2 - 2
+        t <- (M1 - M2) / se
+
+        # Use the counter as the index
+        se_values[counter] <- se
+        df_values[counter] <- df
+        t_values[counter] <- t
+
+        # Increment the counter
+        counter <- counter + 1
+      }
+    }
+
+    # Add the calculated values to the posthoc tibble
+    posthoc <- posthoc %>%
+      dplyr::mutate(
+        se = se_values,
+        df = df_values,
+        t = t_values
+      )
+
+    posthoc <- posthoc %>%
+      dplyr::rename(Delta_M = m.diff,
+                    p = pval,
+                    conf_lower = m.low,
+                    conf_upper = m.upp) %>%
+      dplyr::mutate(Group_Var = group_var_string) %>%
+      dplyr::mutate(contrast = stringr::str_c(group1, group2, sep = "-")) %>%
+      dplyr::select(-c(group1, group2, d.low, d.upp)) %>%
+      dplyr::select(Group_Var, contrast, Delta_M, conf_lower, conf_upper, p, d, se, t, df)
+
+
+    # Add the updated posthoc tibble back to the ph_df tibble
     ph_df <- tibble::tibble(
       post_hoc = list(posthoc)
     )
@@ -288,12 +358,12 @@ visualize_unianova <- function(x, design = design_lmu()) {
     dplyr::bind_cols(n) %>%
     tidyr::pivot_longer(-c("Variable"),
                         names_to = "level") %>%
-    dplyr::mutate(var = stringr::str_split_i(.data$level, "_", 1),
-                  level = stringr::str_split_i(.data$level, "_", 2)) %>%
+    dplyr::mutate(var = stringr::str_split_i(level, "_", 1),
+                  level = stringr::str_split_i(level, "_", 2)) %>%
     tidyr::pivot_wider(names_from = "var",
                        values_from = "value") %>%
-    dplyr::mutate(ci_95_ll = calculate_ci_ll(.data$M, .data$SD, .data$N),
-                  ci_95_ul = calculate_ci_ul(.data$M, .data$SD, .data$N))
+    dplyr::mutate(ci_95_ll = calculate_ci_ll(M, SD, N),
+                  ci_95_ul = calculate_ci_ul(M, SD, N))
 
   # last check
   if (length(dplyr::n_distinct(data$level)) > 12) {
@@ -304,13 +374,13 @@ visualize_unianova <- function(x, design = design_lmu()) {
 
   # visualize
   data %>%
-    dplyr::mutate(Variable = forcats::as_factor(.data$Variable),
-                  Variable_desc = forcats::fct_rev(.data$Variable)) %>%
-    ggplot2::ggplot(ggplot2::aes(xmin = .data$ci_95_ll,
-                                 x = .data$M,
-                                 xmax = .data$ci_95_ul,
-                                 y = .data$Variable_desc,
-                                 color = .data$level)) +
+    dplyr::mutate(Variable = forcats::as_factor(Variable),
+                  Variable_desc = forcats::fct_rev(Variable)) %>%
+    ggplot2::ggplot(ggplot2::aes(xmin = ci_95_ll,
+                                 x = M,
+                                 xmax = ci_95_ul,
+                                 y = Variable_desc,
+                                 color = level)) +
     ggplot2::geom_pointrange(stat = "identity",
                              position = ggplot2::position_dodge2(width = 0.9),
                              linewidth = design$main_size) +

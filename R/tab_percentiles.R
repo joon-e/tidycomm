@@ -53,7 +53,7 @@ tab_percentiles <- function(data, ..., levels = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 
     dplyr::arrange(match(.data$Variable, vars_str))
 
   values <- out %>%
-    dplyr::select(-c(Variable)) %>%
+    dplyr::select(-.data$Variable) %>%
     dplyr::slice(1) %>%
     as.numeric()
 

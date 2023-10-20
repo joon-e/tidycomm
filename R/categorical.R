@@ -212,17 +212,16 @@ visualize_tab_frequencies <- function(x, design = design_lmu()) {
       rbind(attr(x, "data") %>%
               tab_frequencies(!!sym(variable)) %>%
               dplyr::mutate(var = variable,
-                            level = forcats::as_factor(!!sym(variable))) %>%
-              dplyr::select(var, level, percent))
+                            level = forcats::as_factor(.data[[variable]])) %>%
+              dplyr::select(var, .data$level, .data$percent))
   }
 
   # visualize
   g <- data %>%
-    ggplot2::ggplot(ggplot2::aes(x = level,
-                                 y = percent)) +
+    ggplot2::ggplot(ggplot2::aes(x = .data$level, y = .data$percent)) +
     ggplot2::geom_bar(stat = "identity",
                       fill = design$main_color_1) +
-    ggplot2::facet_wrap(dplyr::vars(var),
+    ggplot2::facet_wrap(dplyr::vars(.data$var),
                         scales = "free_x") +
     ggplot2::scale_x_discrete(NULL) +
     ggplot2::scale_y_continuous(NULL,

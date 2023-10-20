@@ -35,6 +35,7 @@ Imports:
     car,
     combinat,
     dplyr,
+	fastDummies,
     forcats,
     GGally,
     ggplot2,

@@ -4,7 +4,7 @@
 \alias{correlate}
 \title{Compute correlation coefficients}
 \usage{
-correlate(data, ..., method = "pearson", partial = FALSE)
+correlate(data, ..., method = "pearson", partial = FALSE, with = NULL)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
@@ -15,10 +15,13 @@ to compute for all numeric variables in data.}
 \item{method}{a character string indicating which correlation coefficient
 is to be computed. One of "pearson" (default), "kendall", or "spearman"}
 
-\item{partial}{Logical indicating whether the pairwise partial correlation
-for three variables should be computed. Defaults to \code{FALSE}. If set to \code{TRUE}
-all combinations, i.e. pairs, of specified variables will be computed
-while controlling for the third variable.}
+\item{partial}{Either a logical value or a character string. When set
+to \code{TRUE}, the function computes the pairwise partial correlation for three
+variables. If set to a character, it represents the variable to control for.
+Defaults to \code{FALSE}.}
+
+\item{with}{A character string specifying a focus variable to correlate all
+other variables with. If used, \code{partial} must be set to \code{FALSE} (default).}
 }
 \value{
 a \link{tdcmm} model

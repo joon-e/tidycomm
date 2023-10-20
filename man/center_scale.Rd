@@ -2,45 +2,45 @@
 % Please edit documentation in R/scaling.R
 \name{center_scale}
 \alias{center_scale}
-\title{Center a numeric continuous scale}
+\title{Center numeric, continuous scales.}
 \usage{
-center_scale(
-  data,
-  scale_var,
-  name = paste0(as_label(expr({
-     {
-         scale_var
-     }
- })), "_centered")
-)
+center_scale(data, ..., name = NULL, overwrite = FALSE)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
+\item{data}{A \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model.}
 
-\item{scale_var}{a numeric variable for which the scale gets centered}
+\item{...}{Numeric variables to be centered. If none are provided, all
+numeric columns will be centered.}
 
-\item{name}{the name of the new variable. By default, this is the same name
-as \code{scale_var} but suffixed with \verb{_centered}.}
+\item{name}{Optional name for the new centered variable when a single
+variable is provided. By default, the name will be the original variable
+name suffixed with \verb{_centered}.}
+
+\item{overwrite}{Logical. If \code{TRUE}, it overwrites the original variable(s)
+with the centered values. If \code{FALSE} (default), a new variable(s) is created.}
 }
 \value{
-a \link{tdcmm} model
+A \link{tdcmm} model with the centered variable(s).
 }
 \description{
-Subtracts the mean from each individual data point. A centered scale then
-centers at a mean of 0.0.
+This function centers the specified numeric columns or all numeric columns
+if none are specified. A centered scale has a mean of 0.0.
 }
 \examples{
-WoJ \%>\% center_scale(autonomy_emphasis)
+WoJ \%>\% dplyr::select(autonomy_emphasis) \%>\% center_scale(autonomy_emphasis)
 WoJ \%>\% center_scale(autonomy_emphasis, name = "my_centered_variable")
-
+WoJ \%>\% center_scale(overwrite = TRUE)
 WoJ \%>\%
   center_scale(autonomy_emphasis) \%>\%
   tab_frequencies(autonomy_emphasis, autonomy_emphasis_centered)
 }
 \seealso{
 Other scaling: 
+\code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},
+\code{\link{recode_cat_scale}()},
 \code{\link{reverse_scale}()},
+\code{\link{setna_scale}()},
 \code{\link{z_scale}()}
 }
 \concept{scaling}
