@@ -280,12 +280,12 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 ## @family tdcmm visualize
 #
 #' @export
-visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = "Linear Regression for") {
+visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = "Linear Regression for", footnote = NULL) {
 
   tab <- x
 
   tab_format <- tab %>%
-    rename(TOL = TOL, `std B` = beta) %>%
+    rename(TOL = TOL) %>%
     dplyr::mutate(across(-1, ~round(.x, digits)),
                   p = format.pval(p, eps = .001, nsmall = 3),
                   p = gsub("0\\.","\\.", p)) %>%
@@ -301,9 +301,10 @@ visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = 
                                                 "full_width = F")) %>%
     kableExtra::kable_styling(full_width = FALSE) %>%
     #  kableExtra::add_header_above(, line = TRUE, line_sep = 3, bold = F) %>%
-    kableExtra::footnote("Fussnote",
+    kableExtra::footnote(footnote,
                          general_title = "",
                          threeparttable = TRUE)
+
  return(tab_format)
 
 }

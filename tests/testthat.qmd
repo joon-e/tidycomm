@@ -11,18 +11,74 @@ editor: visual
 #| echo: false
 #| warings: false
 
-pacman::p_load(tidyverse, viridisLite, viridis)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  echo = FALSE,
+  fig.width = 7,
+  fig.align = "center",
+  fig.pos = "H",
+  out.width = "85%",
+  fig.show = 'hold',
+  eval = TRUE, 
+  warning = FALSE
+)
+
+pacman::p_load(tidyverse, viridisLite, viridis, tidycomm)
+```
+
+```{r}
+#| label: Analyseobjekt
+#| include: false
+
+r <- tidycomm::WoJ %>% 
+  tidycomm::regress(autonomy_selection, work_experience, trust_government, 
+                    check_multicollinearity = TRUE) 
 ```
 
 
+# Regressionsanalyse mit den Daten "World of Journalism"
+
+Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in  einsehbar ist.
+
+
 ```{r}
-#| label: Regression
-#| echo: false
+#| label: tbl-planets
+#| tbl-cap: Planets
 
-tab <- tidycomm::WoJ %>% 
-  tidycomm::regress(autonomy_selection, work_experience, trust_government, 
-                    check_multicollinearity = TRUE) 
+r |> 
+  tidycomm::visualize_regress_table(cap = 'Regressionsmodell 1: "Autonomy Selection"', 
+                                    footnote = "footers")
+```
 
-tab |> 
-  tidycomm::visualize_regress_table()
+## Analyse der Voraussetzungen
+
+In der Abbildung @fig-reslev ist gut zu erkennen.
+
+```{r}
+#| label: fig-reslev
+#| fig.cap: residualsleverage plot
+
+r |> 
+  tidycomm::visualize(which = "reslev")
+```
+
+Schaut man sich darüber hinaus @fig-scaleloc im schönen UZH-Design an, wird einem alles klar.
+
+```{r}
+#| label: fig-scaleloc
+#| fig.cap: scalelocation plot
+
+r |> 
+  tidycomm::visualize(which = "scaloc", .design = design_uzh())
+```
+
+Nicht zuletzt sollte man sich die Residuen in Abhängigkeit der geschätzten Werte ansehen, was im schönen Viridis-Design in @fig-resfit durchaus möglich ist, auch wenn das dunkle Lila nicht gut zu erkennen ist.
+
+```{r}
+#| label: fig-resfit
+#| fig.cap: residualsleverage plot
+
+
+r |> 
+  tidycomm::visualize(which = "resfit", .design = design_viridis())
 ```
