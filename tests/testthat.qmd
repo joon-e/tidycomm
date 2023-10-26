@@ -1,6 +1,8 @@
 ---
 title: "tidycomm-tests"
-format: html
+format: 
+  pdf: default
+  html: default 
 editor: visual
 ---
 
@@ -12,36 +14,10 @@ library(tidyverse)
 ```
 
 ```{r}
-head(tidycomm::WoJ)
-```
-
-
-
-```{r}
 tab <- tidycomm::WoJ %>% 
   tidycomm::regress(autonomy_selection, work_experience, trust_government, 
-                    check_multicollinearity = TRUE)
+                    check_multicollinearity = TRUE) 
 
-tab %>%
-  dplyr::mutate(across(-1, ~round(.x, 2)),
-                p = format.pval(p, eps = .001, nsmall = 3), 
-                p = gsub("0\\.","\\.", p)) %>%
-  dplyr::mutate(across(any_of(c("beta", "tolerance")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) %>%
-  dplyr::mutate(VIF = as.character(VIF)) %>% 
-  dplyr::mutate(across(any_of(c("beta", "VIF", "tolerance")), ~dplyr::if_else(Variable == "(Intercept)", "---", .x))) %>%
-  kableExtra::kable(caption = "AV", 
-                    align = c("l", rep("r", NCOL(tab) - 1)),
-                    booktabs = TRUE, 
-                    longtable = FALSE, 
-                    linesep = "",
-                    
-                   ) %>% 
-  kableExtra::kable_styling(latex_options = c("repeat_header",
-                                              "full_width = F")) %>%
-  kableExtra::kable_styling(full_width = FALSE) %>%
-#  kableExtra::add_header_above(, line = TRUE, line_sep = 3, bold = F) %>%
-  kableExtra::footnote("Fussnote",
-                       general_title = "",
-                       threeparttable = TRUE)
+tab |> 
+  tidycomm::visualize_regress_table()
 ```
-

@@ -279,16 +279,31 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 ##
 ## @family tdcmm visualize
 #
-## @keywords internal
-visualize_regress_table <- function(x, design = design_lmu(), cap = !!sym(attr(x, "params")$dependent_var)) {
+#' @export
+visualize_regress_table <- function(x, design = design_lmu(), digits = 3, cap = "Linear Regression for") {
 
-  x_vars <- ncol(attr(x, "model_tibble"))
+  tab <- x
 
-  tab <- attr(x, "model_tibble") %>%
-    kableExtra::kable(caption = cap) %>%
-    kableExtra::kable_styling(align = "lrrrrrrrr",
-      bootstrap_options = c("striped", "hover", "condensed"),
-                              full_width = FALSE)
+  tab_format <- tab %>%
+    dplyr::mutate(across(-1, ~round(.x, digits)),
+                  p = format.pval(p, eps = .001, nsmall = 3),
+                  p = gsub("0\\.","\\.", p)) %>%
+    dplyr::mutate(across(any_of(c("beta", "tolerance")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) %>%
+    dplyr::mutate(VIF = as.character(VIF)) %>%
+    dplyr::mutate(across(any_of(c("beta", "VIF", "tolerance")), ~dplyr::if_else(row_number()==1, "---", .x))) %>%
+    kableExtra::kable(caption = cap,
+                      align = c("l", rep("r", NCOL(tab) - 1)),
+                      booktabs = TRUE,
+                      longtable = FALSE,
+                      linesep = "") %>%
+    kableExtra::kable_styling(latex_options = c("repeat_header",
+                                                "full_width = F")) %>%
+    kableExtra::kable_styling(full_width = FALSE) %>%
+    #  kableExtra::add_header_above(, line = TRUE, line_sep = 3, bold = F) %>%
+    kableExtra::footnote("Fussnote",
+                         general_title = "",
+                         threeparttable = TRUE)
+ return(tab_format)
 
 }
 

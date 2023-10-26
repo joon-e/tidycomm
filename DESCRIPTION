@@ -39,6 +39,7 @@ Imports:
     GGally,
     ggplot2,
     glue,
+    kableExtra,
     lm.beta,
     lubridate,
     magrittr,
