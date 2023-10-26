@@ -4,7 +4,7 @@
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 %
 \documentclass[
-  letterpaper,
+  a4paper,
   DIV=11,
   numbers=noendperiod]{scrartcl}
 
@@ -41,7 +41,7 @@
 \makeatother
 \usepackage{xcolor}
 \setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\setcounter{secnumdepth}{5}
 % Make \paragraph and \subparagraph free-standing
 \ifx\paragraph\undefined\else
   \let\oldparagraph\paragraph
@@ -97,36 +97,36 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
-  \renewcommand*\contentsname{Table of contents}
+  \renewcommand*\contentsname{Inhaltsverzeichnis}
 \else
-  \newcommand\contentsname{Table of contents}
+  \newcommand\contentsname{Inhaltsverzeichnis}
 \fi
 \ifdefined\listfigurename
-  \renewcommand*\listfigurename{List of Figures}
+  \renewcommand*\listfigurename{Abbildungsverzeichnis}
 \else
-  \newcommand\listfigurename{List of Figures}
+  \newcommand\listfigurename{Abbildungsverzeichnis}
 \fi
 \ifdefined\listtablename
-  \renewcommand*\listtablename{List of Tables}
+  \renewcommand*\listtablename{Tabellenverzeichnis}
 \else
-  \newcommand\listtablename{List of Tables}
+  \newcommand\listtablename{Tabellenverzeichnis}
 \fi
 \ifdefined\figurename
-  \renewcommand*\figurename{Figure}
+  \renewcommand*\figurename{Abbildung}
 \else
-  \newcommand\figurename{Figure}
+  \newcommand\figurename{Abbildung}
 \fi
 \ifdefined\tablename
-  \renewcommand*\tablename{Table}
+  \renewcommand*\tablename{Tabelle}
 \else
-  \newcommand\tablename{Table}
+  \newcommand\tablename{Tabelle}
 \fi
 }
 \@ifpackageloaded{float}{}{\usepackage{float}}
 \floatstyle{ruled}
 \@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
 \floatname{codelisting}{Listing}
-\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\newcommand*\listoflistings{\listof{codelisting}{Listingverzeichnis}}
 \makeatother
 \makeatletter
 \makeatother
@@ -135,6 +135,15 @@
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
 \ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+\babelprovide[main,import]{nswissgerman}
+% get rid of language-specific shorthands (see #6817):
+\let\LanguageShortHands\languageshorthands
+\def\languageshorthands#1{}
+\ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
@@ -142,6 +151,8 @@
 \urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Tidycomm-tests},
+  pdfauthor={Test Bär},
+  pdflang={de-CH},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -150,36 +161,44 @@
   pdfcreator={LaTeX via pandoc}}
 
 \title{Tidycomm-tests}
-\author{}
+\author{Test Bär}
 \date{}
 
 \begin{document}
 \maketitle
+\renewcommand*\contentsname{Inhaltsverzeichnis}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
 \section{Regressionsanalyse mit den Daten ``World of
 Journalism''}\label{regressionsanalyse-mit-den-daten-world-of-journalism}
 
 Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau
 anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in
-einsehbar ist.
+Tabelle~\ref{tbl-tab1} einsehbar ist.
 
 \begin{table}
 
-\caption{\label{tbl-planets}Planets}
+\caption{\label{tbl-tab1}TEst}
 
 \centering{
 
 \begin{table}
 
-\caption{\label{tab:tbl-planets}Regressionsmodell 1: "Autonomy Selection"}
+\caption{\label{tab:tbl-tab1}Linear Regression for}
 \centering
 \begin{threeparttable}
-\begin{tabular}[t]{lrrrrrrr}
+\begin{tabular}[t]{lrrrrrrrrr}
 \toprule
-Variable & B & SE B & beta & t & p & VIF & TOL\\
+\multicolumn{1}{c}{} & \multicolumn{4}{c}{unstnd.} & \multicolumn{1}{c}{std.} & \multicolumn{2}{c}{sig.} & \multicolumn{2}{c}{Multikoll.} \\
+\cmidrule(l{3pt}r{3pt}){2-5} \cmidrule(l{3pt}r{3pt}){6-6} \cmidrule(l{3pt}r{3pt}){7-8} \cmidrule(l{3pt}r{3pt}){9-10}
+Variable & B & SE B & LL & UL & beta & t & p & VIF & TOL\\
 \midrule
-(Intercept) & 3.52 & 0.09 & --- & 38.83 & <.001 & --- & ---\\
-work\_experience & 0.01 & 0.00 & .160 & 5.72 & <.001 & 1.01 & .990\\
-trust\_government & 0.05 & 0.03 & .050 & 1.85 & .060 & 1.01 & .990\\
+(Intercept) & 3.52 & 0.09 & 3.34 & 3.70 & --- & 38.83 & <.001 & --- & ---\\
+work\_experience & 0.01 & 0.00 & 0.01 & 0.02 & .160 & 5.72 & <.001 & 1.01 & .990\\
+trust\_government & 0.05 & 0.03 & 0.00 & 0.10 & .050 & 1.85 & .060 & 1.01 & .990\\
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
@@ -195,13 +214,19 @@ trust\_government & 0.05 & 0.03 & .050 & 1.85 & .060 & 1.01 & .990\\
 \subsection{Analyse der
 Voraussetzungen}\label{analyse-der-voraussetzungen}
 
-In der Abbildung Figure~\ref{fig-reslev} ist gut zu erkennen.
+In Abbildung~\ref{fig-reslev} ist gut zu erkennen.
 
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\includegraphics[width=0.85\textwidth,height=\textheight]{testthat_files/figure-pdf/fig-reslev-1.pdf}
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics[width=0.85\textwidth,height=\textheight]{testthat_files/figure-pdf/fig-reslev-1.pdf}
+
+}
+
+\subcaption{\label{fig-reslev}}
 
 }
 
@@ -209,14 +234,20 @@ In der Abbildung Figure~\ref{fig-reslev} ist gut zu erkennen.
 
 \end{figure}%
 
-Schaut man sich darüber hinaus Figure~\ref{fig-scaleloc} im schönen
+Schaut man sich darüber hinaus Abbildung~\ref{fig-scaleloc} im schönen
 UZH-Design an, wird einem alles klar.
 
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\includegraphics[width=0.85\textwidth,height=\textheight]{testthat_files/figure-pdf/fig-scaleloc-1.pdf}
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics[width=0.85\textwidth,height=\textheight]{testthat_files/figure-pdf/fig-scaleloc-1.pdf}
+
+}
+
+\subcaption{\label{fig-scaleloc}}
 
 }
 
@@ -226,14 +257,20 @@ UZH-Design an, wird einem alles klar.
 
 Nicht zuletzt sollte man sich die Residuen in Abhängigkeit der
 geschätzten Werte ansehen, was im schönen Viridis-Design in
-Figure~\ref{fig-resfit} durchaus möglich ist, auch wenn das dunkle Lila
-nicht gut zu erkennen ist.
+Abbildung~\ref{fig-resfit} durchaus möglich ist, auch wenn das dunkle
+Lila nicht gut zu erkennen ist.
 
-\begin{figure}[H]
+\begin{figure}
 
 \centering{
 
-\includegraphics[width=0.85\textwidth,height=\textheight]{testthat_files/figure-pdf/fig-resfit-1.pdf}
+\centering{
+
+\captionsetup{labelsep=none}\includegraphics[width=0.85\textwidth,height=\textheight]{testthat_files/figure-pdf/fig-resfit-1.pdf}
+
+}
+
+\subcaption{\label{fig-resfit}}
 
 }
 

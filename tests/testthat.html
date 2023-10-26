@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="de-CH" xml:lang="de-CH"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.424">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Test Bär">
 
 <title>Tidycomm-tests</title>
 <style>
@@ -43,7 +44,7 @@ ul.task-list li input[type="checkbox"] {
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="testthat.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<div class="quarto-alternate-formats"><h2>Andere Formate</h2><ul><li><a href="testthat.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -55,6 +56,12 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Autor:in</div>
+    <div class="quarto-title-meta-contents">
+             <p>Test Bär </p>
+          </div>
+  </div>
     
   
     
@@ -65,15 +72,52 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<div class="cell">
+<section id="regressionsanalyse-mit-den-daten-world-of-journalism" class="level1">
+<h1>Regressionsanalyse mit den Daten “World of Journalism”</h1>
+<p>Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in <a href="#tbl-tab1" class="quarto-xref">Tabelle&nbsp;1</a> einsehbar ist.</p>
+<div class="cell" data-layout-align="center">
+<div id="tbl-tab1" class="cell anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="table quarto-float-caption quarto-float-tbl" id="tbl-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabelle&nbsp;1: Regressionsmodell 1 für Autonomy Selection
+</figcaption>
+<div aria-describedby="tbl-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="table table-sm table-striped small" data-quarto-postprocess="true">
-<caption>Linear Regression for</caption>
+<table class="table cell table-sm table-striped small" data-quarto-postprocess="true">
+<colgroup>
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
 <thead>
 <tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+unstnd.
+</div></th>
+<th data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+std.
+</div></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+sig.
+</div></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Multikoll.
+</div></th>
+</tr>
+<tr class="odd">
 <th style="text-align: left;" data-quarto-table-cell-role="th">Variable</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">B</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">SE B</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">LL</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">UL</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">beta</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">t</th>
 <th style="text-align: right;" data-quarto-table-cell-role="th">p</th>
@@ -86,6 +130,8 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">(Intercept)</td>
 <td style="text-align: right;">3.52</td>
 <td style="text-align: right;">0.09</td>
+<td style="text-align: right;">3.34</td>
+<td style="text-align: right;">3.70</td>
 <td style="text-align: right;">---</td>
 <td style="text-align: right;">38.83</td>
 <td style="text-align: right;">&lt;.001</td>
@@ -96,6 +142,8 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">work_experience</td>
 <td style="text-align: right;">0.01</td>
 <td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">0.02</td>
 <td style="text-align: right;">.160</td>
 <td style="text-align: right;">5.72</td>
 <td style="text-align: right;">&lt;.001</td>
@@ -106,6 +154,8 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">trust_government</td>
 <td style="text-align: right;">0.05</td>
 <td style="text-align: right;">0.03</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.10</td>
 <td style="text-align: right;">.050</td>
 <td style="text-align: right;">1.85</td>
 <td style="text-align: right;">.060</td>
@@ -113,8 +163,10 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: right;">.990</td>
 </tr>
 </tbody><tfoot>
-<tr class="even">
-<td style="text-align: left; padding: 0;"><sup></sup> Fussnote</td>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup></sup> footers</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
 <td style="text-align: right;"></td>
@@ -130,6 +182,85 @@ ul.task-list li input[type="checkbox"] {
 
 </div>
 </div>
+</figure>
+</div>
+</div>
+<section id="analyse-der-voraussetzungen" class="level2">
+<h2 class="anchored" data-anchor-id="analyse-der-voraussetzungen">Analyse der Voraussetzungen</h2>
+<p>In <a href="#fig-reslev" class="quarto-xref">Abbildung&nbsp;1</a> ist gut zu erkennen.</p>
+<div class="cell" data-layout-align="center">
+<div id="fig-reslev" class="cell quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="fig-reslev" class="quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-fig-align="center" width="85%">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="testthat_files/figure-html/fig-reslev-1.png" id="fig-reslev" class="img-fluid quarto-figure-center figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-reslev">
+</div>
+<figcaption class="figure quarto-subfloat-caption quarto-subfloat-fig" id="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;1: residualsleverage plot
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Schaut man sich darüber hinaus <a href="#fig-scaleloc" class="quarto-xref">Abbildung&nbsp;2</a> im schönen UZH-Design an, wird einem alles klar.</p>
+<div class="cell" data-layout-align="center">
+<div id="fig-scaleloc" class="cell quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="fig-scaleloc" class="quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-fig-align="center" width="85%">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="testthat_files/figure-html/fig-scaleloc-1.png" id="fig-scaleloc" class="img-fluid quarto-figure-center figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-scaleloc">
+</div>
+<figcaption class="figure quarto-subfloat-caption quarto-subfloat-fig" id="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;2: scalelocation plot
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Nicht zuletzt sollte man sich die Residuen in Abhängigkeit der geschätzten Werte ansehen, was im schönen Viridis-Design in <a href="#fig-resfit" class="quarto-xref">Abbildung&nbsp;3</a> durchaus möglich ist, auch wenn das dunkle Lila nicht gut zu erkennen ist.</p>
+<div class="cell" data-layout-align="center">
+<div id="fig-resfit" class="cell quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<div id="fig-resfit" class="quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-fig-align="center" width="85%">
+<figure class="quarto-float quarto-subfloat-fig figure">
+<div aria-describedby="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="testthat_files/figure-html/fig-resfit-1.png" id="fig-resfit" class="img-fluid quarto-figure-center figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-resfit">
+</div>
+<figcaption class="figure quarto-subfloat-caption quarto-subfloat-fig" id="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a)
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Abbildung&nbsp;3: residualsleverage plot
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
@@ -187,12 +318,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // flash "checked"
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
-    button.setAttribute("title", "Copied!");
+    button.setAttribute("title", "Kopiert");
     let tooltip;
     if (window.bootstrap) {
       button.setAttribute("data-bs-toggle", "tooltip");
       button.setAttribute("data-bs-placement", "left");
-      button.setAttribute("data-bs-title", "Copied!");
+      button.setAttribute("data-bs-title", "Kopiert");
       tooltip = new bootstrap.Tooltip(button, 
         { trigger: "manual", 
           customClass: "code-copy-button-tooltip",

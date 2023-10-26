@@ -96,6 +96,8 @@ regress <- function(data,
       Variable = dimnames(model_summary$coefficients)[[1]],
       B = model_summary$coefficients[,1],
       `SE B` = model_summary$coefficients[,2],
+      LL = confint(model)[,1],
+      UL = confint(model)[,2],
       beta = lm.beta::lm.beta(model)$standardized.coefficients,
       t = model_summary$coefficients[,3],
       p = model_summary$coefficients[,4]
@@ -300,7 +302,7 @@ visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = 
     kableExtra::kable_styling(latex_options = c("repeat_header",
                                                 "full_width = F")) %>%
     kableExtra::kable_styling(full_width = FALSE) %>%
-    #  kableExtra::add_header_above(, line = TRUE, line_sep = 3, bold = F) %>%
+    kableExtra::add_header_above(c("", "unstnd." = 4, "std.", "sig." =  2, "Multikoll." = 2), line = TRUE, line_sep = 3, bold = F) %>%
     kableExtra::footnote(footnote,
                          general_title = "",
                          threeparttable = TRUE)

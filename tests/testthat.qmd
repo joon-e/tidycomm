@@ -1,8 +1,17 @@
 ---
 title: "Tidycomm-tests"
+author: "Test Bär"
+
 format: 
-  pdf: default
+  pdf:
+    documentclass: scrartcl
+    papersize: a4
+    toc: true
+    number-sections: true
+    colorlinks: true
   html: default 
+
+lang: de-CH
 editor: visual
 ---
 
@@ -19,6 +28,7 @@ knitr::opts_chunk$set(
   fig.pos = "H",
   out.width = "85%",
   fig.show = 'hold',
+  fig.subcap = TRUE,
   eval = TRUE, 
   warning = FALSE
 )
@@ -30,6 +40,10 @@ pacman::p_load(tidyverse, viridisLite, viridis, tidycomm)
 #| label: Analyseobjekt
 #| include: false
 
+DATEN <- tidycomm::WoJ
+
+model <- lm(autonomy_selection ~ work_experience + trust_government, data = DATEN)
+
 r <- tidycomm::WoJ %>% 
   tidycomm::regress(autonomy_selection, work_experience, trust_government, 
                     check_multicollinearity = TRUE) 
@@ -38,21 +52,20 @@ r <- tidycomm::WoJ %>%
 
 # Regressionsanalyse mit den Daten "World of Journalism"
 
-Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in  einsehbar ist.
+Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in  @tbl-tab1 einsehbar ist.
 
 
 ```{r}
-#| label: tbl-planets
-#| tbl-cap: Planets
+
 
 r |> 
-  tidycomm::visualize_regress_table(cap = 'Regressionsmodell 1: "Autonomy Selection"', 
+  tidycomm::visualize_regress_table(cap = 'Regressionsmodell 1 für Autonomy Selection', 
                                     footnote = "footers")
 ```
 
 ## Analyse der Voraussetzungen
 
-In der Abbildung @fig-reslev ist gut zu erkennen.
+In @fig-reslev ist gut zu erkennen.
 
 ```{r}
 #| label: fig-reslev
