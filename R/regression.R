@@ -28,6 +28,7 @@
 #' WoJ %>% regress(autonomy_selection, work_experience, trust_government)
 #'
 #' @export
+
 regress <- function(data,
                     dependent_var,
                     ...,
@@ -145,7 +146,7 @@ regress <- function(data,
   }
   model_checks[['factors']] <- checks_factors
 
-  # return
+  # return ----
   return(new_tdcmm_rgrssn(
     new_tdcmm(model_tibble,
               func = "regress",
@@ -269,6 +270,28 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 }
 
 ### Internal functions ###
+
+## Visualize as html- or pdf-table with linear model ---
+##
+## @param x a [tdcmm] model
+##
+## @return LaTeX or html-table
+##
+## @family tdcmm visualize
+#
+## @keywords internal
+visualize_regress_table <- function(x, design = design_lmu(), cap = !!sym(attr(x, "params")$dependent_var)) {
+
+  x_vars <- ncol(attr(x, "model_tibble"))
+
+  tab <- attr(x, "model_tibble") %>%
+    kableExtra::kable(caption = cap) %>%
+    kableExtra::kable_styling(align = "lrrrrrrrr",
+      bootstrap_options = c("striped", "hover", "condensed"),
+                              full_width = FALSE)
+
+}
+
 
 ## Visualize as scatter plot with linear model.
 ##
