@@ -52,7 +52,7 @@ design_lmu <- function() {
               }))
 }
 
-#' Colorbrewer-inspired design with focus on UZH (uzh.ch) green
+#' Colorbrewer-inspired design with focus on UZH (uzh.ch) blue
 #'
 #' @return a list with `main_color_1`, a vector of 12 `main_colors`, a
 #' corresponding `main_contrast_1` (the color of text to write on top of the
@@ -79,14 +79,14 @@ design_uzh <- function() {
                                  "#525252",
                                  "#FFFFFF",
                                  "#525252",
-                                 "#525252",
-                                 "#525252",
-                                 "#525252",
-                                 "#525252",
-                                 "#525252",
+                                 "#FFFFFF",
+                                 "#FFFFFF",
                                  "#FFFFFF",
                                  "#525252",
-                                 "#FFFFFF"),
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252"),
               main_size = 0.95,
               comparison_linetype = "dashed",
               comparison_color = "#525252",
@@ -104,6 +104,60 @@ design_uzh <- function() {
                          ))
               }))
 }
+
+#' viridis-inspired design
+#'
+#' @return a list with `main_color_1`, a vector of 12 `main_colors`, a
+#' corresponding `main_contrast_1` (the color of text to write on top of the
+#' main color) and a corresponding `main_contrasts`, the `main_size` (for
+#' lines), a `comparison_linetype`, `comparison_color`, and `comparison_size`
+#' for all lines that act as comparative lines, and a [ggplot2] `theme`
+#' @export
+design_viridis <- function() {
+  return(list(main_color_1 = "#440154FF",
+              main_colors = c("#440154FF",
+                              "#482173FF",
+                              "#433E85FF",
+                              "#38598CFF",
+                              "#2D708EFF",
+                              "#25858EFF",
+                              "#1E9B8AFF",
+                              "#2BB07FFF",
+                              "#51C56AFF",
+                              "#85D54AFF",
+                              "#C2DF23FF",
+                              "#FDE725FF"),
+              main_contrast_1 = "#FFFFFF",
+              main_contrasts = c("#FFFFFF",
+                                 "#FFFFFF",
+                                 "#FFFFFF",
+                                 "#FFFFFF",
+                                 "#FFFFFF",
+                                 "#FFFFFF",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252"),
+              main_size = 0.95,
+              comparison_linetype = "dashed",
+              comparison_color = "#525252",
+              comparison_size = 0.85,
+              theme = function(...) {
+                return(ggplot2::theme_minimal() +
+                         ggplot2::theme(
+                           axis.line = ggplot2::element_line(color = "#8f8f8f"),
+                           axis.ticks = ggplot2::element_line(color = "#6b6b6b"),
+                           axis.title = ggplot2::element_text(),
+                           axis.title.x = ggplot2::element_text(vjust = -.5),
+                           axis.title.y = ggplot2::element_text(vjust = 2.5),
+                           strip.text = ggplot2::element_text(face = "bold"),
+                           ...
+                         ))
+              }))
+}
+
 #' Gray design
 #'
 #' @return a list with `main_color_1`, a vector of 12 `main_colors`, a
