@@ -1,5 +1,5 @@
 ---
-title: "tidycomm-tests"
+title: "Tidycomm-tests"
 format: 
   pdf: default
   html: default 
@@ -9,11 +9,16 @@ editor: visual
 ```{r}
 #| label: setup
 #| echo: false
+#| warings: false
 
-library(tidyverse)
+pacman::p_load(tidyverse, viridisLite, viridis)
 ```
 
+
 ```{r}
+#| label: Regression
+#| echo: false
+
 tab <- tidycomm::WoJ %>% 
   tidycomm::regress(autonomy_selection, work_experience, trust_government, 
                     check_multicollinearity = TRUE) 

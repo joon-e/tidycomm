@@ -15,7 +15,7 @@
 #'   two cases is being checked using a Durbin-Watson test
 #' @param check_multicollinearity if set, multicollinearity among all specified
 #'   independent variables is being checked using the variance inflation factor
-#'   (VIF) and the tolerance (1/VIF); this check can only be performed if at
+#'   (VIF) and the TOL (1/VIF); this check can only be performed if at
 #'   least two independent variables are provided, and all provided variables
 #'   need to be numeric
 #' @param check_homoscedasticity if set, homoscedasticity is being checked
@@ -95,7 +95,7 @@ regress <- function(data,
     tibble::tibble(
       Variable = dimnames(model_summary$coefficients)[[1]],
       B = model_summary$coefficients[,1],
-      StdErr = model_summary$coefficients[,2],
+      `SE B` = model_summary$coefficients[,2],
       beta = lm.beta::lm.beta(model)$standardized.coefficients,
       t = model_summary$coefficients[,3],
       p = model_summary$coefficients[,4]
@@ -128,7 +128,7 @@ regress <- function(data,
         model_tibble <- model_tibble %>%
           dplyr::bind_cols(tibble::tibble(VIF = c(NA,
                                                   check_vif),
-                                          tolerance = c(NA,
+                                          TOL = c(NA,
                                                         1/check_vif)))
         model_checks[['multicollinearity']] <- check_vif
       }
@@ -252,7 +252,7 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 
   if ("multicollinearity" %in% model_check_names) {
     footers <- c(footers,
-                 "- Check for multicollinearity: VIF/tolerance added to output")
+                 "- Check for multicollinearity: VIF/TOL added to output")
   }
 
   if (length(model_checks$factors) > 0) {
@@ -280,17 +280,18 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 ## @family tdcmm visualize
 #
 #' @export
-visualize_regress_table <- function(x, design = design_lmu(), digits = 3, cap = "Linear Regression for") {
+visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = "Linear Regression for") {
 
   tab <- x
 
   tab_format <- tab %>%
+    rename(TOL = TOL, `std B` = beta) %>%
     dplyr::mutate(across(-1, ~round(.x, digits)),
                   p = format.pval(p, eps = .001, nsmall = 3),
                   p = gsub("0\\.","\\.", p)) %>%
-    dplyr::mutate(across(any_of(c("beta", "tolerance")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) %>%
+    dplyr::mutate(across(any_of(c("beta", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) %>%
     dplyr::mutate(VIF = as.character(VIF)) %>%
-    dplyr::mutate(across(any_of(c("beta", "VIF", "tolerance")), ~dplyr::if_else(row_number()==1, "---", .x))) %>%
+    dplyr::mutate(across(any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "---", .x))) %>%
     kableExtra::kable(caption = cap,
                       align = c("l", rep("r", NCOL(tab) - 1)),
                       booktabs = TRUE,
