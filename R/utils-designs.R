@@ -52,6 +52,58 @@ design_lmu <- function() {
               }))
 }
 
+#' Colorbrewer-inspired design with focus on UZH (uzh.ch) green
+#'
+#' @return a list with `main_color_1`, a vector of 12 `main_colors`, a
+#' corresponding `main_contrast_1` (the color of text to write on top of the
+#' main color) and a corresponding `main_contrasts`, the `main_size` (for
+#' lines), a `comparison_linetype`, `comparison_color`, and `comparison_size`
+#' for all lines that act as comparative lines, and a [ggplot2] `theme`
+#' @export
+design_uzh <- function() {
+  return(list(main_color_1 = "#0028a5",
+              main_colors = c("#0028a5",
+                              "#a3adb7",
+                              "#dc6027",
+                              "#0b82a0",
+                              "#3c9fb6",
+                              "#2a7f62",
+                              "#91c34a",
+                              "#fede00",
+                              "#9ed0d9",
+                              "#dadee2",
+                              "#f1bfa9",
+                              "#9ed0d9"),
+              main_contrast_1 = "#FFFFFF",
+              main_contrasts = c("#FFFFFF",
+                                 "#525252",
+                                 "#FFFFFF",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#525252",
+                                 "#FFFFFF",
+                                 "#525252",
+                                 "#FFFFFF"),
+              main_size = 0.95,
+              comparison_linetype = "dashed",
+              comparison_color = "#525252",
+              comparison_size = 0.85,
+              theme = function(...) {
+                return(ggplot2::theme_minimal() +
+                         ggplot2::theme(
+                           axis.line = ggplot2::element_line(color = "#8f8f8f"),
+                           axis.ticks = ggplot2::element_line(color = "#6b6b6b"),
+                           axis.title = ggplot2::element_text(),
+                           axis.title.x = ggplot2::element_text(vjust = -.5),
+                           axis.title.y = ggplot2::element_text(vjust = 2.5),
+                           strip.text = ggplot2::element_text(face = "bold"),
+                           ...
+                         ))
+              }))
+}
 #' Gray design
 #'
 #' @return a list with `main_color_1`, a vector of 12 `main_colors`, a
