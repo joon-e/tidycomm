@@ -12,7 +12,7 @@ format:
   html: default 
 
 lang: de-CH
-editor: visual
+editor: source
 ---
 
 ```{r}
@@ -44,24 +44,28 @@ DATEN <- tidycomm::WoJ
 
 model <- lm(autonomy_selection ~ work_experience + trust_government, data = DATEN)
 
+summary(model)
+
 r <- tidycomm::WoJ %>% 
   tidycomm::regress(autonomy_selection, work_experience, trust_government, 
                     check_multicollinearity = TRUE) 
 ```
 
-
 # Regressionsanalyse mit den Daten "World of Journalism"
 
-Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in  @tbl-tab1 einsehbar ist.
-
+Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in @tbl-tab1 einsehbar ist.
 
 ```{r}
 
-
-r |> 
+r %>% 
+  select(c(1, "beta", "p"))  %>% 
   tidycomm::visualize_regress_table(cap = 'Regressionsmodell 1 für Autonomy Selection', 
-                                    footnote = "footers")
+                                    footnote = "footers") 
 ```
+## Teiltabelle
+
+
+
 
 ## Analyse der Voraussetzungen
 

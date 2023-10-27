@@ -15,7 +15,7 @@
 #'   two cases is being checked using a Durbin-Watson test
 #' @param check_multicollinearity if set, multicollinearity among all specified
 #'   independent variables is being checked using the variance inflation factor
-#'   (VIF) and the TOL (1/VIF); this check can only be performed if at
+#'   (VIF) and the tolerance (1/VIF); this check can only be performed if at
 #'   least two independent variables are provided, and all provided variables
 #'   need to be numeric
 #' @param check_homoscedasticity if set, homoscedasticity is being checked
@@ -90,7 +90,11 @@ regress <- function(data,
                                       paste(xvars_string,
                                             collapse = " + ")))
   model <- stats::lm(model_formula, data)
+  # model_std <- stats::lm(model_formula, scale(data)) # fände ich aus didaktischen Gründen besser, weil dann die std.B mit den händisch berechneten übereinstimmen
+
   model_summary <- summary(model)
+  # model_summary_std <- summary(model_std)
+
   model_tibble <-
     tibble::tibble(
       Variable = dimnames(model_summary$coefficients)[[1]],
@@ -99,6 +103,8 @@ regress <- function(data,
       LL = confint(model)[,1],
       UL = confint(model)[,2],
       beta = lm.beta::lm.beta(model)$standardized.coefficients,
+      # LL_std = confint(model_std)[,1],
+      # UL_std = confint(model_std)[,2],
       t = model_summary$coefficients[,3],
       p = model_summary$coefficients[,4]
     )
@@ -130,7 +136,7 @@ regress <- function(data,
         model_tibble <- model_tibble %>%
           dplyr::bind_cols(tibble::tibble(VIF = c(NA,
                                                   check_vif),
-                                          TOL = c(NA,
+                                          tolerance = c(NA,
                                                         1/check_vif)))
         model_checks[['multicollinearity']] <- check_vif
       }
@@ -254,7 +260,7 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 
   if ("multicollinearity" %in% model_check_names) {
     footers <- c(footers,
-                 "- Check for multicollinearity: VIF/TOL added to output")
+                 "- Check for multicollinearity: VIF/tolerance added to output")
   }
 
   if (length(model_checks$factors) > 0) {
@@ -282,18 +288,59 @@ tbl_format_footer.tdcmm_rgrssn <- function(x, ...) {
 ## @family tdcmm visualize
 #
 #' @export
-visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = "Linear Regression for", footnote = NULL) {
+visualize_regress_table <- function(x,
+                                    design = design_lmu(),
+                                    digits = 2,
+                                    cap = "Linear Regression for",
+                                    footnote = NULL,
+                                    rename = c("TOL" = "tolerance")
+                                    ) {
+  tab <- x %>%
+    rename(any_of(rename))
 
-  tab <- x
+  ColNum_unst <- tab %>%
+    select(any_of(c("B", "SE B", "LL", "UL"))) %>%
+    ncol()
 
-  tab_format <- tab %>%
-    rename(TOL = TOL) %>%
+  ColNum_std <- tab %>%
+    select(any_of(c("beta"))) %>%
+    ncol()
+
+  ColNum_sig <- tab %>%
+    select(any_of(c("t", "p"))) %>%
+    ncol()
+
+  ColNum_multicol <- tab %>%
+    select(any_of(c("VIF", "tolerance"))) %>%
+    ncol()
+
+  kableHeader <- c("")
+
+  if(ColNum_unst > 0) {
+    kableHeader <- c(kableHeader, `unstd.` = ColNum_unst)
+  }
+
+  if(ColNum_std > 0) {
+    kableHeader <- c(kableHeader, `std.` = ColNum_std)
+  }
+
+  if(ColNum_sig > 0) {
+    kableHeader <- c(kableHeader, `sig.` = ColNum_sig)
+  }
+
+  if(ColNum_multicol > 0) {
+    kableHeader <- c(kableHeader, Multicoll. = ColNum_multicol)
+  } else {
+     kableHeader <- kableHeader
+   }
+
+  tab_format <- tab%>%
     dplyr::mutate(across(-1, ~round(.x, digits)),
-                  p = format.pval(p, eps = .001, nsmall = 3),
-                  p = gsub("0\\.","\\.", p)) %>%
+                  across(any_of("p"), ~format.pval(.x, eps = .001, nsmall = 3)),
+                         across(any_of("p"), ~gsub("0\\.","\\.", .x))) %>%
     dplyr::mutate(across(any_of(c("beta", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) %>%
-    dplyr::mutate(VIF = as.character(VIF)) %>%
-    dplyr::mutate(across(any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "---", .x))) %>%
+    dplyr::mutate(across(any_of("VIF"), as.character)) %>%
+    dplyr::mutate(across(any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "—", .x))) %>%
     kableExtra::kable(caption = cap,
                       align = c("l", rep("r", NCOL(tab) - 1)),
                       booktabs = TRUE,
@@ -302,7 +349,8 @@ visualize_regress_table <- function(x, design = design_lmu(), digits = 2, cap = 
     kableExtra::kable_styling(latex_options = c("repeat_header",
                                                 "full_width = F")) %>%
     kableExtra::kable_styling(full_width = FALSE) %>%
-    kableExtra::add_header_above(c("", "unstnd." = 4, "std.", "sig." =  2, "Multikoll." = 2), line = TRUE, line_sep = 3, bold = F) %>%
+    kableExtra::add_header_above(kableHeader,
+                                 line = TRUE, line_sep = 3, bold = F) %>%
     kableExtra::footnote(footnote,
                          general_title = "",
                          threeparttable = TRUE)
