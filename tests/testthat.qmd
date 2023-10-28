@@ -53,6 +53,8 @@ summary(model_std)
 r <- tidycomm::WoJ %>% 
   tidycomm::regress(autonomy_selection, work_experience, trust_government, 
                     check_multicollinearity = TRUE) 
+
+kableHeader
 ```
 
 # Regressionsanalyse mit den Daten "World of Journalism"
@@ -62,7 +64,7 @@ Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschaue
 ```{r}
 
 r %>% 
- # select(c(1, "beta", "p"))  %>% 
+  select(c(1, "beta", "p")) %>% 
   tidycomm::visualize_regress_table(cap = 'Regressionsmodell 1 für Autonomy Selection', 
                                     footnote = "footers") 
 ```

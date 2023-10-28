@@ -341,10 +341,13 @@ visualize_regress_table <- function(x,
   if(ColNum_multicol > 1) {
     kableHeader <- c(kableHeader, `Multicoll.` = ColNum_multicol)
   } else if (ColNum_multicol == 1){
-     kableHeader <<- c(kableHeader, " ")
+     kableHeader <- c(kableHeader, " ")
    }
 
- KableHeaderCols <- sum(c(ColNum_unst > 1, ColNum_std > 1, ColNum_sig > 1, ColNum_multicol > 1)) > 0
+ if(sum(c(ColNum_unst > 1, ColNum_std > 1, ColNum_sig > 1, ColNum_multicol > 1)) == 0) {
+   kableHeader <- NULL
+ }
+
 
   tab_format <- tab%>%
     dplyr::mutate(across(-1, ~round(.x, digits)),
@@ -361,7 +364,7 @@ visualize_regress_table <- function(x,
     kableExtra::kable_styling(latex_options = c("repeat_header",
                                                 "full_width = F")) %>%
     kableExtra::kable_styling(full_width = FALSE) %>%
-    kableExtra::add_header_above(kableHeader,
+    kableExtra::add_header_above(header = kableHeader,
                                  line = TRUE, line_sep = 3, bold = F) %>%
     kableExtra::footnote(footnote,
                          general_title = "",
