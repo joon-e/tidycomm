@@ -89,11 +89,13 @@ regress <- function(data,
                                       yvar_string,
                                       paste(xvars_string,
                                             collapse = " + ")))
+
   model <- stats::lm(model_formula, data)
-  # model_std <- stats::lm(model_formula, scale(data)) # fände ich aus didaktischen Gründen besser, weil dann die std.B mit den händisch berechneten übereinstimmen
+
+ # model_std <- datawizard::standardize(model)
 
   model_summary <- summary(model)
-  # model_summary_std <- summary(model_std)
+#  model_std_summary <- summary(model_std)
 
   model_tibble <-
     tibble::tibble(
@@ -103,6 +105,7 @@ regress <- function(data,
       LL = confint(model)[,1],
       UL = confint(model)[,2],
       beta = lm.beta::lm.beta(model)$standardized.coefficients,
+ #     beta = model_std_summary$coefficients[,1],
       # LL_std = confint(model_std)[,1],
       # UL_std = confint(model_std)[,2],
       t = model_summary$coefficients[,3],
@@ -298,41 +301,50 @@ visualize_regress_table <- function(x,
   tab <- x %>%
     rename(any_of(rename))
 
-  ColNum_unst <- tab %>%
+  ColNum_unst <- x %>%
     select(any_of(c("B", "SE B", "LL", "UL"))) %>%
     ncol()
 
-  ColNum_std <- tab %>%
+  ColNum_std <- x %>%
     select(any_of(c("beta"))) %>%
     ncol()
 
-  ColNum_sig <- tab %>%
+  ColNum_sig <- x %>%
     select(any_of(c("t", "p"))) %>%
     ncol()
 
-  ColNum_multicol <- tab %>%
+  ColNum_multicol <- x %>%
     select(any_of(c("VIF", "tolerance"))) %>%
     ncol()
 
-  kableHeader <- c("")
+  kableHeader <- c(" ")
 
-  if(ColNum_unst > 0) {
+  if(ColNum_unst > 1) {
     kableHeader <- c(kableHeader, `unstd.` = ColNum_unst)
-  }
-
-  if(ColNum_std > 0) {
-    kableHeader <- c(kableHeader, `std.` = ColNum_std)
-  }
-
-  if(ColNum_sig > 0) {
-    kableHeader <- c(kableHeader, `sig.` = ColNum_sig)
-  }
-
-  if(ColNum_multicol > 0) {
-    kableHeader <- c(kableHeader, Multicoll. = ColNum_multicol)
-  } else {
-     kableHeader <- kableHeader
+  } else if (ColNum_unst == 1){
+     kableHeader <- c(kableHeader, " ")
    }
+
+  if(ColNum_std > 1) {
+    kableHeader <- c(kableHeader, `std.` = ColNum_std)
+  } else if (ColNum_std == 1){
+     kableHeader <- c(kableHeader, " ")
+   }
+
+  if(ColNum_sig > 1) {
+    kableHeader <- c(kableHeader, `sig.` = ColNum_sig)
+  } else if (ColNum_sig == 1){
+     kableHeader <- c(kableHeader, " ")
+   }
+
+
+  if(ColNum_multicol > 1) {
+    kableHeader <- c(kableHeader, `Multicoll.` = ColNum_multicol)
+  } else if (ColNum_multicol == 1){
+     kableHeader <<- c(kableHeader, " ")
+   }
+
+ KableHeaderCols <- sum(c(ColNum_unst > 1, ColNum_std > 1, ColNum_sig > 1, ColNum_multicol > 1)) > 0
 
   tab_format <- tab%>%
     dplyr::mutate(across(-1, ~round(.x, digits)),
