@@ -54,7 +54,6 @@ r <- tidycomm::WoJ %>%
   tidycomm::regress(autonomy_selection, work_experience, trust_government, 
                     check_multicollinearity = TRUE) 
 
-kableHeader
 ```
 
 # Regressionsanalyse mit den Daten "World of Journalism"
@@ -68,6 +67,18 @@ r %>%
   tidycomm::visualize_regress_table(cap = 'Regressionsmodell 1 für Autonomy Selection', 
                                     footnote = "footers") 
 ```
+
+```{r}
+r %>% 
+  huxtable::huxtable() %>% 
+      huxtable::set_bold(1, huxtable::everywhere)             |>
+      huxtable::set_bottom_border(1, huxtable::everywhere)    |>
+      huxtable::set_align(huxtable::everywhere, 2, "right")   |>
+      huxtable::set_lr_padding(10)                  |>
+      huxtable::set_width(0.55)                     |>
+      huxtable::set_number_format(2)
+```
+
 ## Teiltabelle
 
 
