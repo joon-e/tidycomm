@@ -206,7 +206,7 @@ correlation_test <- function(var_comb, data, method) {
 ## @keywords internal
 visualize_correlate <- function(x, which = "jitter", design = design_lmu()) {
   if (nrow(x) > 1) {
-    return(visualize(to_correlation_matrix(x), design))
+    return(visualize(to_correlation_matrix(x), .design = design))
   }
 
   g <- attr(x, "data") %>%
