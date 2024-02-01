@@ -2,7 +2,7 @@
 % Please edit documentation in R/scaling.R
 \name{center_scale}
 \alias{center_scale}
-\title{Center numeric, continuous scales.}
+\title{Center numeric, continuous variables}
 \usage{
 center_scale(data, ..., name = NULL, overwrite = FALSE)
 }
@@ -36,6 +36,7 @@ WoJ \%>\%
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},
 \code{\link{recode_cat_scale}()},

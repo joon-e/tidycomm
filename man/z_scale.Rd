@@ -2,7 +2,7 @@
 % Please edit documentation in R/scaling.R
 \name{z_scale}
 \alias{z_scale}
-\title{Z-standardize numeric, continuous scales.}
+\title{Z-standardize numeric, continuous variables}
 \usage{
 z_scale(data, ..., name = NULL, overwrite = FALSE)
 }
@@ -32,6 +32,7 @@ WoJ \%>\%
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{center_scale}()},
 \code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},

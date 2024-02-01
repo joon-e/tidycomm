@@ -89,7 +89,7 @@ test_icr <- function(data, unit_var, coder_var, ...,
     })
     # Bind all data frames together and reorder resulting data frame
     out <- dplyr::bind_rows(out) %>%
-      dplyr::select(.data$group, tidyselect::everything())
+      dplyr::select(group, tidyselect::everything())
   } else {
     # Map icr computation over test_vars
     out <- purrr::map_dfr(test_vars, compute_icr, data, {{ unit_var }}, {{ coder_var }},

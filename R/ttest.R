@@ -42,7 +42,6 @@
 #' WoJ %>% t_test(autonomy_selection, mu = 3.62)
 #'
 #' @export
-#' @export
 t_test <- function(data, group_var, ...,
                    var.equal = TRUE, paired = FALSE, pooled_sd = TRUE,
                    levels = NULL, case_var = NULL, mu = NULL) {
@@ -91,11 +90,19 @@ t_test <- function(data, group_var, ...,
     test_vars <- syms(test_vars_string[test_vars_string != group_var_str])
   }
 
-  # if not one-sample, run two-sample t-test
+  # if not one-sample, it might be a two-sample t-test without case_var
+  if (missing(case_var)) {
   return(two_sample_t_test(data,
                            {{ group_var }}, group_var_str,
                            {{ test_vars }}, test_vars_string,
                            var.equal, paired, pooled_sd, levels, case_var))
+  }
+
+  # ...or with a provided case_var
+  return(two_sample_t_test(data,
+                           {{ group_var }}, group_var_str,
+                           {{ test_vars }}, test_vars_string,
+                           var.equal, paired, pooled_sd, levels, ensym(case_var)))
 }
 
 #' @rdname visualize
@@ -205,11 +212,11 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
   # Prepare data
   levels <- levels[1:2]
 
-  if (!missing(case_var)) {
+  if (!is.null(case_var)) {
+    case_var_sym <- rlang::sym(case_var)
     data <- data %>%
-      dplyr::arrange({{ group_var }}, {{ case_var }})
+      dplyr::arrange({{ group_var }}, !!case_var_sym)
   }
-
   data <- dplyr::select(data, {{ group_var }}, !!!test_vars)
 
 
@@ -245,10 +252,12 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
     # Compute output based on Levene's test
     if (levene_row$Levene_p < 0.05) {
       # Unequal variances, use Welch's ttest
+      equal_var_assumption <- FALSE
       tt <- t.test(x, y, var.equal = FALSE, paired = paired)
 
     } else {
       # Equal variances, use regular ttest
+      equal_var_assumption <- TRUE
       tt <- t.test(x, y, var.equal = TRUE, paired = paired)
     }
 
@@ -260,24 +269,26 @@ two_sample_t_test <- function(data, group_var, group_var_str, test_vars,
     out_t <- out_t %>%
       dplyr::bind_rows(tt_row)
 
-    # Collect levene test
-    model_list_levene[[length(model_list_levene) + 1]] <- levene_row
-    out_levene <- out_levene %>%
-      dplyr::bind_rows(levene_row)
+  # Collect levene test
+  if (equal_var_assumption == FALSE)
+    levene_row <- levene_row %>%
+    dplyr::mutate(var_equal = "FALSE")
+  else {
+    levene_row <- levene_row %>%
+      dplyr::mutate(var_equal = "TRUE")
+  }
+
+  model_list_levene[[length(model_list_levene) + 1]] <- levene_row
+  out_levene <- out_levene %>%
+    dplyr::bind_rows(levene_row)
+  }
+
+  if (levene_row$Levene_p < 0.05) {
+    # Unequal variances, Welch's ttest used
+    message(glue("The significant result from Levene's test suggests unequal variances among the groups, violating standard t-test assumptions. This necessitates the use of Welch approximation to the degrees of freedom, which is robust against heteroscedasticity."))
   }
 
   out <- dplyr::full_join(out_t, out_levene, by = "Variable")
-
-  if (levene_row$Levene_p < 0.05) {
-    # Unequal variances, Welch's ANOVA used
-    out <- out %>%
-      dplyr::mutate(var_equal = "FALSE")
-    message(glue("The significant result from Levene's test suggests unequal variances among the groups, violating standard t-test assumptions. This necessitates the use of Welch's t-test, which is robust against heteroscedasticity."))
-  } else {
-    # Equal variances, regular ANOVA used
-    out <- out %>%
-      dplyr::mutate(var_equal = "TRUE")
-  }
 
   # Output
   return(new_tdcmm_ttst(

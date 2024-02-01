@@ -1,4 +1,4 @@
-#' Reverse a numeric, logical, or date/time continuous scale
+#' Reverse numeric, logical, or date/time continuous variables
 #'
 #' Reverses a continuous scale into a new variable. A 5-1 scale thus turns into
 #' a 1-5 scale. Missing values are retained. For a given continuous variable
@@ -62,7 +62,7 @@ reverse_scale <- function(data, ...,
     scale_var_data <- data %>% dplyr::pull(!!scale_var_enquo)
     scale_var_str <- rlang::quo_name(scale_var_enquo)
 
-    # Deduct the new variable name
+    # Determine the name of the new variable
     if (overwrite) {
       new_var_name <- scale_var_str
     } else if (is.null(name)) {
@@ -71,7 +71,6 @@ reverse_scale <- function(data, ...,
       new_var_name <- name
     }
 
-    # Your existing logic for each variable goes here...
     if (!is.numeric(scale_var_data) &&
         !is.logical(scale_var_data) &&
         !lubridate::is.POSIXt(scale_var_data) &&
@@ -170,7 +169,7 @@ reverse_scale <- function(data, ...,
     return()
 }
 
-#' Rescale a numeric continuous scale to new minimum/maximum boundaries
+#' Rescale numeric continuous variables to new minimum/maximum boundaries
 #'
 #' Given a specified minimum and maximum, this function translates each value
 #' into a new value within this specified range. The transformation maintains
@@ -250,7 +249,7 @@ minmax_scale <- function(data, ..., change_to_min = 0,
 
     data <- data %>%
       dplyr::mutate(!!new_var_name :=
-                      scales::rescale(!!scale_var_enquo,
+                      rescale(!!scale_var_enquo,
                                       to = c(change_to_min, change_to_max)))
   }
 
@@ -267,7 +266,7 @@ minmax_scale <- function(data, ..., change_to_min = 0,
 }
 
 
-#' Center numeric, continuous scales.
+#' Center numeric, continuous variables
 #'
 #' This function centers the specified numeric columns or all numeric columns
 #' if none are specified. A centered scale has a mean of 0.0.
@@ -342,7 +341,7 @@ center_scale <- function(data, ..., name = NULL, overwrite = FALSE) {
     return()
 }
 
-#' Z-standardize numeric, continuous scales.
+#' Z-standardize numeric, continuous variables
 #'
 #' This function z-standardizes the specified numeric columns or all numeric columns
 #' if none are specified. A z-standardized scale centers at a mean of 0.0 and has
@@ -413,7 +412,7 @@ z_scale <- function(data, ..., name = NULL, overwrite = FALSE) {
 }
 
 
-#' Set specified values to NA in selected variables or entire data frame.
+#' Set specified values to NA in selected variables or entire data frame
 #'
 #' This function allows users to set specific values to `NA` in chosen variables
 #' within a data frame. It can handle numeric, character, and factor variables.
@@ -442,6 +441,8 @@ z_scale <- function(data, ..., name = NULL, overwrite = FALSE) {
 #' setna_scale(value = c(2, 3, 4), overwrite = TRUE)
 #' WoJ %>%
 #' dplyr::select(country) %>% setna_scale(country, value = "Germany")
+#' WoJ %>%
+#' dplyr::select(country) %>% setna_scale(country, value = c("Germany", "Switzerland"))
 setna_scale <- function(data, ..., value,
                         name = NULL, overwrite = FALSE) {
 
@@ -518,14 +519,20 @@ setna_scale <- function(data, ..., value,
 }
 
 
-#' Recode one or more categorical scales.
+#' Recode one or more categorical variables into new categories
+#'
+#' This function transforms one or more categorical variables into new categories
+#' based on specified mapping. For unmatched cases not specified in the mapping, a default
+#' value can be assigned. Missing values are retained.
 #'
 #' @param data A tibble or a tdcmm model.
 #' @param ... Variables to recode.
 #' @param assign A named vector where names are the old values and values are
-#' the new values to be assigned. The special name `.else` can be used to
-#' provide a default value for unmatched cases.
-#' @param name The name of the new variable(s). By default, this is the same
+#' the new values to be assigned.
+#' @param other The value for unmatched cases. By default, it is `NA`. This
+#' parameter is used to assign a value to cases that do not match any of the keys
+#' in the `assign` vector.
+#' @param name The name of the new variable(s). If not specified, this is the same
 #' name as the provided variable(s) but suffixed with `_rec`.
 #' @param overwrite Logical. If `TRUE`, it overwrites the original variable(s).
 #' You cannot specify both 'name' and 'overwrite' parameters simultaneously.
@@ -536,22 +543,24 @@ setna_scale <- function(data, ..., value,
 #' @examples
 #' WoJ %>%
 #' recode_cat_scale(country,
-#' assign = c("Germany" = 1, "Switzerland" = 2 , .else = 3), overwrite = TRUE)
+#' assign = c("Germany" = 1, "Switzerland" = 2), overwrite = TRUE)
 #' WoJ %>%
 #' recode_cat_scale(country,
-#' assign = c("Germany" = "german", "Switzerland" = "swiss" , .else = "other"),
+#' assign = c("Germany" = "german", "Switzerland" = "swiss"), other = "other",
 #' overwrite = TRUE)
 #' WoJ %>%
 #' recode_cat_scale(ethics_1, ethics_2,
-#' assign = c(`1` = 5, `2` = 4, `3` = 3, `4` = 2, `5` = 1), overwrite = TRUE)
+#' assign = c(`1` = 5, `2` = 4, `3` = 3, `4` = 2, `5` = 1), other = 6, overwrite = TRUE)
 #' WoJ %>%
 #' recode_cat_scale(ethics_1, ethics_2,
 #' assign = c(`1` = "very low", `2` = "low", `3` = "medium", `4` = "high", `5` = "very high"),
 #' overwrite = TRUE)
 #' WoJ %>%
 #' dplyr::select(temp_contract) %>% recode_cat_scale(temp_contract,
-#' assign = c(`Permanent` = "P", `Temporary` = "T", .else = "E"))
-recode_cat_scale <- function(data, ..., assign = NULL, overwrite = FALSE, name = NULL) {
+#' assign = c(`Permanent` = "P", `Temporary` = "T"), other = "O")
+recode_cat_scale <- function(data, ..., assign = NULL,
+                             other = NA, overwrite = FALSE,
+                             name = NULL) {
 
   if (is.null(assign)) {
     stop("The 'assign' argument is required.", call. = FALSE)
@@ -574,10 +583,6 @@ recode_cat_scale <- function(data, ..., assign = NULL, overwrite = FALSE, name =
 
   var_names <- purrr::map_chr(scale_vars, rlang::quo_name)
 
-  # Extract .else value and remove it from assign
-  default_value <- ifelse(".else" %in% names(assign), assign[[".else"]], NA)
-  assign <- assign[!names(assign) %in% ".else"]
-
   for (var_name_str in var_names) {
     unique_values <- unique(data[[var_name_str]])
 
@@ -585,11 +590,11 @@ recode_cat_scale <- function(data, ..., assign = NULL, overwrite = FALSE, name =
     invalid_assign_values <- setdiff(names(assign), unique_values)
     if (length(invalid_assign_values) > 0) {
       stop(paste("The following names in the 'assign' parameter for",
-                    var_name_str, "are not part of the original scale:",
-                    paste(invalid_assign_values, collapse = ", "), ". Please ensure the 'assign' parameter is correctly specified. Recoding has been stopped."))
+                 var_name_str, "are not part of the original scale:",
+                 paste(invalid_assign_values, collapse = ", "), ". Please ensure the 'assign' parameter is correctly specified. Recoding has been stopped."))
     }
 
-    name <- if (overwrite) {
+    new_var_name <- if (overwrite) {
       var_name_str
     } else if (!is.null(name)) {
       name
@@ -600,31 +605,32 @@ recode_cat_scale <- function(data, ..., assign = NULL, overwrite = FALSE, name =
     # Check unassigned values, but exclude NAs
     unmatched_values <- setdiff(na.omit(unique_values), names(assign))
 
-    # Add unassigned values to the assign vector with the .else value
-    assign[as.character(unmatched_values)] <- default_value
+    # Add unassigned values to the assign vector with the 'other' value
+    assign[as.character(unmatched_values)] <- other
 
     if (length(unmatched_values) > 0) {
       message(paste("The following unassigned values were found in", var_name_str, ":",
                     paste(unmatched_values, collapse = ", "),
-                    ". They were recoded to the .else value (", default_value, ")."))
+                    ". They were recoded to the 'other' value (", other, ")."))
     }
 
-    recoding_args <- c(assign, .else = default_value)
+    recoding_args <- c(assign, ..else = other)
     column_as_char <- as.character(data[[var_name_str]])
     new_values <- dplyr::recode(column_as_char, !!!recoding_args)
-    data[[name]] <- new_values
+    data[[new_var_name]] <- new_values
 
     # Convert the column to a factor
-    data[[name]] <- as.factor(data[[name]])
+    data[[new_var_name]] <- as.factor(data[[new_var_name]])
   }
 
   data %>%
     new_tdcmm(
-      func = "recode_scale",
+      func = "recode_cat_scale",
       data = data,
       params = list(
         scale_var = scale_vars,
         assign = assign,
+        other = other,
         overwrite = overwrite,
         name = if (overwrite) scale_vars else paste0(scale_vars, "_rec")
       )
@@ -632,54 +638,71 @@ recode_cat_scale <- function(data, ..., assign = NULL, overwrite = FALSE, name =
     return()
 }
 
-#' Recode one or more numeric, continuous scales into categories.
+
+
+#' Categorize numeric variables into categories
 #'
-#' This recodingsallows for the recoding of one or more numeric variables
-#' into categorical variables based on provided breaks and labels.
-#' If no variables are specified, all numeric columns will be recoded.
+#' This function recodes one or more numeric variables into categorical
+#' variables based on a specified lower end, upper end, and intermediate breaks.
+#' The intervals created include the right endpoint of the interval. For example,
+#' breaks = c(2, 3) with lower_end = 1 and upper_end = 5 creates intervals from
+#' 1 to ≤ 2, >2 to ≤ 3, and >3 to ≤ 5. If the lower or upper ends are not provided,
+#' the function defaults to the minimum and maximum values of the data and issues
+#' a warning. This default behavior is prone to errors, however, because a scale may not
+#' include its actual lower and upper ends which might in turn affect the recoding
+#' process. Hence, it is strongly suggested to manually set the lower and upper
+#' bounds of the original continuous scale.
 #'
 #' @param data A tibble or a tdcmm model.
-#' @param ... Variables to recode as factor variables in categories. If none are provided, all numeric columns in
-#' the data will be recoded.
-#' @param breaks A vector of numeric values specifying the breaks.
-#' @param labels A vector of string labels for each interval.
-#' @param name The name of the new variable(s). By default, this is the same
-#' name as the provided variable(s) but suffixed with `_cat`.
-#' @param overwrite Logical. If `TRUE`, it overwrites the original variable(s).
-#' You cannot specify both 'name' and 'overwrite' parameters simultaneously.
+#' @param ... Variables to recode as factor variables in categories.
+#' If no variables are specified, all numeric columns will be recoded.
+#' @param breaks A vector of numeric values specifying the breaks for
+#' categorizing the data between the lower and upper ends.
+#' The breaks define the boundaries of the intervals. Setting this parameter is
+#' required.
+#' @param labels A vector of string labels for each interval. The number of
+#' labels must match the number of intervals defined by the breaks and
+#' lower/upper ends.Setting this parameter is required.
+#' @param lower_end Optional numeric value specifying the lower end of the scale.
+#' If not provided, defaults to the minimum value of the data.
+#' @param upper_end Optional numeric value specifying the upper end of
+#' the scale. If not provided, defaults to the maximum value of the data.
+#' @param name Optional string specifying the name of the new variable(s).
+#' By default, the new variable names are the original variable names suffixed
+#' with `_cat`.
+#' @param overwrite Logical indicating whether to overwrite the original
+#' variable(s) with the new categorical variables. If `TRUE`,
+#' the original variable(s) are overwritten.
 #'
-#' @return A [tdcmm] model or a tibble.
+#' @return A modified tibble or tdcmm model with the recoded variables.
 #' @export
 #' @family scaling
-#' #' @examples
+#'
+#' @examples
 #' WoJ %>%
-#' recode_scale(autonomy_emphasis, autonomy_selection, breaks = c(0, 1, 4, Inf),
-#' labels = c("Low", "Medium", "High"), overwrite = TRUE)
+#' dplyr::select(trust_parliament, trust_politicians) %>%
+#' categorize_scale(trust_parliament, trust_politicians,
+#' lower_end = 1, upper_end = 5, breaks = c(2, 3),
+#' labels = c("Low", "Medium", "High"), overwrite = FALSE)
 #' WoJ %>%
-#' dplyr::select(autonomy_emphasis) %>%
-#' recode_scale(autonomy_emphasis, breaks = c(0, 1, 4, Inf),
-#' labels = c("Low", "Medium", "High"), name = "new_na_autonomy")
-recode_scale <- function(data, ..., breaks, labels, name = NULL, overwrite = FALSE) {
+#' dplyr::select(autonomy_selection) %>%
+#' categorize_scale(autonomy_selection, breaks = c(2, 3, 4),
+#' lower_end = 1, upper_end = 5,
+#' labels = c("Low", "Medium", "High", "Very High"),
+#' name = "autonomy_in_categories")
+categorize_scale <- function(data, ..., breaks, labels,
+                             lower_end = NULL, upper_end = NULL,
+                             name = NULL, overwrite = FALSE) {
   scale_vars <- rlang::quos(...)
 
   if (length(scale_vars) == 0) {
-    message("NOTE: No variables provided. All numeric columns will be recoded.")
+    message("NOTE: No variables provided. All numeric columns will be recategorized.")
     numeric_vars <- sapply(data, is.numeric)
     scale_vars <- rlang::syms(names(data)[numeric_vars])
   }
 
-  if (missing(breaks) || is.null(breaks)) {
-    stop("The 'breaks' parameter is required. Please specify the breaks.",
-         call. = FALSE)
-  }
-
-  if (missing(labels) || is.null(labels)) {
-    stop("The 'labels' parameter is required. Please specify the labels.",
-         call. = FALSE)
-  }
-
-  if (length(breaks) - 1 != length(labels)) {
-    stop("The number of breaks minus one must match the number of labels.",
+  if (length(scale_vars) > 1 && !is.null(name)) {
+    stop("The 'name' parameter cannot be used when recategorizing multiple variables.",
          call. = FALSE)
   }
 
@@ -688,69 +711,97 @@ recode_scale <- function(data, ..., breaks, labels, name = NULL, overwrite = FAL
          call. = FALSE)
   }
 
-  if (length(scale_vars) > 1 && !is.null(name)) {
-    stop("The 'name' parameter cannot be used when recoding multiple variables.",
-         call. = FALSE)
-  }
-
-  for (scale_var_enquo in scale_vars) {
-    scale_data <- data %>% dplyr::pull(!!scale_var_enquo)
+  for (i in seq_along(scale_vars)) {
+    scale_var_enquo <- scale_vars[[i]]
+    scale_data <- dplyr::pull(data, !!scale_var_enquo)
 
     if (!is.numeric(scale_data)) {
       stop(paste("The variable", rlang::quo_name(scale_var_enquo),
                  "is not numeric. Please provide numeric variables only."))
     }
 
-    # Check if breaks are within bounds
-    if (min(breaks) > min(scale_data, na.rm = TRUE) ||
-        max(breaks) < max(scale_data, na.rm = TRUE)) {
-      stop(paste("The breaks for",
-                 rlang::quo_name(scale_var_enquo),
-                 "are out of bounds. Please adjust the breaks to fit the data range."))
+    warn_about_ends <- FALSE
+
+    if (is.null(lower_end)) {
+      lower_end <- min(scale_data, na.rm = TRUE)
+      warn_about_ends <- TRUE
+    }
+    if (is.null(upper_end)) {
+      upper_end <- max(scale_data, na.rm = TRUE)
+      warn_about_ends <- TRUE
     }
 
-    # If 'overwrite' is TRUE, set name to the scale_var
-    if (overwrite) {
-      name <- rlang::quo_name(scale_var_enquo)
-    } else if (is.null(name)) {
-      name <- paste0(rlang::quo_name(scale_var_enquo), "_cat")
+    if (warn_about_ends) {
+      warning(glue::glue("Lower and/or upper end missing. Based on the minimum and ",
+                         "maximum values observed in the data, the original scale ",
+                         "({rlang::quo_name(scale_var_enquo)}) is assumed to range from {lower_end} to ",
+                         "{upper_end}. To prevent this warning, please provide the ",
+                         "lower_end and upper_end values as arguments when calling the ",
+                         "function."),
+              call. = FALSE)
     }
+
+    if (length(breaks) + 1 != length(labels)) {
+      stop("The number of breaks plus one must match the number of labels.",
+           call. = FALSE)
+    }
+
+    # Determine the name of the new variable
+    new_var_name <- if (overwrite) {
+      rlang::quo_name(scale_var_enquo)
+    } else {
+      if (is.null(name)) {
+        paste0(rlang::quo_name(scale_var_enquo), "_cat")
+      } else {
+        paste0(name, "_", i)
+      }
+    }
+
+    full_breaks <- c(lower_end, breaks, upper_end)
 
     data <- dplyr::mutate(
       data,
-      !!name :=
+      !!rlang::sym(new_var_name) :=
         cut(
           !!scale_var_enquo,
-          breaks = breaks,
+          breaks = full_breaks,
           labels = labels,
           include.lowest = TRUE,
-          right = FALSE
+          right = TRUE
         )
     )
   }
 
   data %>%
     new_tdcmm(
-      func = "recode_scale",
+      func = "categorize_scale",
       data = data,
       params = list(scale_vars = scale_vars,
-                    breaks = breaks,
-                    labels = labels,
-                    name = name,
-                    overwrite = overwrite)
+                    lower_end = lower_end, upper_end = upper_end,
+                    breaks = breaks, labels = labels,
+                    name = name, overwrite = overwrite)
     ) %>%
     return()
 }
 
-#' Convert categorical scales to dummy variables
+
+#' Convert categorical variables to dummy variables
 #'
 #' This function transforms specified categorical variables into dummy variables.
 #' Each level of the categorical variable is represented by a new dummy variable.
-#' These new dummy variables are appended to the original data frame.
+#' Missing values are retained.
+#' These new dummy variables are appended to the original data frame. This function
+#' does not allow specifying new column names for the dummy variables. Instead, it
+#' follows a consistent naming pattern: the new dummy variables are named using the
+#' original variable name with the category value appended. For example, if a
+#' categorical variable named "autonomy" with levels "low", "medium", "high" is dummified,
+#' the new dummy variables will be named "autonomy_low", "autonomy_medium", "autonomy_high".
 #'
 #' @param data A [tibble][tibble::tibble-package] or a [tdcmm] model.
 #' @param ... Categorical variables to be transformed into dummy variables.
-#' @param overwrite Logical. If `TRUE`, it overwrites the original variable(s) with the dummy variables. If `FALSE` (default), new variables are created.
+#' Category names will be automatically appended to the newly created dummy variables.
+#' @param overwrite Logical. If `TRUE`, it overwrites the original variable(s)
+#' with the dummy variables. If `FALSE` (default), new variables are created.
 #'
 #' @return A [tdcmm] model with the dummy variables appended.
 #' @export
@@ -758,7 +809,9 @@ recode_scale <- function(data, ..., breaks, labels, name = NULL, overwrite = FAL
 #'
 #' @examples
 #' WoJ %>% dplyr::select(temp_contract) %>% dummify_scale(temp_contract)
-#' WoJ %>% dummify_scale(overwrite = TRUE)
+#' WoJ %>% categorize_scale(autonomy_emphasis, breaks = c(2, 3),
+#' labels = c('low', 'medium', 'high')) %>%
+#' dummify_scale(autonomy_emphasis_cat) %>% dplyr::select(starts_with('autonomy_emphasis'))
 dummify_scale <- function(data, ..., overwrite = FALSE) {
   scale_vars <- rlang::quos(...)
 

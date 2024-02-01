@@ -8,7 +8,7 @@ test_that("correlation test returns tibble", {
 
   expect_true(tibble::is_tibble(t))
   expect_equal(dim(t), c(1, 6))
-  })
+})
 
 test_that("correlate returns tibble", {
 
@@ -22,16 +22,16 @@ test_that("correlate returns for other methods", {
 
   tt <- tibble::tibble(x = 1:10, y = c(2:5, 1, 6:10))
 
- t1 <- correlate(tt, method = "spearman")
- t2 <- correlate(tt, method = "kendall")
+  t1 <- correlate(tt, method = "spearman")
+  t2 <- correlate(tt, method = "kendall")
 
- expect_true(tibble::is_tibble(t1))
- expect_true("rho" %in% names(t1))
- expect_equal(dim(t1), c(1, 6))
+  expect_true(tibble::is_tibble(t1))
+  expect_true("rho" %in% names(t1))
+  expect_equal(dim(t1), c(1, 6))
 
- expect_true(tibble::is_tibble(t2))
- expect_true("tau" %in% names(t2))
- expect_equal(dim(t2), c(1, 6))
+  expect_true(tibble::is_tibble(t2))
+  expect_true("tau" %in% names(t2))
+  expect_equal(dim(t2), c(1, 6))
 })
 
 test_that("correlate returns tibble when no variables are specified", {
@@ -66,6 +66,7 @@ test_that("correlation matrix returns tibble", {
 
   t1 <- correlate(WoJ) %>%
     to_correlation_matrix()
+
   t2 <- correlate(WoJ, tidyselect::starts_with("ethics")) %>%
     to_correlation_matrix()
 

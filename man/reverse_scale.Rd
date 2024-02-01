@@ -2,7 +2,7 @@
 % Please edit documentation in R/scaling.R
 \name{reverse_scale}
 \alias{reverse_scale}
-\title{Reverse a numeric, logical, or date/time continuous scale}
+\title{Reverse numeric, logical, or date/time continuous variables}
 \usage{
 reverse_scale(
   data,
@@ -59,6 +59,7 @@ WoJ \%>\%
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{center_scale}()},
 \code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},

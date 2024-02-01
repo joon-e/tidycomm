@@ -2,9 +2,16 @@
 % Please edit documentation in R/scaling.R
 \name{recode_cat_scale}
 \alias{recode_cat_scale}
-\title{Recode one or more categorical scales.}
+\title{Recode one or more categorical variables into new categories}
 \usage{
-recode_cat_scale(data, ..., assign = NULL, overwrite = FALSE, name = NULL)
+recode_cat_scale(
+  data,
+  ...,
+  assign = NULL,
+  other = NA,
+  overwrite = FALSE,
+  name = NULL
+)
 }
 \arguments{
 \item{data}{A tibble or a tdcmm model.}
@@ -12,42 +19,48 @@ recode_cat_scale(data, ..., assign = NULL, overwrite = FALSE, name = NULL)
 \item{...}{Variables to recode.}
 
 \item{assign}{A named vector where names are the old values and values are
-the new values to be assigned. The special name \code{.else} can be used to
-provide a default value for unmatched cases.}
+the new values to be assigned.}
+
+\item{other}{The value for unmatched cases. By default, it is \code{NA}. This
+parameter is used to assign a value to cases that do not match any of the keys
+in the \code{assign} vector.}
 
 \item{overwrite}{Logical. If \code{TRUE}, it overwrites the original variable(s).
 You cannot specify both 'name' and 'overwrite' parameters simultaneously.}
 
-\item{name}{The name of the new variable(s). By default, this is the same
+\item{name}{The name of the new variable(s). If not specified, this is the same
 name as the provided variable(s) but suffixed with \verb{_rec}.}
 }
 \value{
 A \link{tdcmm} model or a tibble.
 }
 \description{
-Recode one or more categorical scales.
+This function transforms one or more categorical variables into new categories
+based on specified mapping. For unmatched cases not specified in the mapping, a default
+value can be assigned. Missing values are retained.
 }
 \examples{
 WoJ \%>\%
 recode_cat_scale(country,
-assign = c("Germany" = 1, "Switzerland" = 2 , .else = 3), overwrite = TRUE)
+assign = c("Germany" = 1, "Switzerland" = 2), overwrite = TRUE)
 WoJ \%>\%
 recode_cat_scale(country,
-assign = c("Germany" = "german", "Switzerland" = "swiss" , .else = "other"),
+assign = c("Germany" = "german", "Switzerland" = "swiss"), other = "other",
 overwrite = TRUE)
 WoJ \%>\%
 recode_cat_scale(ethics_1, ethics_2,
-assign = c(`1` = 5, `2` = 4, `3` = 3, `4` = 2, `5` = 1), overwrite = TRUE)
+assign = c(`1` = 5, `2` = 4, `3` = 3, `4` = 2, `5` = 1), other = 6, overwrite = TRUE)
 WoJ \%>\%
 recode_cat_scale(ethics_1, ethics_2,
 assign = c(`1` = "very low", `2` = "low", `3` = "medium", `4` = "high", `5` = "very high"),
 overwrite = TRUE)
 WoJ \%>\%
 dplyr::select(temp_contract) \%>\% recode_cat_scale(temp_contract,
-assign = c(`Permanent` = "P", `Temporary` = "T", .else = "E"))
+assign = c(`Permanent` = "P", `Temporary` = "T"), other = "O")
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{center_scale}()},
 \code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},

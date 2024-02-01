@@ -70,13 +70,15 @@ test_that("scaling return values work", {
   expect_true("new_na_autonomy" %in% names(WoJ %>% setna_scale(autonomy_emphasis, value = 5, name = "new_na_autonomy")))
 
   # recode_cat_scale
-  WoJ_recode <- WoJ %>% recode_cat_scale(country, assign = c("Germany" = 1, "Switzerland" = 2 , .else = 3), overwrite = TRUE)
+  WoJ_recode <- WoJ %>% recode_cat_scale(country, assign = c("Germany" = 1, "Switzerland" = 2), other = 3, overwrite = TRUE)
   expect_true(tibble::is_tibble(WoJ_recode))
   expect_equal(dim(WoJ_recode), dim(WoJ))
   expect_true("country" %in% names(WoJ_recode))
 
-  # recode_scale
-  WoJ_recode_num <- WoJ %>% recode_scale(autonomy_emphasis, breaks = c(0, 1, 4, Inf), labels = c("Low", "Medium", "High"), overwrite = TRUE)
+  # categorize_scale
+  WoJ_recode_num <- WoJ %>% categorize_scale(autonomy_emphasis,
+                                             lower_end = 1, upper_end = 5,
+                                             breaks = c(3, 4), labels = c("Low", "Medium", "High"), overwrite = TRUE)
   expect_true(tibble::is_tibble(WoJ_recode_num))
   expect_equal(dim(WoJ_recode_num), dim(WoJ))
   expect_true("autonomy_emphasis" %in% names(WoJ_recode_num))
@@ -134,10 +136,10 @@ test_that("scaling can handle false inputs", {
   # recode_cat_scale
   expect_error(recode_cat_scale(check, c, assign = c(`1` = "A")))
 
-  # recode_scale
-  expect_error(recode_scale(check, b, breaks = c(0, 1), labels = c("Low")))
-  expect_error(recode_scale(check, c, breaks = c(0, 1), labels = c("Low")))
-  expect_error(recode_scale(check, a, breaks = c(4, 5), labels = c("Low")))
+  # categorize_scale
+  expect_error(categorize_scale(check, b, breaks = c(0, 1), labels = c("Low")))
+  expect_error(categorize_scale(check, c, breaks = c(0, 1), labels = c("Low")))
+  expect_error(categorize_scale(check, a, breaks = c(4, 5), labels = c("Low")))
 
   # dummify_scale
   expect_error(dummify_scale(check, a))
@@ -223,13 +225,6 @@ test_that("scaling returns correct scales", {
   expect_equal(recode_cat_check$b_rec, as.factor(c("One", "One", "One", "Two")))
   recode_cat_check <- recode_cat_scale(check, c, assign = c("a" = "A", "b" = "B"))
   expect_equal(recode_cat_check$c_rec, as.factor(c("A", "B", NA, NA)))
-
-  # recode_scale
-  check <- tibble::tibble(a = c(1, 2, 3, NA),
-                          b = forcats::as_factor(c(1, 1, 1, 2)),
-                          c = c("a", "b", "cde", NA_character_))
-  recode_check <- recode_scale(check, a, breaks = c(0, 2, Inf), labels = c("Low", "High"))
-  expect_equal(recode_check$a_cat, factor(c("Low", "High", "High", NA), levels=c("Low", "High")))
 
   # dummify_scale
   dummify_check <- dummify_scale(check, b)

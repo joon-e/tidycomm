@@ -2,7 +2,7 @@
 % Please edit documentation in R/scaling.R
 \name{setna_scale}
 \alias{setna_scale}
-\title{Set specified values to NA in selected variables or entire data frame.}
+\title{Set specified values to NA in selected variables or entire data frame}
 \usage{
 setna_scale(data, ..., value, name = NULL, overwrite = FALSE)
 }
@@ -38,9 +38,12 @@ WoJ \%>\%
 setna_scale(value = c(2, 3, 4), overwrite = TRUE)
 WoJ \%>\%
 dplyr::select(country) \%>\% setna_scale(country, value = "Germany")
+WoJ \%>\%
+dplyr::select(country) \%>\% setna_scale(country, value = c("Germany", "Switzerland"))
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{center_scale}()},
 \code{\link{dummify_scale}()},
 \code{\link{minmax_scale}()},

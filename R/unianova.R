@@ -82,16 +82,18 @@ unianova <- function(data, group_var, ..., descriptives = FALSE, post_hoc = FALS
     if (levene_row$Levene_p < 0.05) {
       # Unequal variances, use Welch's ANOVA
       equal_var_assumption <- FALSE
-      aov_model <- misty::test.welch(formula, data, effsize = TRUE, output = FALSE, posthoc = TRUE)
-    } else {
+      data_frame <- (as.data.frame(data))
+      aov_model <- misty::test.welch(formula, data_frame, effsize = TRUE, output = FALSE, posthoc = TRUE)
+      } else {
       # Equal variances, use regular ANOVA
       equal_var_assumption <- TRUE
-      aov_model <- misty::aov.b(formula, data, effsize = TRUE, output = FALSE, posthoc = TRUE)
+      data_frame <- (as.data.frame(data))
+      aov_model <- misty::aov.b(formula, data_frame, effsize = TRUE, output = FALSE, posthoc = TRUE)
     }
 
+    data <- tibble::as_tibble(data_frame)
     aov_model_row <- format_aov(aov_model, {{ test_var }}, data, {{ group_var }},
                                 descriptives, post_hoc, equal_var_assumption)
-
     # Collect ANOVA
     model_list_annova[[length(model_list_annova) + 1]] <- aov_model
     out_annova <- out_annova %>%
@@ -239,7 +241,7 @@ format_aov <- function(aov_model, test_var, data, group_var, descriptives,
 
     ph_df <- tibble::tibble(
       post_hoc = list(posthoc)
-      )
+    )
     aov_df <- aov_df %>%
       dplyr::bind_cols(ph_df)
   }
@@ -338,10 +340,10 @@ visualize_unianova <- function(x, design = design_lmu()) {
   # if not inclusive of descriptives, re-do the call respectively
   if (!attr(x, "params")$descriptives) {
     x <- suppressMessages(unianova(attr(x, "data"),
-                  !!group_var,
-                  !!!test_vars,
-                  descriptives = TRUE,
-                  post_hoc = FALSE))
+                                   !!group_var,
+                                   !!!test_vars,
+                                   descriptives = TRUE,
+                                   post_hoc = FALSE))
   }
 
   # prepare data

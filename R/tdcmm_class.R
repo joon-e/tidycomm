@@ -227,12 +227,19 @@ model.tdcmm <- function(x, ...) {
 #' fbposts %>%
 #'   correlate(pop_elite, pop_people) %>%
 #'   visualize()
+#'
+#' fbposts %>%
+#'   correlate(pop_elite, pop_people, with = pop_othering) %>%
+#'   visualize()
+#'
 #' fbposts %>%
 #'   correlate(pop_elite, pop_people) %>%
 #'   visualize("alpha")
+#'
 #' WoJ %>%
-#'   correlate(autonomy_selection, ethics_1, work_experience, partial = TRUE) %>%
+#'   correlate(autonomy_selection, ethics_1, partial = work_experience) %>%
 #'   visualize()
+#'
 #' WoJ %>%
 #'   correlate(ethics_1, ethics_2, ethics_3, ethics_4) %>%
 #'   to_correlation_matrix() %>%

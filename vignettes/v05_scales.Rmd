@@ -25,7 +25,7 @@ Tidycomm provides four functions to easily transform continuous scales and to st
 - `z_scale()` works just like `center_scale()` but also divides the result by the standard deviation to also obtain a standard deviation of 1 and make it comparable to other z-standardized distributions
 - `setna_scale()`: Sets specified values to `NA` in selected variables or the entire data frame.
 - `recode_cat_scale()`: Recodes categorical variables based on provided assignments.
-- `recode_scale()`: Recodes numeric scales into categorical variables based on provided breaks and labels.
+- `categorize_scale()`: Recodes numeric scales into categorical variables based on provided breaks and labels.
 - `dummify_scale()`: Transforms categorical variables into dummy variables.
 
 These functions provide convenience wrappers that make it easy to read and spell out how you transformed your scales.
@@ -102,7 +102,7 @@ For recoding categorical scales:
 ```{r}
 WoJ %>% 
   dplyr::select(country) %>%
-  recode_cat_scale(country, assign = c("Germany" = "german", "Switzerland" = "swiss", .else = "other"))
+  recode_cat_scale(country, assign = c("Germany" = "german", "Switzerland" = "swiss"), other = "other")
 ```
 
 To recode numeric scales into categories:
@@ -110,7 +110,10 @@ To recode numeric scales into categories:
 ```{r}
 WoJ %>%
   dplyr::select(autonomy_emphasis) %>%
-  recode_scale(autonomy_emphasis, breaks = c(0, 1, 4, Inf), labels = c("Low", "Medium", "High"))
+  categorize_scale(autonomy_emphasis, 
+               lower_end =1, upper_end =5,
+               breaks = c(2, 3),
+               labels = c("Low", "Medium", "High"))
 ```
 
 And to create dummy variables:

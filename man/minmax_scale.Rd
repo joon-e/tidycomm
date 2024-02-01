@@ -2,7 +2,7 @@
 % Please edit documentation in R/scaling.R
 \name{minmax_scale}
 \alias{minmax_scale}
-\title{Rescale a numeric continuous scale to new minimum/maximum boundaries}
+\title{Rescale numeric continuous variables to new minimum/maximum boundaries}
 \usage{
 minmax_scale(
   data,
@@ -54,6 +54,7 @@ WoJ \%>\%
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{center_scale}()},
 \code{\link{dummify_scale}()},
 \code{\link{recode_cat_scale}()},

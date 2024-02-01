@@ -25,7 +25,7 @@ tab_frequencies <- function(data, ...) {
     dplyr::group_by(..., !!!grouping) %>%
     dplyr::summarise(n = dplyr::n()) %>%
     dplyr::group_by(!!!grouping) %>%
-    dplyr::mutate(percent = .data$n / sum(.data$n)) %>%
+    dplyr::mutate(percent = n / sum(n)) %>%
     dplyr::arrange(!!!grouping)
 
   out <- d %>%
@@ -90,7 +90,7 @@ crosstab <- function(data, col_var, ..., add_total = FALSE,
   xt <- data %>%
     dplyr::group_by({{ col_var }}, ...) %>%
     dplyr::count() %>%
-    tidyr::spread({{ col_var }}, .data$n, fill = 0) %>%
+    tidyr::spread({{ col_var }}, n, fill = 0) %>%
     dplyr::ungroup()
 
   xt_cross_vars <- xt %>%
@@ -213,15 +213,15 @@ visualize_tab_frequencies <- function(x, design = design_lmu()) {
               tab_frequencies(!!sym(variable)) %>%
               dplyr::mutate(var = variable,
                             level = forcats::as_factor(.data[[variable]])) %>%
-              dplyr::select(var, .data$level, .data$percent))
+              dplyr::select(var, level, percent))
   }
 
   # visualize
   g <- data %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$level, y = .data$percent)) +
+    ggplot2::ggplot(ggplot2::aes(x = level, y = percent)) +
     ggplot2::geom_bar(stat = "identity",
                       fill = design$main_color_1) +
-    ggplot2::facet_wrap(dplyr::vars(.data$var),
+    ggplot2::facet_wrap(dplyr::vars(var),
                         scales = "free_x") +
     ggplot2::scale_x_discrete(NULL) +
     ggplot2::scale_y_continuous(NULL,
@@ -267,9 +267,9 @@ visualize_crosstab <- function(x, design = design_lmu()) {
     tidyr::pivot_longer(!c(!!sym(dependent_var_string)),
                         names_to = "label_independent") %>%
     dplyr::mutate(label_independent =
-                    forcats::as_factor(.data$label_independent),
+                    forcats::as_factor(label_independent),
                   label_independent_desc =
-                    forcats::fct_rev(.data$label_independent)) %>%
+                    forcats::fct_rev(label_independent)) %>%
     dplyr::rename(level = !!sym(dependent_var_string))
 
   if (length(dplyr::n_distinct(data$label_independent)) > 12) {
@@ -280,16 +280,16 @@ visualize_crosstab <- function(x, design = design_lmu()) {
 
   # visualize
   g <- data %>%
-    ggplot2::ggplot(ggplot2::aes(x = .data$value,
-                                 y = .data$label_independent_desc,
-                                 fill = .data$level)) +
+    ggplot2::ggplot(ggplot2::aes(x = value,
+                                 y = label_independent_desc,
+                                 fill = level)) +
     ggplot2::geom_bar(stat = "identity",
                       position = "stack")
 
   if (attr(x, "params")$percentages) {
     g <- g +
-      ggplot2::geom_text(ggplot2::aes(label = percentage_labeller(.data$value),
-                                      color = .data$level),
+      ggplot2::geom_text(ggplot2::aes(label = percentage_labeller(value),
+                                      color = level),
                          position = ggplot2::position_stack(vjust = .5)) +
       ggplot2::scale_x_continuous(NULL,
                                   labels = percentage_labeller,
@@ -297,8 +297,8 @@ visualize_crosstab <- function(x, design = design_lmu()) {
                                   breaks = seq(0, 1, .1))
   } else {
     g <- g +
-      ggplot2::geom_text(ggplot2::aes(label = .data$value,
-                                      color = .data$level),
+      ggplot2::geom_text(ggplot2::aes(label = value,
+                                      color = level),
                          position = ggplot2::position_stack(vjust = .5)) +
       ggplot2::scale_x_continuous('N',
                                   limits = c(0, NA),
