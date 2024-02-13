@@ -139,7 +139,7 @@ test_that("scaling can handle false inputs", {
   # categorize_scale
   expect_error(categorize_scale(check, b, breaks = c(0, 1), labels = c("Low")))
   expect_error(categorize_scale(check, c, breaks = c(0, 1), labels = c("Low")))
-  expect_error(categorize_scale(check, a, breaks = c(4, 5), labels = c("Low")))
+  expect_error(suppressWarnings(categorize_scale(check, a, breaks = c(4, 5), labels = c("Low"))))
 
   # dummify_scale
   expect_error(dummify_scale(check, a))
