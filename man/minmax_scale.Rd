@@ -2,38 +2,38 @@
 % Please edit documentation in R/scaling.R
 \name{minmax_scale}
 \alias{minmax_scale}
-\title{Rescale a numeric continuous scale to new minimum/maximum boundaries}
+\title{Rescale numeric continuous variables to new minimum/maximum boundaries}
 \usage{
 minmax_scale(
   data,
-  scale_var,
+  ...,
   change_to_min = 0,
   change_to_max = 1,
-  name = paste0(as_label(expr({
-     {
-         scale_var
-     }
- })), "_", gsub("-",
-    "neg", paste0(change_to_min, "to", change_to_max)))
+  name = NULL,
+  overwrite = FALSE
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
+\item{data}{A \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model.}
 
-\item{scale_var}{a numeric variable for which the scale gets changed}
+\item{...}{Numeric variables to be min-max scaled. If none are provided,
+all numeric columns will be scaled.}
 
-\item{change_to_min}{numeric minimum of the new range (default is \code{0})}
+\item{change_to_min}{The desired minimum value after scaling.}
 
-\item{change_to_max}{numeric maximum of the new range (default is \code{1})}
+\item{change_to_max}{The desired maximum value after scaling.}
 
-\item{name}{the name of the new variable. By default, this is the same name
-as \code{scale_var} but suffixed with \code{change_to_min} and \code{change_to_max} so that,
-for example, "variable" becomes "variable_3to5". Negative values are prefixed
-with "neg" to avoid invalid columns names (e.g., -3 to 3 becomes
-"variable_neg3to5").}
+\item{name}{Optional name for the new scaled variable when a single
+variable is provided. By default, the name will be the original variable
+name suffixed with the range. For example, "variable" becomes
+"variable_3to5". Negative values are prefixed with "neg" to avoid invalid
+columns names (e.g., -3 to 3 becomes "variable_neg3to5").}
+
+\item{overwrite}{Logical. If \code{TRUE}, it overwrites the original variable(s)
+with the scaled values. If \code{FALSE} (default), a new variable(s) is created.}
 }
 \value{
-a \link{tdcmm} model
+A \link{tdcmm} model with the min-max scaled variable(s).
 }
 \description{
 Given a specified minimum and maximum, this function translates each value
@@ -44,20 +44,22 @@ scale are z-standardized, they will be equal again, indicating that the
 relative positions and distributions of the values remain consistent.
 }
 \examples{
-WoJ \%>\% minmax_scale(autonomy_emphasis)
-WoJ \%>\% minmax_scale(autonomy_emphasis,
-                     change_to_min = 1,
-                     change_to_max = 10,
-                     name = "my_changed_variable")
-
+WoJ \%>\% minmax_scale(autonomy_emphasis, change_to_min = 0,
+change_to_max = 1)
+WoJ \%>\% minmax_scale(autonomy_emphasis, name = "my_scaled_variable",
+change_to_min = 0, change_to_max = 1)
 WoJ \%>\%
-  minmax_scale(autonomy_emphasis) \%>\%
+  minmax_scale(autonomy_emphasis, change_to_min = 0, change_to_max = 1) \%>\%
   tab_frequencies(autonomy_emphasis, autonomy_emphasis_0to1)
 }
 \seealso{
 Other scaling: 
+\code{\link{categorize_scale}()},
 \code{\link{center_scale}()},
+\code{\link{dummify_scale}()},
+\code{\link{recode_cat_scale}()},
 \code{\link{reverse_scale}()},
+\code{\link{setna_scale}()},
 \code{\link{z_scale}()}
 }
 \concept{scaling}

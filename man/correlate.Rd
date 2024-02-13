@@ -4,7 +4,7 @@
 \alias{correlate}
 \title{Compute correlation coefficients}
 \usage{
-correlate(data, ..., method = "pearson", partial = FALSE)
+correlate(data, ..., method = "pearson", partial = NULL, with = NULL)
 }
 \arguments{
 \item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
@@ -15,10 +15,13 @@ to compute for all numeric variables in data.}
 \item{method}{a character string indicating which correlation coefficient
 is to be computed. One of "pearson" (default), "kendall", or "spearman"}
 
-\item{partial}{Logical indicating whether the pairwise partial correlation
-for three variables should be computed. Defaults to \code{FALSE}. If set to \code{TRUE}
-all combinations, i.e. pairs, of specified variables will be computed
-while controlling for the third variable.}
+\item{partial}{Specifies a variable to be used as a control in a partial correlation.
+By default, this parameter is set to \code{NULL}, indicating that no control variable
+is used in the correlation. If used, \code{with} must be set to \code{NULL} (default).}
+
+\item{with}{Specifies a focus variable to correlate all other variables with.
+By default, this parameter is set to \code{NULL}, indicating that no focus variable
+is used in the correlation. If used, \code{partial} must be set to \code{NULL} (default).}
 }
 \value{
 a \link{tdcmm} model
@@ -31,7 +34,9 @@ variables are used.
 \examples{
 WoJ \%>\% correlate(ethics_1, ethics_2, ethics_3)
 WoJ \%>\% correlate()
-WoJ \%>\% correlate(autonomy_selection, autonomy_emphasis, work_experience, partial = TRUE)
+WoJ \%>\% correlate(ethics_1, ethics_2, ethics_3, with = work_experience)
+WoJ \%>\% correlate(autonomy_selection, autonomy_emphasis, partial = work_experience)
+WoJ \%>\% correlate(with = work_experience)
 
 }
 \concept{correlations}

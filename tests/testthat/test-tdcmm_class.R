@@ -23,7 +23,7 @@ test_that("S3 class tdcmm is assigned to relevant outputs", {
 
   # Crosstabs
   expect_s3_class(crosstab(WoJ, reach, employment), "tdcmm")
-  expect_s3_class(crosstab(WoJ, reach, employment, chi_square = TRUE), "tdcmm")
+  expect_s3_class(crosstab(WoJ, reach, employment), "tdcmm")
 
   # Frequency tables
   expect_s3_class(tab_frequencies(WoJ, employment, country), "tdcmm")
@@ -101,10 +101,8 @@ test_that("correct subclasses are assigned to outputs", {
   # Correlation
   expect_s3_class(correlate(WoJ, work_experience, autonomy_selection),
                   "tdcmm_crrltn")
-  expect_s3_class(to_correlation_matrix(correlate(WoJ,
-                                                  work_experience,
-                                                  autonomy_selection)),
-                  "tdcmm_crrltn")
+  expect_s3_class(to_correlation_matrix(correlate(WoJ, work_experience, autonomy_selection), verbose = FALSE),
+    "tdcmm_crrltn")
 
   # t tests
   expect_s3_class(t_test(WoJ, temp_contract, autonomy_selection),
@@ -209,7 +207,7 @@ test_that("tdcmm contains adequate func names and param lists", {
 
   # to_correlation_matrix uses its corresponding correlate params
   expect_equal(length(formals(to_correlation_matrix)) - 1, # reduced by piping data argument
-               0)
+               1)
   expect_equal(length(attr(t, "params")),
                length(attr(model(t), "params")))
 

@@ -187,6 +187,20 @@ WoJ %>%
   correlate()
 ```
 
+Specify a focus variable using the `with` parameter to correlate all other variables with this focus variable. 
+
+```{r}
+WoJ %>% 
+  correlate(autonomy_selection, autonomy_emphasis, with = work_experience)
+```
+
+Run a partial correlation by designating three variables along with the `partial` parameter.
+
+```{r}
+WoJ %>% 
+  correlate(autonomy_selection, autonomy_emphasis, partial = work_experience)
+```
+
 Visualize correlations by passing the results on to the `visualize()` function:
 
 ```{r}

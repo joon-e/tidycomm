@@ -9,10 +9,12 @@
 #'   to compute for all numeric variables in data.
 #' @param method a character string indicating which correlation coefficient
 #'   is to be computed. One of "pearson" (default), "kendall", or "spearman"
-#' @param partial Logical indicating whether the pairwise partial correlation
-#' for three variables should be computed. Defaults to `FALSE`. If set to `TRUE`
-#' all combinations, i.e. pairs, of specified variables will be computed
-#' while controlling for the third variable.
+#' @param partial Specifies a variable to be used as a control in a partial correlation.
+#' By default, this parameter is set to `NULL`, indicating that no control variable
+#' is used in the correlation. If used, `with` must be set to `NULL` (default).
+#' @param with Specifies a focus variable to correlate all other variables with.
+#' By default, this parameter is set to `NULL`, indicating that no focus variable
+#' is used in the correlation. If used, `partial` must be set to `NULL` (default).
 #'
 #' @return a [tdcmm] model
 #'
@@ -21,46 +23,119 @@
 #' @examples
 #' WoJ %>% correlate(ethics_1, ethics_2, ethics_3)
 #' WoJ %>% correlate()
-#' WoJ %>% correlate(autonomy_selection, autonomy_emphasis, work_experience, partial = TRUE)
+#' WoJ %>% correlate(ethics_1, ethics_2, ethics_3, with = work_experience)
+#' WoJ %>% correlate(autonomy_selection, autonomy_emphasis, partial = work_experience)
+#' WoJ %>% correlate(with = work_experience)
 #'
 #' @export
-correlate <- function(data, ..., method = "pearson", partial = FALSE) {
+correlate <- function(data, ..., method = "pearson",
+                      partial = NULL,
+                      with = NULL) {
 
-  if (partial == TRUE) {
-    vars <- grab_vars(data, enquos(...), alternative = "none")
-    var_strings <- data %>%
-      dplyr::select(!!!vars) %>%
-      names()
-    method_string <- method
-    result_correlate_partial <- correlate_partial(data, ..., method = method_string)
-    return(new_tdcmm_crrltn(new_tdcmm(result_correlate_partial,
-                                      func = "correlate",
-                                      data = data,
-                                      params = list(vars = var_strings,
-                                                    partial = TRUE,
-                                                    method = method))))
+  if (!inherits(data, "tbl_df")) {
+    tryCatch({
+      data <- tibble::as_tibble(data)
+    },
+    error = function(e) {
+      message("Your data is currently not in tibble format and the automatic conversion to a tibble has failed. Please attempt to manually convert your data into a tibble.", e$message)
+    }
+    )
+  }
+
+  vars <- enquos(...)
+  partial_arg <- enquo(partial)
+  with_arg <- enquo(with)
+
+  # Check if the partial parameter is provided
+  if (!rlang::quo_is_null(partial_arg)) {
+    zvar <- rlang::quo_name(partial_arg)
+    partial <- TRUE
+  } else {
+    zvar <- NULL
+    partial <- FALSE
+  }
+
+  # Check if the with parameter is provided
+  if (!rlang::quo_is_null(with_arg)) {
+    with_var <- rlang::quo_name(with_arg)
   }
 
   if (!method %in% c("pearson", "kendall", "spearman")) {
-    stop('method must be one of "pearson", "kendall" or "spearman"',
-         call. = FALSE)
+    stop('Method must be one of "pearson", "kendall" or "spearman".', call. = FALSE)
   }
 
-  vars <- grab_vars(data, enquos(...))
+  input_vars_chr <- purrr::map_chr(vars, rlang::quo_name)
 
-  var_strings <- data %>%
-    dplyr::select(!!!vars) %>%
-    names()
-  var_combs <- combn(var_strings, 2, simplify = FALSE)
-  out <- purrr::map_dfr(var_combs, correlation_test, data, method)
+  # Check if partial and with are both provided at the same time
+  if (partial == TRUE && !rlang::quo_is_null(with_arg)) {
+    stop("Cannot run a partial correlation and specify a focus variable simultaneously. Please choose one approach.", call. = FALSE)
+  }
 
-  return(new_tdcmm_crrltn(new_tdcmm(out,
-                                    func = "correlate",
-                                    data = data,
-                                    params = list(vars = var_strings,
-                                                  partial = FALSE,
-                                                  method = method))))
+  input_vars_incl_zvar <- c(input_vars_chr, zvar)
+
+  if (partial == TRUE) {
+    result_correlate_partial <- correlate_partial(data, zvar, !!!vars, method = method)
+    return(new_tdcmm_crrltn(new_tdcmm(result_correlate_partial,
+                                      func = "correlate",
+                                      data = data,
+                                      params = list(vars = input_vars_incl_zvar,
+                                                    partial = TRUE,                                                partial = TRUE,
+                                                    with = NULL,
+                                                    method = method))))
+  }
+
+
+  if (!rlang::quo_is_null(with_arg)) {
+    if (!(with_var %in% names(data))) {
+      stop("Specified focus variable not found in the data.", call. = FALSE)
+    }
+
+    if (length(vars) > 0) {
+      # correlate focus variable with the specified variables
+      var_strings <- purrr::map_chr(vars, rlang::quo_name)
+      var_combs <- purrr::map(var_strings, ~c(with_var, .x))
+    } else {
+      # correlate focus variable with all variables in the dataset
+      var_strings <- data %>%
+        dplyr::select(-!!with_arg) %>%
+        names()
+
+      var_combs <- purrr::map(var_strings, ~c(with_var, .x))
+    }
+
+    out <- purrr::map_dfr(var_combs, correlation_test, data, method)
+
+    input_vars_incl_focus <- c(var_strings, with_var)
+
+    return(new_tdcmm_crrltn(new_tdcmm(out,
+                                      func = "correlate",
+                                      data = data,
+                                      params = list(vars = input_vars_incl_focus,
+                                                    partial = FALSE,
+                                                    with = with_var,
+                                                    method = method
+                                                    ))))
+  } else {
+    # Regular correlation without 'partial' or 'with' parameter
+    vars <- grab_vars(data, enquos(...))
+    var_strings <- data %>%
+      dplyr::select(!!!vars) %>%
+      names()
+
+    var_combs <- combn(var_strings, 2, simplify = FALSE)
+
+    out <- purrr::map_dfr(var_combs, correlation_test, data, method)
+
+    return(new_tdcmm_crrltn(new_tdcmm(out,
+                                      func = "correlate",
+                                      data = data,
+                                      params = list(vars = var_strings,
+                                                    partial = FALSE,
+                                                    with = NULL,
+                                                    method = method))))
+  }
 }
+
 
 #' Create correlation matrix
 #'
@@ -68,6 +143,9 @@ correlate <- function(data, ..., method = "pearson", partial = FALSE) {
 #' matrix.
 #'
 #' @param data a [tdcmm] model returned from \code{\link{correlate}}
+#' @param verbose A logical, defaulted to `FALSE`. Only applicable when
+#' correlating two variables. If set to `TRUE`, the function outputs information
+#' regarding the sample size.
 #'
 #' @return a [tdcmm] model
 #'
@@ -77,26 +155,62 @@ correlate <- function(data, ..., method = "pearson", partial = FALSE) {
 #' WoJ %>% correlate() %>% to_correlation_matrix()
 #'
 #' @export
-to_correlation_matrix <- function(data) {
+to_correlation_matrix <- function(data, verbose = FALSE) {
 
   estimate <- names(data)[3]
 
   var_order <- data %>%
-    dplyr::pull(.data$x) %>%
+    dplyr::pull(x) %>%
     unique()
 
-  out <- data %>%
-    dplyr::select(x = 1, y = 2, cor = 3) %>%
-    dplyr::bind_rows(
-      data %>%
-        dplyr::select(x = 1, y = 2, cor = 3) %>%
-        dplyr::rename(x = "y", y = "x")
-    ) %>%
-    tidyr::spread(.data$y, .data$cor, fill = 1) %>%
-    dplyr::arrange(match(.data$x, var_order)) %>%
-    dplyr::rename(!!estimate := "x") %>%
-    dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
-                  dplyr::everything())
+  # Compute n if exactly two vars are being correlated
+  if (nrow(data) == 1) {
+
+    out <- data %>%
+      dplyr::select(x = 1, y = 2, cor = 3, n = 4) %>%
+      dplyr::bind_rows(
+        data %>%
+          dplyr::select(x = 1, y = 2, cor = 3, n = 4) %>%
+          dplyr::rename(x = "y", y = "x")
+      ) %>%
+      tidyr::spread(.data$y, .data$cor, fill = 1) %>%
+      dplyr::arrange(match(.data$x, var_order)) %>%
+      dplyr::rename(!!estimate := "x") %>%
+      dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
+                    dplyr::everything())
+
+    if (!is.na(out$n[1])) {
+      n_value <- out$n[1] + 2
+
+      if (verbose) {
+        cat("\n", "Sample size after deletion of cases with missing values: n = ", n_value, "\n")
+      }
+      }
+
+    out <- out %>%
+      dplyr::select(-n)
+
+  } else {
+    out <- data %>%
+      dplyr::select(x = 1, y = 2, cor = 3) %>%
+      dplyr::bind_rows(
+        data %>%
+          dplyr::select(x = 1, y = 2, cor = 3) %>%
+          dplyr::rename(x = "y", y = "x")
+      ) %>%
+      tidyr::spread(.data$y, .data$cor, fill = 1) %>%
+      dplyr::arrange(match(.data$x, var_order)) %>%
+      dplyr::rename(!!estimate := "x") %>%
+      dplyr::select(tidyselect::all_of(estimate), tidyselect::all_of(var_order),
+                    dplyr::everything())
+
+    check_for_with_parameter <- out[2,4]
+
+    if (check_for_with_parameter == 1) {
+      out <- out %>%
+        dplyr::select(1:2) # Fixed the select function by adding the dplyr:: prefix
+    }
+  }
 
   return(new_tdcmm_crrltn(
     new_tdcmm(out,
@@ -106,6 +220,7 @@ to_correlation_matrix <- function(data) {
               model = list(data)))
   )
 }
+
 
 #' @rdname visualize
 #' @param which string to specify type of point visualization. One of
@@ -120,7 +235,7 @@ visualize.tdcmm_crrltn <- function(x,
                                    .design = design_lmu()) {
   if (attr(x, "func") == "correlate") {
     if (!which %in% c("jitter", "alpha")) {
-      warning(glue('which must be one of "jitter" or "alpha". Since none ',
+      warning(glue::glue('which must be one of "jitter" or "alpha". Since none ',
                    'was provided, "jitter" is considered by default.'),
               call. = FALSE)
       which <- "jitter"
@@ -161,22 +276,39 @@ correlation_test <- function(var_comb, data, method) {
   xvar <- data[[x]]
   yvar <- data[[y]]
 
+  n_value <- nrow(data) - sum(is.na(data[[x]]) | is.na(data[[y]]))
+
   if (any(!is.numeric(xvar), !is.numeric(yvar))) {
-    warning(glue("At least one of {x} and {y} is not numeric, ",
+    warning(glue::glue("At least one of {x} and {y} is not numeric, ",
                  "skipping computation."),
             call. = FALSE)
     return()
   }
 
-  cor_test <- stats::cor.test(xvar, yvar, method = method)
+  suppressWarnings({
+    cor_test <- stats::cor.test(xvar, yvar, method = method)
+  })
 
   if (method == "pearson") {
     name <- "r"
   } else if (method == "kendall") {
     name <- "tau"
+    if (is.null(cor_test$parameter)) {
+      message("When using Kendall's tau correlation, the df is not applicable. Kendall's tau is based on concordant and discordant pairs of data, rather than on a mathematical distribution that would require the calculation of df.")
+      df <- NA
+    } else {
+      df <- cor_test$parameter
+    }
   } else if (method == "spearman") {
     name <- "rho"
+    if (is.null(cor_test$parameter)) {
+      message("The Spearman correlation may involve tied values (they have the same rank), making it impossible to calculate an exact p-value and dfs. We suggest using Kendall's tau rank correlation, which is tailored to handle tied data.")
+      df <- NA
+    } else {
+      df <- cor_test$parameter
+    }
   }
+
 
   tibble::tibble(
     x = x,
@@ -184,7 +316,8 @@ correlation_test <- function(var_comb, data, method) {
     !!name := cor_test$estimate,
     df = ifelse(is.null(cor_test$parameter),
                 NA, cor_test$parameter),
-    p = cor_test$p.value
+    p = cor_test$p.value,
+    n = n_value
   )
 }
 
@@ -287,37 +420,50 @@ visualize_to_correlation_matrix <- function(x, design = design_lmu()) {
 #
 ## @keywords internal
 visualize_partial_correlation <- function(x, which = "jitter", design = design_lmu()) {
-  # prepare data
+  # Ensure that the necessary parameters are present
+  if (!"params" %in% names(attributes(x)) ||
+      !"vars" %in% names(attr(x, "params"))) {
+    stop("Required parameters for visualization are missing.", call. = FALSE)
+  }
+
+  # Extract the variable names from the parameters
+  params <- attr(x, "params")
+  var_names <- params$vars
+
+  # Check if the variable names are correct and in expected number
+  if (length(var_names) != 3) {
+    stop("Expected three variable names for partial correlation visualization.", call. = FALSE)
+  }
+
+  # Convert character vectors to symbols
+  sym_vars <- lapply(var_names, rlang::sym)
+
+  # Data preparation for models
   data <- attr(x, "data") %>%
     stats::na.omit()
 
-  # calculate individual models
+  # Regression models
   model1 <- data %>%
-    regress(!!sym(attr(x, "params")$vars[1]),
-            !!sym(attr(x, "params")$vars[3])) %>%
+    regress(!!sym_vars[[1]], !!sym_vars[[3]]) %>%
     model()
 
   model2 <- data %>%
-    regress(!!sym(attr(x, "params")$vars[2]),
-            !!sym(attr(x, "params")$vars[3])) %>%
+    regress(!!sym_vars[[2]], !!sym_vars[[3]]) %>%
     model()
 
-  # extracts residuals
+  # Extracts residuals
   model1_res <- stats::residuals(model1)
   model2_res <- stats::residuals(model2)
 
-  # cbind and visualize
-  model1_name <- paste0('Residuals ',
-                        attr(x, "params")$vars[1], ' ~ ',
-                        attr(x, "params")$vars[3])
-  model2_name <- paste0('Residuals ',
-                        attr(x, "params")$vars[2], ' ~ ',
-                        attr(x, "params")$vars[3])
+  # Prepare names for residual columns
+  model1_name <- paste0('Residuals ', var_names[1], ' ~ ', var_names[3])
+  model2_name <- paste0('Residuals ', var_names[2], ' ~ ', var_names[3])
+
+  # Combine and visualize
   data %>%
     dplyr::bind_cols(tibble::tibble(!!model1_name := model1_res,
                                     !!model2_name := model2_res)) %>%
-    correlate(!!model1_name,
-              !!model2_name) %>%
+    correlate(!!model1_name, !!model2_name) %>%
     visualize(which, design)
 }
 

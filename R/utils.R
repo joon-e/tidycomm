@@ -1,5 +1,17 @@
 ### Internal functions ###
 
+## Using globalVariables function
+# Use the globalVariables function to inform R CMD check that certain names are
+# known and shouldn't be flagged.
+utils::globalVariables(c(".", "Delta_M", "Group_Var", "M", "N", "SD",
+                         "Variable", "Variable_desc", "ci_95_ll", "ci_95_ul",
+                         "conf_lower", "conf_upper", "contrast", "d", "d.low",
+                         "d.upp", "group1", "group2", "level", "m.diff", "m.low",
+                         "m.upp", "name", "pval", "val", "z", "group", "x", "n",
+                         "label_independent", "value", "label_independent_desc",
+                         "percent"))
+
+
 ## Helper function for indicating a lack of visualization
 ##
 ## @param a [tdcmm] model

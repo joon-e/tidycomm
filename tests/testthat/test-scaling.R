@@ -62,6 +62,32 @@ test_that("scaling return values work", {
                                    autonomy_emphasis,
                                    change_to_min = -2,
                                    change_to_max = +2)))
+  # setna_scale
+  WoJ_na <- WoJ %>% setna_scale(autonomy_emphasis, value = 5)
+  expect_true(tibble::is_tibble(WoJ_na))
+  expect_equal(dim(WoJ_na), dim(WoJ) + c(0, 1))
+  expect_true("autonomy_emphasis_na" %in% names(WoJ_na))
+  expect_true("new_na_autonomy" %in% names(WoJ %>% setna_scale(autonomy_emphasis, value = 5, name = "new_na_autonomy")))
+
+  # recode_cat_scale
+  WoJ_recode <- WoJ %>% recode_cat_scale(country, assign = c("Germany" = 1, "Switzerland" = 2), other = 3, overwrite = TRUE)
+  expect_true(tibble::is_tibble(WoJ_recode))
+  expect_equal(dim(WoJ_recode), dim(WoJ))
+  expect_true("country" %in% names(WoJ_recode))
+
+  # categorize_scale
+  WoJ_recode_num <- WoJ %>% categorize_scale(autonomy_emphasis,
+                                             lower_end = 1, upper_end = 5,
+                                             breaks = c(3, 4), labels = c("Low", "Medium", "High"), overwrite = TRUE)
+  expect_true(tibble::is_tibble(WoJ_recode_num))
+  expect_equal(dim(WoJ_recode_num), dim(WoJ))
+  expect_true("autonomy_emphasis" %in% names(WoJ_recode_num))
+
+  # dummify_scale
+  WoJ_dummy <- WoJ %>% dplyr::select(temp_contract) %>% dummify_scale(temp_contract)
+  expect_true(tibble::is_tibble(WoJ_dummy))
+  expected_columns <- c("temp_contract", paste0("temp_contract_", tolower(as.character(unique(na.omit(WoJ$temp_contract))))))
+  expect_equal(sort(names(WoJ_dummy)), sort(expected_columns))
 })
 
 test_that("scaling can handle false inputs", {
@@ -103,6 +129,20 @@ test_that("scaling can handle false inputs", {
                sum(is.na(minmax_scale(check, a)$a_0to1)))
   expect_error(minmax_scale(check, b))
   expect_error(minmax_scale(check, c))
+
+  # setna_scale
+  expect_error(setna_scale(check, c, value = "x"))
+
+  # recode_cat_scale
+  expect_error(recode_cat_scale(check, c, assign = c(`1` = "A")))
+
+  # categorize_scale
+  expect_error(categorize_scale(check, b, breaks = c(0, 1), labels = c("Low")))
+  expect_error(categorize_scale(check, c, breaks = c(0, 1), labels = c("Low")))
+  expect_error(categorize_scale(check, a, breaks = c(4, 5), labels = c("Low")))
+
+  # dummify_scale
+  expect_error(dummify_scale(check, a))
 })
 
 test_that("scaling returns correct scales", {
@@ -165,4 +205,30 @@ test_that("scaling returns correct scales", {
   expect_equal(max(check$autonomy_emphasis_1to10, na.rm = TRUE), 10)
   expect_equal(check$autonomy_emphasis_z,
                check$autonomy_emphasis_1to10_z)
+
+  # setna_scale
+  check <- tibble::tibble(a = c(1, 2, 3, NA),
+                          b = forcats::as_factor(c(1, 1, 1, 2)),
+                          c = c("a", "b", "cde", NA_character_))
+  setna_check <- setna_scale(check, a, value = 2)
+  expect_true(is.na(setna_check[2, "a_na"]))
+  setna_check <- setna_scale(check, b, value = 2)
+  expect_true(is.na(setna_check[4, "b_na"]))
+  setna_check <- setna_scale(check, c, value = "a")
+  expect_true(is.na(setna_check[1, "c_na"]))
+
+  # recode_cat_scale
+  check <- tibble::tibble(a = c(1, 2, 3, NA),
+                          b = forcats::as_factor(c(1, 1, 1, 2)),
+                          c = c("a", "b", "cde", NA_character_))
+  recode_cat_check <- check %>% recode_cat_scale(b, assign = c(`1` = "One", `2` = "Two"))
+  expect_equal(recode_cat_check$b_rec, as.factor(c("One", "One", "One", "Two")))
+  recode_cat_check <- recode_cat_scale(check, c, assign = c("a" = "A", "b" = "B"))
+  expect_equal(recode_cat_check$c_rec, as.factor(c("A", "B", NA, NA)))
+
+  # dummify_scale
+  dummify_check <- dummify_scale(check, b)
+  expect_true(all(colnames(dummify_check) %in% c("a", "b", "c", "b_1", "b_2")))
+  dummify_check <- dummify_scale(check, c)
+  expect_true(all(colnames(dummify_check) %in% c("a", "b", "c", "c_a", "c_b", "c_cde")))
 })
