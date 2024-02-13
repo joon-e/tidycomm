@@ -1,6 +1,6 @@
 Package: tidycomm
 Title: Data Modification and Analysis for Communication Research
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: c(
     person("Julian", "Unkel", , "julian.unkel@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9568-7041")),

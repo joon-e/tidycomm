@@ -1,3 +1,5 @@
+# tidycomm 0.4.0
+
 # tidycomm 0.3.0
 
 ## New features
