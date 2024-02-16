@@ -13,6 +13,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
 Tidycomm provides a workflow to quickly add mean/sum indices of several variables to the dataset and compute reliability estimates for those added indices:

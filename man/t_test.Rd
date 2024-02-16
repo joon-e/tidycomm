@@ -12,21 +12,24 @@ t_test(
   paired = FALSE,
   pooled_sd = TRUE,
   levels = NULL,
-  case_var = NULL
+  case_var = NULL,
+  mu = NULL
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
-\item{group_var}{group variable (column name)}
+\item{group_var}{group variable (column name) to specify where to split two
+samples (two-sample t-test) or which variable to compare a one-sample
+t-test on}
 
 \item{...}{test variables (column names). Leave empty to compute t-tests for
-all numeric variables in data.}
+all numeric variables in data. Also leave empty for one-sample t-tests.}
 
-\item{var.equal}{a logical variable indicating whether to treat the two
+\item{var.equal}{this parameter is deprecated (previously: a logical variable indicating whether to treat the two
 variances as being equal. If \code{TRUE} then the pooled variance is used to
 estimate the variance otherwise the Welch (or Satterthwaite) approximation
-to the degrees of freedom is used. Defaults to \code{TRUE}.}
+to the degrees of freedom is used. Defaults to \code{TRUE}).}
 
 \item{paired}{a logical indicating whether you want a paired t-test. Defaults
 to \code{FALSE}.}
@@ -40,20 +43,28 @@ the group variable.}
 \item{case_var}{optional: case-identifying variable (column name). If you
 set \code{paired = TRUE}, specifying a case variable will ensure that data
 are properly sorted for a dependent t-test.}
+
+\item{mu}{optional: a number indicating the \emph{true} value of the mean in the
+general population (\eqn{\mu}). If set, a one-sample t-test (i.e., a
+location test) is being calculated. Leave to \code{NULL} to calculate
+two-sample t-test(s).}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes t-tests for one group variable and specified test variables.
 If no variables are specified, all numeric (integer or double) variables are
-used.
+used. A Levene's test will automatically determine whether the pooled variance is used to
+estimate the variance. Otherwise the Welch (or Satterthwaite) approximation
+to the degrees of freedom is used.
 }
 \examples{
 WoJ \%>\% t_test(temp_contract, autonomy_selection, autonomy_emphasis)
 WoJ \%>\% t_test(temp_contract)
 WoJ \%>\% t_test(employment, autonomy_selection, autonomy_emphasis,
   levels = c("Full-time", "Freelancer"))
+WoJ \%>\% t_test(autonomy_selection, mu = 3.62)
 
 }
 \concept{t-test}

@@ -1,0 +1,125 @@
+---
+title: "Change Scales"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Scales}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+Tidycomm provides four functions to easily transform continuous scales and to standardize them:
+
+- `reverse_scale()` simply turns a scale upside down
+- `minmax_scale()` down- or upsizes a scale to new minimum/maximum while retaining distances
+- `center_scale()` subtracts the mean from each individual data point to center a scale at a mean of 0
+- `z_scale()` works just like `center_scale()` but also divides the result by the standard deviation to also obtain a standard deviation of 1 and make it comparable to other z-standardized distributions
+- `setna_scale()`: Sets specified values to `NA` in selected variables or the entire data frame.
+- `recode_cat_scale()`: Recodes categorical variables based on provided assignments.
+- `categorize_scale()`: Recodes numeric scales into categorical variables based on provided breaks and labels.
+- `dummify_scale()`: Transforms categorical variables into dummy variables.
+
+These functions provide convenience wrappers that make it easy to read and spell out how you transformed your scales.
+
+```{r setup}
+library(tidycomm)
+```
+
+The easiest one is to reverse your scale. You can just specify the scale and define the scale's lower and upper end. Take `autonomy_emphasis` as an example that originally ranges from 1 to 5. We will reverse it to range from 5 to 1.
+
+The function adds a new column named `autonomy_emphasis_rev`: 
+
+```{r}
+WoJ %>% 
+  reverse_scale(autonomy_emphasis,
+                lower_end = 1,
+                upper_end = 5) %>% 
+  dplyr::select(autonomy_emphasis,
+                autonomy_emphasis_rev)
+```
+
+Alternatively, you can also specify the new column name manually:
+
+```{r}
+WoJ %>% 
+  reverse_scale(autonomy_emphasis,
+                name = "new_emphasis",
+                lower_end = 1,
+                upper_end = 5) %>% 
+  dplyr::select(autonomy_emphasis,
+                new_emphasis)
+```
+
+`minmax_scale()` just takes your continuous scale to a new range. For example, convert the 1-5 scale of `autonomy_emphasis` to a 1-10 scale while keeping the distances:
+
+```{r}
+WoJ %>% 
+  minmax_scale(autonomy_emphasis,
+               change_to_min = 1,
+               change_to_max = 10) %>% 
+  dplyr::select(autonomy_emphasis,
+                autonomy_emphasis_1to10)
+```
+
+`center_scale()` moves your continuous scale around a mean of 0:
+
+```{r}
+WoJ %>% 
+  center_scale(autonomy_selection) %>% 
+  dplyr::select(autonomy_selection,
+                autonomy_selection_centered)
+```
+
+Finally, `z_scale()` does more or less the same but standardizes the outcome. To visualize this, we look at it with a visualized `tab_frequencies()`:
+
+```{r}
+WoJ %>% 
+  z_scale(autonomy_selection) %>% 
+  tab_frequencies(autonomy_selection,
+                  autonomy_selection_z) %>% 
+  visualize()
+```
+
+To set a specific value to `NA`:
+
+```{r}
+WoJ %>% 
+  setna_scale(autonomy_emphasis, value = 5) %>% 
+  dplyr::select(autonomy_emphasis, autonomy_emphasis_na)
+```
+
+For recoding categorical scales:
+
+```{r}
+WoJ %>% 
+  dplyr::select(country) %>%
+  recode_cat_scale(country, assign = c("Germany" = "german", "Switzerland" = "swiss"), other = "other")
+```
+
+To recode numeric scales into categories:
+
+```{r}
+WoJ %>%
+  dplyr::select(autonomy_emphasis) %>%
+  categorize_scale(autonomy_emphasis, 
+               lower_end =1, upper_end =5,
+               breaks = c(2, 3),
+               labels = c("Low", "Medium", "High"))
+```
+
+And to create dummy variables:
+
+```{r}
+WoJ %>% 
+  dplyr::select(temp_contract) %>%
+  dummify_scale(temp_contract)
+```

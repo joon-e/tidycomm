@@ -1,12 +1,14 @@
 Package: tidycomm
 Title: Data Modification and Analysis for Communication Research
-Version: 0.2.1
-Authors@R: 
-    person(given = "Julian",
-           family = "Unkel",
-           role = c("aut", "cre"),
-           email = "julian.unkel@gmail.com",
-           comment = c(ORCID = "0000-0001-9568-7041"))
+Version: 0.4.0
+Authors@R: c(
+    person("Julian", "Unkel", , "julian.unkel@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-9568-7041")),
+    person("Mario", "Haim", , "haim@ifkw.lmu.de", role = "aut",
+           comment = c(ORCID = "0000-0002-0643-2299")),
+    person("Lara", "Kobilke", , "lara.kobilke@ifkw.lmu.de", role = "aut",
+           comment = c(ORCID = "0000-0001-6194-4724"))
+  )
 Description: Provides convenience functions for common data
     modification and analysis tasks in communication research. This
     includes functions for univariate and bivariate data analysis, index
@@ -29,27 +31,35 @@ URL: https://joon-e.github.io/tidycomm/
 BugReports: https://github.com/joon-e/tidycomm/issues
 Depends:
     R (>= 2.10)
-Imports: 
-    broom,
+Imports:
+    car,
     dplyr,
+	fastDummies,
     forcats,
+    GGally,
+    ggplot2,
     glue,
+    lm.beta,
+    lubridate,
     magrittr,
+	MASS,
     MBESS,
+	misty,
+    pillar,
     purrr,
     rlang,
     stringr,
     tibble,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests: 
     covr,
     knitr,
     rmarkdown,
-    testthat (>= 2.1.0),
-    tidyselect
+    testthat (>= 2.1.0)
 VignetteBuilder: 
     knitr
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3

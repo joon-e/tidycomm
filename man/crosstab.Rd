@@ -14,7 +14,7 @@ crosstab(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{col_var}{Independent (column) variable.}
 
@@ -30,7 +30,7 @@ percentages instead of absolute values. Defaults to \code{FALSE}.}
 Test results will be reported via message(). Defaults to \code{FALSE}.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Computes contingency table for one independent (column) variable and one or

@@ -13,14 +13,16 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
-Tidycomm includes four functions for bivariate explorative data analysis:
+Tidycomm includes five functions for bivariate explorative data analysis:
 
 - `crosstab()` for both categorical independent and dependent variables
 - `t_test()` for dichotomous categorical independent and continuous dependent variables
 - `unianova()` for polytomous categorical independent and continuous dependent variables
 - `correlate()` for both continuous independent and dependent variables
+- `regress()` for both continuous or factorial (translated into dummy dichotomous versions) independent and continuous dependent variables
 
 ```{r setup, message = FALSE, warning = FALSE, include = FALSE}
 library(tidycomm)
@@ -62,6 +64,22 @@ WoJ %>%
   crosstab(reach, employment, country, percentages = TRUE)
 ```
 
+You can also visualize the output from `crosstab()`:
+
+```{r}
+WoJ %>% 
+  crosstab(reach, employment, percentages = TRUE) %>% 
+  visualize()
+```
+
+Note that the `percentages = TRUE` argument determines whether the bars add up to 100% and thus cover the whole width or whether they do not:
+
+```{r}
+WoJ %>% 
+  crosstab(reach, employment) %>% 
+  visualize()
+```
+
 ## Compute t-Tests
 
 Use `t_test()` to quickly compute t-Tests for a group variable and one or more test variables. Output includes test statistics, descriptive statistics and Cohen's $d$ effect size estimates: 
@@ -90,14 +108,31 @@ WoJ %>%
 
 Additional options include:
 
-- `var.equal`: By default, `t_test()` will assume equal variances for both groups. Set `var.equal = FALSE` to compute t-Tests with the Welch approximation to the degrees of freedom.
 - `pooled_sd`: By default, the pooled variance will be used the compute Cohen's $d$ effect size estimates ($s = \sqrt\frac{(n_1 - 1)s^2_1 + (n_2 - 1)s^2_2}{n_1 + n_2 - 2}$).
 Set `pooled_sd = FALSE` to use the simple variance estimation instead ($s = \sqrt\frac{(s^2_1 + s^2_2)}{2}$).
 - `paired`: Set `paired = TRUE` to compute a paired t-Test instead. It is advisable to specify the case-identifying variable with `case_var` when computing paired t-Tests, as this will make sure that data are properly sorted.
 
+Previously, the (now deprecated) option of `var.equal` was also available. This has been overthrown, however, as `t_test()` now by default tests for equal variance (using a Levene test) to decide whether to use pooled variance or to use the Welch approximation to the degrees of freedom.
+
+`t_test()` also provides a one-sample t-Test if you provide a `mu` argument:
+
+```{r}
+WoJ %>% 
+  t_test(autonomy_emphasis, mu = 3.9)
+```
+
+Of course, also the result from t-Tests can be visualized easily as such:
+
+```{r}
+WoJ %>% 
+  t_test(temp_contract, autonomy_selection, autonomy_emphasis) %>% 
+  visualize()
+```
+
+
 ## Compute one-way ANOVAs
 
-`unianova()` will compute one-way ANOVAs for one group variable and one or more test variables. Output includes test statistics and $\eta^2$ effect size estimates.
+`unianova()` will compute one-way ANOVAs for one group variable and one or more test variables. Output includes test statistics, $\eta^2$ effect size estimates, and $\omega^2$, if Welch's approximation is used to account for unequal variances.
 
 ```{r}
 WoJ %>% 
@@ -123,9 +158,18 @@ These can then be unnested with `tidyr::unnest()`:
 ```{r}
 WoJ %>% 
   unianova(employment, autonomy_selection, autonomy_emphasis, post_hoc = TRUE) %>% 
-  dplyr::select(Var, post_hoc) %>% 
+  dplyr::select(Variable, post_hoc) %>% 
   tidyr::unnest(post_hoc)
 ```
+
+Visualize one-way ANOVAs the way you visualize almost everything in `tidycomm`:
+
+```{r}
+WoJ %>% 
+  unianova(employment, autonomy_selection, autonomy_emphasis) %>% 
+  visualize()
+```
+
 
 ## Compute correlation tables and matrices
 
@@ -143,6 +187,37 @@ WoJ %>%
   correlate()
 ```
 
+Specify a focus variable using the `with` parameter to correlate all other variables with this focus variable. 
+
+```{r}
+WoJ %>% 
+  correlate(autonomy_selection, autonomy_emphasis, with = work_experience)
+```
+
+Run a partial correlation by designating three variables along with the `partial` parameter.
+
+```{r}
+WoJ %>% 
+  correlate(autonomy_selection, autonomy_emphasis, partial = work_experience)
+```
+
+Visualize correlations by passing the results on to the `visualize()` function:
+
+```{r}
+WoJ %>% 
+  correlate(work_experience, autonomy_selection) %>% 
+  visualize()
+```
+
+If you provide more than two variables, you automatically get a correlogram (the same you would get if you convert correlations to a correlation matrix):
+
+```{r}
+WoJ %>% 
+  correlate(work_experience, autonomy_selection, autonomy_emphasis) %>% 
+  visualize()
+```
+
+
 By default, Pearson's product-moment correlations coefficients ($r$) will be computed. Set `method` to `"kendall"` to obtain Kendall's $\tau$ or to `"spearman"` to obtain Spearman's $\rho$ instead.
 
 To obtain a correlation matrix, pass the output of `correlate()` to `to_correlation_matrix()`:
@@ -153,3 +228,77 @@ WoJ %>%
   to_correlation_matrix()
 ```
 
+## Compute linear regressions
+
+`regress()` will create a linear regression on one dependent variable with a flexible number of independent variables. Independent variables can thereby be continuous, dichotomous, and factorial (in which case each factor level will be translated into a dichotomous dummy variable version):
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government)
+```
+
+The function automatically adds standardized beta values to the expected linear-regression output. You can also opt in to calculate up to three precondition checks:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government,
+          check_independenterrors = TRUE,
+          check_multicollinearity = TRUE,
+          check_homoscedasticity = TRUE)
+```
+
+For linear regressions, a number of visualizations are possible. The default one is the visualization of the result(s), is that the dependent variable is correlated with each of the independent variables separately and a linear model is presented in these:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize()
+```
+
+Alternatively you can visualize precondition-check-assisting depictions. Correlograms among independent variables, for example:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize(which = "correlogram")
+```
+
+Next up, visualize a residuals-versus-fitted plot to determine distributions:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize(which = "resfit")
+```
+
+Or use a (normal) probability-probability plot to check for multicollinearity:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize(which = "pp")
+```
+
+The (normal) quantile-quantile plot also helps checking for multicollinearity but focuses more on outliers:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize(which = "qq")
+```
+
+Next up, the scale-location (sometimes also called spread-location) plot checks whether residuals are spread equally to help check for homoscedasticity:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize(which = "scaloc")
+```
+
+Finally, visualize the residuals-versus-leverage plot to check for influential outliers affecting the final model more than the rest of the data:
+
+```{r}
+WoJ %>% 
+  regress(autonomy_selection, work_experience, trust_government) %>% 
+  visualize(which = "reslev")
+```

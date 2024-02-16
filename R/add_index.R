@@ -2,7 +2,7 @@
 #'
 #' Add a rowwise mean or sum index of specific variables to the dataset.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param name Name of the index column to compute.
 #' @param ... Variables used for the index.
 #' @param type Type of index to compute. Either "mean" (default) or "sum".
@@ -12,7 +12,7 @@
 #'   for index computation should be converted to numeric. Useful if computing
 #'   indices from factor variables. Defaults to `FALSE`.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @examples
 #' WoJ %>% add_index(ethical_flexibility, ethics_1, ethics_2, ethics_3, ethics_4)
@@ -57,5 +57,13 @@ add_index <- function(data, name, ..., type = "mean",
   index_vars_str <- names(i)
   attributes(index_df[[name]]) <- list(index_of = index_vars_str)
 
-  return(index_df)
+  # Output
+  return(new_tdcmm(index_df,
+                   func = "add_index",
+                   data = data,
+                   params = list(name = name,
+                                 vars = index_vars_str,
+                                 type = type,
+                                 na.rm = na.rm,
+                                 cast.numeric = cast.numeric)))
 }

@@ -2,7 +2,7 @@
 #'
 #' Get reliability estimates of index variables created with \code{\link{add_index}}.
 #'
-#' @param data a [tibble][tibble::tibble-package]
+#' @param data a [tibble][tibble::tibble-package] or a [tdcmm] model
 #' @param ... Index variables created with \code{\link{add_index}}. Leave empty
 #'   to get reliability estimates for all index variables.
 #' @param type Type of reliability estimate. See \code{\link[MBESS]{ci.reliability}}
@@ -16,7 +16,7 @@
 #'   if using computationally intense computations (e. g., many bootstrapping
 #'   samples) and many index variables.
 #'
-#' @return a [tibble][tibble::tibble-package]
+#' @return a [tdcmm] model
 #'
 #' @family reliability
 #'
@@ -75,8 +75,7 @@ get_reliability <- function(data, ..., type = "alpha",
 
     if (is.null(index_vars)) {
       stop(glue("No attribute 'index_of' found for variable {test_var_str}. ",
-                "Use add_index() to create variables for get_reliability()",
-                ", or use compute_reliability() to directly add reliability variables."),
+                "Use add_index() to create variables for get_reliability()."),
            call. = FALSE)
     }
 
@@ -110,7 +109,16 @@ get_reliability <- function(data, ..., type = "alpha",
 
   }
 
-  return(reli_df)
+  # Output
+  return(new_tdcmm(reli_df,
+                   func = "get_reliability",
+                   data = data,
+                   params = list(vars = purrr::map_chr(test_vars, as_label),
+                                 type = type,
+                                 interval.type = interval.type,
+                                 bootstrap.samples = bootstrap.samples,
+                                 conf.level = conf.level,
+                                 progress = progress)))
 }
 
 ### Internal functions ###

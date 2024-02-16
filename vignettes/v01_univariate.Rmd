@@ -13,11 +13,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+options(rmarkdown.html_vignette.check_title = FALSE)
 ```
 
-The first step in data exploration usually consists of univariate, descriptive analysis of all variables of interest. Tidycomm offers three basic functions to quickly output relevant statistics:
+The first step in data exploration usually consists of univariate, descriptive analysis of all variables of interest. Tidycomm offers four basic functions to quickly output relevant statistics:
 
 - `describe()` for continuous variables
+- `tab_percentiles()` for continuous variables
 - `describe_cat()` for categorical variables
 - `tab_frequencies()` for categorical variables
 
@@ -56,6 +58,31 @@ WoJ %>%
   describe(autonomy_emphasis, autonomy_selection)
 ```
 
+The returning results from `describe()` can also be visualized:
+
+```{r}
+WoJ %>% 
+  describe() %>% 
+  visualize()
+```
+
+In addition, percentiles can easily be extracted from continuous variables:
+
+```{r}
+WoJ %>% 
+  tab_percentiles()
+```
+
+Percentiles can also be visualized:
+
+```{r}
+WoJ %>% 
+  tab_percentiles(trust_parties) %>% 
+  visualize()
+```
+
+
+
 ## Describe categorical variables
 
 `describe_cat()` outputs a short summary of categorical variables (number of unique values, mode, N of mode) of all variables named in the function call:
@@ -78,6 +105,14 @@ Data can be grouped before describing:
 WoJ %>% 
   dplyr::group_by(reach) %>% 
   describe_cat(country, employment)
+```
+
+Again, also the results from `describe_cat()` can be visualized like so:
+
+```{r}
+WoJ %>% 
+  describe_cat() %>% 
+  visualize()
 ```
 
 ## Tabulate frequencies of categorical variables
@@ -105,3 +140,12 @@ WoJ %>%
 ```
 
 (Compare the columns `percent`, `cum_n` and `cum_percent` with the output above.)
+
+And of course, also `tab_frequencies()` can easily be visualized:
+
+```{r}
+WoJ %>% 
+  tab_frequencies(country) %>% 
+  visualize()
+```
+

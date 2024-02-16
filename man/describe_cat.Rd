@@ -7,13 +7,13 @@
 describe_cat(data, ...)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{...}{Variables to describe (column names). Leave empty to describe all
 categorical variables in data.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Describe categorical variables by N, number of unique values, and mode.
@@ -23,13 +23,22 @@ is chosen.
 \details{
 If no variables are specified, all categorical (character or factor)
 variables are described.
+\itemize{
+\item N: number of valid cases (i.e., all but missing)
+\item Missing: number of NA cases
+\item Unique: number of unique categories in a given variable, without Missing
+\item Mode: mode average (if multiple modes exist, first mode by order of values is returned)
+\item Mode_N: number of cases reflecting the Mode
+}
 }
 \examples{
-iris \%>\% describe_cat()
+WoJ \%>\% describe_cat(reach, employment, temp_contract)
+fbposts \%>\% describe_cat(type)
 
 }
 \seealso{
 Other descriptives: 
-\code{\link{describe}()}
+\code{\link{describe}()},
+\code{\link{tab_percentiles}()}
 }
 \concept{descriptives}

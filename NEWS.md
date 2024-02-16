@@ -1,3 +1,30 @@
+# tidycomm 0.4.0
+
+# tidycomm 0.3.0
+
+## New features
+* Converted `tibble` returns into `tdcmm/tibble` return objects (they behave just like tibbles but are in essence our own objects now)
+* Added partial correlation in `correlate(..., partial = z_var)`
+* Added correlation with a focus variable `correlate(..., with = focus_var)`
+* Added linear regression `regress()`
+* Added one-sample t-test `t_test(..., mu = ...)`
+* Added `reverse_scale()`, `minmax_scale()`, `z_scale()`, `center_scale()`, `setna_scale()`, `recode_cat_scale()`, `recode_scale()`, and `dummify_cale()` to shift and modify continuous and categorical scales
+* Added `tab_percentiles()`
+* Added `visualize()` to visualize almost everything
+* Added `snscomments` and `incvlcomments` as additional data sets
+
+## Minor changes
+* Changed `unianova()` and `t_test()` to build on `leveneTest()`
+* Allowed `test_icr()` to work with grouped data
+* Converted all code examples in documentation to be built on `tidycomm`-provided data sets
+* Added `omega_squared`, `Levene_p`, and `var_equal` columns to default return from `unianova()`
+* Added `d`, `se`, `t`, and `df`
+* Removed `null.value` from list of return values in `unianova()` post-hoc test
+* Renamed `unianova()` return column names to `Variable` (previously: `Var`), `Group_Var` (prev. `term`), `Delta_M` (prev. `estimate`), `p` (prev. `adj.p.value`), `conf.lower` and `conf.upper` (prev. `conf.low` and `conf.high`)
+
+## Bugfixes
+* Unified output to coherent number of after-comma digits
+
 # tidycomm 0.2.0
 
 ## New features

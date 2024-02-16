@@ -22,7 +22,7 @@ test_icr(
 )
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{unit_var}{Variable with unit identifiers}
 
@@ -63,7 +63,7 @@ computed. Defaults to \code{FALSE}}
 (S-Lotus) should be computed. Defaults to \code{FALSE}.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Performs an intercoder reliability test by computing various intercoder

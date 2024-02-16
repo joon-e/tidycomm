@@ -7,7 +7,7 @@
 describe(data, ..., na.rm = TRUE)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble}}
+\item{data}{a \link[tibble:tibble-package]{tibble} or a \link{tdcmm} model}
 
 \item{...}{Variables to describe (column names). Leave empty to describe all
 numeric variables in data.}
@@ -16,20 +16,39 @@ numeric variables in data.}
 before the computation proceeds. Defaults to \code{TRUE}.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Describe numeric variables by several measures of
 central tendency and variability. If no variables are specified,
 all numeric (integer or double) variables are described.
 }
+\details{
+\itemize{
+\item N: number of valid cases (i.e., all but missing)
+\item Missing: number of NA cases
+\item M: \link{mean} average
+\item SD: standard deviation, \link{sd}
+\item Min: minimum value, \link{min}
+\item Q25: 25\% quantile, \link{quantile}
+\item Mdn: \link{median} average, same as 50\% quantile
+\item Q75: 75\% quantile, \link{quantile}
+\item Max: maximum value, \link{max}
+\item Range: difference between Min and Max
+\item CI_95_LL: \eqn{M - Q(0.975) \times \frac{SD}{\sqrt{N}}} where \eqn{Q(0.975)} denotes Student t's \link[stats:quantile]{stats::quantile} function with a probability of \eqn{0.975} and \eqn{N-1} degrees of freedom
+\item CI_95_UL: \eqn{M + Q(0.975) \times \frac{SD}{\sqrt{N}}} where \eqn{Q(0.975)} denotes Student t's \link[stats:quantile]{stats::quantile} function with a probability of \eqn{0.975} and \eqn{N-1} degrees of freedom
+\item Skewness: traditional Fisher-Pearson coefficient of skewness of valid cases as per \eqn{\frac{\frac{1}{N} \sum\limits_{i=1}^N (x_{i}-\overline{x})^3}{[\frac{1}{N}\sum\limits_{i=1}^N (x_{i}-\overline{x})^2]^{3/2}}} where \eqn{\overline{x}} denotes \eqn{M}, following \href{\doi{10.1080/10691898.2011.11889611}}{Doane & Seward, 2011, p. 6, 1a}
+\item Kurtosis: empirical sample kurtosis (i.e., standardized fourth population moment about the mean) as per \eqn{\frac{\sum (x-\overline{x})^4 / N}{(\sum (x-\overline{x})^2 / N)^2}}, following \href{\doi{10.1037/1082-989X.2.3.292}}{DeCarlo, 1997, p. 292, b2}
+}
+}
 \examples{
-iris \%>\% describe()
-mtcars \%>\% describe(mpg, am, cyl)
+WoJ \%>\% describe(autonomy_selection, autonomy_emphasis, work_experience)
+fbposts \%>\% describe(n_pictures)
 
 }
 \seealso{
 Other descriptives: 
-\code{\link{describe_cat}()}
+\code{\link{describe_cat}()},
+\code{\link{tab_percentiles}()}
 }
 \concept{descriptives}

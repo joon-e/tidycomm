@@ -4,13 +4,17 @@
 \alias{to_correlation_matrix}
 \title{Create correlation matrix}
 \usage{
-to_correlation_matrix(data)
+to_correlation_matrix(data, verbose = FALSE)
 }
 \arguments{
-\item{data}{a \link[tibble:tibble-package]{tibble} returned from \code{\link{correlate}}}
+\item{data}{a \link{tdcmm} model returned from \code{\link{correlate}}}
+
+\item{verbose}{A logical, defaulted to \code{FALSE}. Only applicable when
+correlating two variables. If set to \code{TRUE}, the function outputs information
+regarding the sample size.}
 }
 \value{
-a \link[tibble:tibble-package]{tibble}
+a \link{tdcmm} model
 }
 \description{
 Turns the tibble exported from \code{\link{correlate}} into a correlation
