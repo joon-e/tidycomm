@@ -1,6 +1,6 @@
 #' Worlds of Journalism sample data
 #'
-#' A subset of data from the [Worlds of Journalism](https://www.worldsofjournalism.org/)
+#' A subset of data from the [Worlds of Journalism](https://worldsofjournalism.org/)
 #' 2012-16 study containing survey data of 1,200 journalists from five European
 #' countries.
 #'
@@ -38,7 +38,7 @@
 #'   \item{trust_politicians}{Trust placed in politicians in general,
 #'     scale from 1 (*no trust at all*) to 5 (*complete trust*)}
 #' }
-#' @source \url{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
+#' @source \samp{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
 "WoJ"
 
 #' Facebook posts reliability test
@@ -84,7 +84,7 @@
 #' Kümpel, A. S., & Unkel, J. (2020). Negativity wins at last: How presentation
 #' order and valence of user comments affect perceptions of journalistic quality.
 #' Journal of Media Psychology: Theories, Methods, and Applications, 32(2), 89–99.
-#' \url{https://doi.org/10.1027/1864-1105/a000261}
+#' \doi{10.1027/1864-1105/a000261}
 #'
 #' @format A data frame of 630 observations and 15 variables:
 #' \describe{
