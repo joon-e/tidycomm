@@ -131,7 +131,7 @@ format_value <- function(x, d) trimws(format(round(x, d), nsmall = d))
 
 #' Helper function for labelling purposes
 #'
-#' @param numeric share between 0 and 1
+#' @param x share between 0 and 1
 #'
 #' @return a string with formatted % (rounded and suffixed)
 #'

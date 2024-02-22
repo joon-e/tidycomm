@@ -52,7 +52,7 @@ This function recodes one or more numeric variables into categorical
 variables based on a specified lower end, upper end, and intermediate breaks.
 The intervals created include the right endpoint of the interval. For example,
 breaks = c(2, 3) with lower_end = 1 and upper_end = 5 creates intervals from
-1 to ≤ 2, >2 to ≤ 3, and >3 to ≤ 5. If the lower or upper ends are not provided,
+1 to <= 2, >2 to <= 3, and >3 to <= 5. If the lower or upper ends are not provided,
 the function defaults to the minimum and maximum values of the data and issues
 a warning. This default behavior is prone to errors, however, because a scale may not
 include its actual lower and upper ends which might in turn affect the recoding

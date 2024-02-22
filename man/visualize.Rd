@@ -137,6 +137,7 @@ or overwriting individual geom's or scale's. See the examples below and the
 documentation of \link{ggplot2}.
 }
 \examples{
+\dontrun{
 WoJ \%>\%
   describe() \%>\%
   visualize()
@@ -155,6 +156,7 @@ fbposts \%>\%
 WoJ \%>\%
   crosstab(reach, employment) \%>\%
   visualize()
+
 fbposts \%>\%
   crosstab(coder_id, type, percentages = TRUE) \%>\%
   visualize()
@@ -203,6 +205,7 @@ fbposts \%>\%
   describe_cat() \%>\%
   visualize() +
     ggplot2::scale_fill_grey()
+}
 
 }
 \concept{visualize}
