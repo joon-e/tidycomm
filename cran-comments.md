@@ -1,3 +1,9 @@
+## Resubmission
+This is a resubmission. In this version we have:
+
+* Corrected the DOI links in the documentation. They are now properly formatted as standalone \doi{} commands without being encapsulated within any other markup, as per the CRAN guidelines.
+
+## About
 This update elevates the version directly to 0.4.1 as it introduces significant enhancements including new tdcmm/tibble returns and functions such as partial correlation, linear regression, one-sample t-test, scale transformations, percentiles, visualizations, and additional datasets (snscomments and incvlcomments). Additionally, we have applied a minor patch to encase the 'visualize()' examples within 'dontrun()' to reduce the elapsed time during the compilation of these examples.
 
 ## Test environments
