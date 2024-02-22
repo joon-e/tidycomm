@@ -37,8 +37,9 @@ all numeric (integer or double) variables are described.
 \item Range: difference between Min and Max
 \item CI_95_LL: \eqn{M - Q(0.975) \times \frac{SD}{\sqrt{N}}} where \eqn{Q(0.975)} denotes Student t's \link[stats:quantile]{stats::quantile} function with a probability of \eqn{0.975} and \eqn{N-1} degrees of freedom
 \item CI_95_UL: \eqn{M + Q(0.975) \times \frac{SD}{\sqrt{N}}} where \eqn{Q(0.975)} denotes Student t's \link[stats:quantile]{stats::quantile} function with a probability of \eqn{0.975} and \eqn{N-1} degrees of freedom
-\item Skewness: traditional Fisher-Pearson coefficient of skewness of valid cases as per \eqn{\frac{\frac{1}{N} \sum\limits_{i=1}^N (x_{i}-\overline{x})^3}{[\frac{1}{N}\sum\limits_{i=1}^N (x_{i}-\overline{x})^2]^{3/2}}} where \eqn{\overline{x}} denotes \eqn{M}, following \href{\doi{10.1080/10691898.2011.11889611}}{Doane & Seward, 2011, p. 6, 1a}
-\item Kurtosis: empirical sample kurtosis (i.e., standardized fourth population moment about the mean) as per \eqn{\frac{\sum (x-\overline{x})^4 / N}{(\sum (x-\overline{x})^2 / N)^2}}, following \href{\doi{10.1037/1082-989X.2.3.292}}{DeCarlo, 1997, p. 292, b2}
+\item Skewness: traditional Fisher-Pearson coefficient of skewness of valid cases as per \eqn{\frac{\frac{1}{N} \sum\limits_{i=1}^N (x_{i}-\overline{x})^3}{[\frac{1}{N}\sum\limits_{i=1}^N (x_{i}-\overline{x})^2]^{3/2}}}
+where \eqn{\overline{x}} denotes \eqn{M}, following Doane & Seward (2011, p. 6, 1a). See DOI \doi{10.1080/10691898.2011.11889611}.
+\item Kurtosis: empirical sample kurtosis (i.e., standardized fourth population moment about the mean) as per \eqn{\frac{\sum (x-\overline{x})^4 / N}{(\sum (x-\overline{x})^2 / N)^2}}, following DeCarlo (1997, p. 292, b2). See DOI \doi{10.1037/1082-989X.2.3.292}.
 }
 }
 \examples{
