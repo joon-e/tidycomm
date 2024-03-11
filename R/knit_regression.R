@@ -8,7 +8,7 @@
 ## @family tdcmm visualize
 #
 #' @export
-visualize_regress_table <- function(x,
+knit_regress_table <- function(x,
                                     design = design_lmu(),
                                     digits = 2,
                                     cap = "Linear Regression for",
