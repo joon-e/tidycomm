@@ -41,13 +41,13 @@ scale from 1 (\emph{no trust at all}) to 5 (\emph{complete trust})}
 }
 }
 \source{
-\url{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
+\samp{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
 }
 \usage{
 WoJ
 }
 \description{
-A subset of data from the \href{https://www.worldsofjournalism.org/}{Worlds of Journalism}
+A subset of data from the \href{https://worldsofjournalism.org/}{Worlds of Journalism}
 2012-16 study containing survey data of 1,200 journalists from five European
 countries.
 }

@@ -34,8 +34,10 @@ Otherwise Welch's ANOVA with a (Satterthwaite's) approximation to the degrees of
 }
 \examples{
 WoJ \%>\% unianova(employment, autonomy_selection, autonomy_emphasis)
-WoJ \%>\% unianova(employment)
 WoJ \%>\% unianova(employment, descriptives = TRUE, post_hoc = TRUE)
+\dontrun{
+WoJ \%>\% unianova(employment)
+}
 
 }
 \concept{ANOVA}

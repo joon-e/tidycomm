@@ -44,6 +44,6 @@ corresponding to the paper:
 Kümpel, A. S., & Unkel, J. (2020). Negativity wins at last: How presentation
 order and valence of user comments affect perceptions of journalistic quality.
 Journal of Media Psychology: Theories, Methods, and Applications, 32(2), 89–99.
-\url{https://doi.org/10.1027/1864-1105/a000261}
+\doi{10.1027/1864-1105/a000261}
 }
 \keyword{datasets}

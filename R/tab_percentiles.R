@@ -44,13 +44,13 @@ tab_percentiles <- function(data, ..., levels = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 
   out <- data %>%
     dplyr::select(!!!vars, !!!grouping) %>%
     tidyr::pivot_longer(c(!!!vars), names_to = "Variable", values_to = "Value") %>%
-    dplyr::group_by(.data$Variable, .add = TRUE, .drop = TRUE) %>%
+    dplyr::group_by(Variable, .add = TRUE, .drop = TRUE) %>%
     dplyr::summarise(dplyr::across(
       .cols = tidyselect::everything(),
       .fns = purrr::set_names(purrr::map(levels, function(x) purrr::partial(calc_percentiles, percentile = x)), paste0("p", levels * 100)),
       .names = "{.fn}"
     )) %>%
-    dplyr::arrange(match(.data$Variable, vars_str))
+    dplyr::arrange(match(Variable, vars_str))
 
   values <- out %>%
     dplyr::select(-c(Variable)) %>%
@@ -122,19 +122,25 @@ visualize_tab_percentiles <- function(x, design = design_lmu()) {
   # visualize quartiles
   data %>%
     ggplot2::ggplot(ggplot2::aes(x = attr(x, "params")$levels * 100, y = attr(x, "params")$values)) +
-    ggplot2::geom_vline(xintercept = 25, linetype="solid", color = design$comparison_color, size = 0.4) +
-    ggplot2::geom_vline(xintercept = 50, linetype="solid", color = design$comparison_color, size = 0.4) +
-    ggplot2::geom_vline(xintercept = 75, linetype="solid", color = design$comparison_color, size = 0.4) +
-    ggplot2::geom_vline(xintercept = 100, linetype="solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 25, linetype = "solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 50, linetype = "solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 75, linetype = "solid", color = design$comparison_color, size = 0.4) +
+    ggplot2::geom_vline(xintercept = 100, linetype = "solid", color = design$comparison_color, size = 0.4) +
     ggplot2::geom_point() +
-    ggplot2::scale_x_continuous(labels = scales::percent_format(scale = 1),
+    ggplot2::scale_x_continuous(labels = percent_format(),
                                 breaks = attr(x, "params")$levels * 100) +
-    ggplot2::labs(x = "Percentiles", y = attr(x, "params")$vars[1])  +
-    ggplot2::annotate("text", x = 8.5, y = max(y_var), label = "Quartile 1", hjust = 0, vjust = -0.7, size = 1.8) +
-    ggplot2::annotate("text", x = 33.5, y = max(y_var), label = "Quartile 2", hjust = 0, vjust = -0.7, size = 1.8) +
-    ggplot2::annotate("text", x = 58.5, y = max(y_var), label = "Quartile 3", hjust = 0, vjust = -0.7, size = 1.8) +
-    ggplot2::annotate("text", x = 83.5, y = max(y_var), label = "Quartile 4", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::labs(x = "Percentiles", y = attr(x, "params")$vars[1]) +
+    ggplot2::annotate("text", x = 8.5, y = max(attr(x, "params")$values), label = "Quartile 1", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::annotate("text", x = 33.5, y = max(attr(x, "params")$values), label = "Quartile 2", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::annotate("text", x = 58.5, y = max(attr(x, "params")$values), label = "Quartile 3", hjust = 0, vjust = -0.7, size = 1.8) +
+    ggplot2::annotate("text", x = 83.5, y = max(attr(x, "params")$values), label = "Quartile 4", hjust = 0, vjust = -0.7, size = 1.8) +
     design$theme()
+}
+
+# Internal helper function ----
+#' @keywords internal
+percent_format <- function() {
+  function(x) paste0(round(x, 2), "%")
 }
 
 # Constructors ----

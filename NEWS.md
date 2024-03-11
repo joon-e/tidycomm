@@ -1,11 +1,14 @@
+# tidycomm 0.4.1
+
 # tidycomm 0.3.0
 
 ## New features
 * Converted `tibble` returns into `tdcmm/tibble` return objects (they behave just like tibbles but are in essence our own objects now)
-* Added partial correlation in `correlate(..., partial = TRUE)`
+* Added partial correlation in `correlate(..., partial = z_var)`
+* Added correlation with a focus variable `correlate(..., with = focus_var)`
 * Added linear regression `regress()`
 * Added one-sample t-test `t_test(..., mu = ...)`
-* Added `reverse_scale()`, `minmax_scale()`, `z_scale()`, and `center_scale()` to shift and modify continuous scales
+* Added `reverse_scale()`, `minmax_scale()`, `z_scale()`, `center_scale()`, `setna_scale()`, `recode_cat_scale()`, `recode_scale()`, and `dummify_cale()` to shift and modify continuous and categorical scales
 * Added `tab_percentiles()`
 * Added `visualize()` to visualize almost everything
 * Added `snscomments` and `incvlcomments` as additional data sets

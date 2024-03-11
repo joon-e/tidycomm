@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
 [![Codecov test
-coverage](https://codecov.io/gh/joon-e/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/joon-e/tidycomm?branch=master)
+coverage](https://codecov.io/gh/joon-e/tidycomm/branch/master/graph/badge.svg)](https://app.codecov.io/gh/joon-e/tidycomm?branch=master)
 [![R-CMD-check](https://github.com/joon-e/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/joon-e/tidycomm/actions)
 <!-- badges: end -->
 

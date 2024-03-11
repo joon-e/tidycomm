@@ -7,7 +7,7 @@
 percentage_labeller(x)
 }
 \arguments{
-\item{numeric}{share between 0 and 1}
+\item{x}{share between 0 and 1}
 }
 \value{
 a string with formatted \% (rounded and suffixed)
