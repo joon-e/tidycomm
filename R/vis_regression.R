@@ -12,7 +12,7 @@ visualize_regress_table <- function(x,
                                     design = design_lmu(),
                                     digits = 2,
                                     cap = "Linear Regression for",
-                                    footnote = NULL,
+                                    footnote = footers,
                                     rename = c("TOL" = "tolerance")
 ) {
   tab <- x |>
