@@ -102,8 +102,8 @@ regress <- function(data,
       Variable = dimnames(model_summary$coefficients)[[1]],
       B = model_summary$coefficients[,1],
       `SE B` = model_summary$coefficients[,2],
-      LL = confint(model)[,1],
-      UL = confint(model)[,2],
+      LL = stats::confint(model)[,1],
+      UL = stats::confint(model)[,2],
       beta = lm.beta::lm.beta(model)$standardized.coefficients,
  #     beta = model_std_summary$coefficients[,1],
       # LL_std = confint(model_std)[,1],
@@ -139,7 +139,7 @@ regress <- function(data,
         model_tibble <- model_tibble %>%
           dplyr::bind_cols(tibble::tibble(VIF = c(NA,
                                                   check_vif),
-                                          tolerance = c(NA,
+                                          TOL = c(NA,
                                                         1/check_vif)))
         model_checks[['multicollinearity']] <- check_vif
       }

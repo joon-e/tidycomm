@@ -34,7 +34,7 @@ WoJ \%>\% tab_percentiles(work_experience, autonomy_emphasis)
 }
 \seealso{
 Other descriptives: 
-\code{\link{describe_cat}()},
-\code{\link{describe}()}
+\code{\link{describe}()},
+\code{\link{describe_cat}()}
 }
 \concept{descriptives}

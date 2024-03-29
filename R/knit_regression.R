@@ -1,37 +1,35 @@
 
-## Visualize as html- or pdf-table with linear model ---
-##
-## @param x a [tdcmm] model
-##
-## @return LaTeX or html-table
-##
-## @family tdcmm visualize
+# Visualize as html- or pdf-table with linear model ---
+#
+# @param x a [tdcmm] model
+#
+# @return html-, pdf- or word-table
+#
+# @family tdcmm visualize
 #
 #' @export
 knit_regress_table <- function(x,
                                     design = design_lmu(),
                                     digits = 2,
                                     cap = "Linear Regression for",
-                                    footnote = footers,
-                                    rename = c("TOL" = "tolerance")
+                                    footnote = "footers irgendwann"
 ) {
-  tab <- x |>
-    rename(any_of(rename))
+  tab <- x
 
   ColNum_unst <- x |>
-    select(any_of(c("B", "SE B", "LL", "UL"))) |>
+    dplyr::select(dplyr::any_of(c("B", "SE B", "LL", "UL"))) |>
     ncol()
 
   ColNum_std <- x |>
-    select(any_of(c("beta"))) |>
+    dplyr::select(dplyr::any_of(c("beta"))) |>
     ncol()
 
   ColNum_sig <- x |>
-    select(any_of(c("t", "p"))) |>
+    dplyr::select(dplyr::any_of(c("t", "p"))) |>
     ncol()
 
   ColNum_multicol <- x |>
-    select(any_of(c("VIF", "tolerance"))) |>
+    dplyr::select(dplyr::any_of(c("VIF", "TOL"))) |>
     ncol()
 
   kableHeader <- c(" ")
@@ -67,12 +65,16 @@ knit_regress_table <- function(x,
 
 
   tab_format <- tab |>
-    dplyr::mutate(across(-1, ~round(.x, digits)),
-                  across(any_of("p"), ~format.pval(.x, eps = .001, nsmall = 3)),
-                  across(any_of("p"), ~gsub("0\\.","\\.", .x))) |>
-    dplyr::mutate(across(any_of(c("beta", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) |>
-    dplyr::mutate(across(any_of("VIF"), as.character)) |>
-    dplyr::mutate(across(any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "—", .x))) |>
+    dplyr::mutate(dplyr::across(-1, ~round(.x, digits)),
+                  dplyr::across(dplyr::any_of("p"), ~format.pval(.x, eps = .001, nsmall = 3)),
+                  dplyr::across(dplyr::any_of("p"), ~gsub("0\\.","\\.", .x))) |>
+    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) |>
+    dplyr::mutate(dplyr::across(dplyr::any_of("VIF"), as.character)) |>
+    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "-", .x)))
+
+  if(knitr::is_html_output() | knitr::is_latex_output()) {
+
+  tab_knit <- tab_format |>
     kableExtra::kable(caption = cap,
                       align = c("l", rep("r", NCOL(tab) - 1)),
                       booktabs = TRUE,
@@ -86,6 +88,13 @@ knit_regress_table <- function(x,
     kableExtra::footnote(footnote,
                          general_title = "",
                          threeparttable = TRUE)
+  }
+
+  if (knitr::pandoc_to("docx")){
+  tab_knit <- tab_format |>
+    flextable::flextable()
+
+  }
 
   return(tab_format)
 
