@@ -16,3 +16,4 @@ well as any performed assumption checks.
 \code{tdcmm} objects in \code{tidycomm} are further subclassed with individual classes
 handling visualization and printing per "output" type.
 }
+\keyword{internal}

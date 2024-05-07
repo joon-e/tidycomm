@@ -42,3 +42,4 @@ handling visualization and printing per "output" type.
 \item \code{is_tdcmm()}: Test for class \code{tdcmm}
 
 }}
+\keyword{internal}

@@ -27,6 +27,10 @@ reference:
       - minmax_scale
       - center_scale
       - z_scale
+      - categorize_scale
+      - dummify_scale
+      - setna_scale
+      - recode_cat_scale
   - title: "Reliability tests"
     contents:
       - get_reliability
@@ -36,6 +40,9 @@ reference:
   - title: "Visualization"
     contents:
       - visualize
+      - design_lmu
+      - design_gray
+      - design_grey
   - title: "Sample data"
     contents:
       - WoJ

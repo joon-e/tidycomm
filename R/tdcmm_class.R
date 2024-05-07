@@ -15,6 +15,7 @@
 #'
 #' @name tdcmm-class
 #' @aliases tdcmm tdcmm-class
+#' @keywords internal
 NULL
 
 # Constructors ----
@@ -42,6 +43,7 @@ NULL
 #'   output. Defaults to `NULL`.
 #' @param params A named list of parameters originally passed to the call.
 #'   Defaults to an empty list.
+#' @keywords internal
 new_tdcmm <- function(x, func, data, model = NULL, checks = NULL, params = list()) {
   stopifnot(tibble::is_tibble(x))
   stopifnot(func != "")
@@ -81,6 +83,7 @@ is_tdcmm <- function(x) {
 #' @returns A model object or a list of model objects
 #'
 #' @export
+#' @keywords internal
 model <- function(x, ...) {
   UseMethod("model")
 }
