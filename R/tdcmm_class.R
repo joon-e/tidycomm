@@ -197,6 +197,7 @@ model.tdcmm <- function(x, ...) {
 #' @family visualize
 #'
 #' @examples
+#' \dontrun{
 #' WoJ %>%
 #'   describe() %>%
 #'   visualize()
@@ -215,6 +216,7 @@ model.tdcmm <- function(x, ...) {
 #' WoJ %>%
 #'   crosstab(reach, employment) %>%
 #'   visualize()
+#'
 #' fbposts %>%
 #'   crosstab(coder_id, type, percentages = TRUE) %>%
 #'   visualize()
@@ -263,6 +265,7 @@ model.tdcmm <- function(x, ...) {
 #'   describe_cat() %>%
 #'   visualize() +
 #'     ggplot2::scale_fill_grey()
+#'}
 #'
 #' @export
 visualize <- function(x, ..., .design = design_lmu()) {

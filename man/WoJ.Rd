@@ -41,7 +41,7 @@ scale from 1 (\emph{no trust at all}) to 5 (\emph{complete trust})}
 }
 }
 \source{
-\url{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
+\samp{https://worldsofjournalism.org/data/data-and-key-tables-2012-2016}
 }
 \usage{
 WoJ
