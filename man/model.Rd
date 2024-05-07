@@ -17,3 +17,4 @@ A model object or a list of model objects
 \description{
 Returns model objects used to estimate \code{tdcmm} output.
 }
+\keyword{internal}
