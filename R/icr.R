@@ -115,14 +115,13 @@ test_icr <- function(data, unit_var, coder_var, ..., levels = NULL, na.omit = FA
   # If the data is grouped, use group_map function
   if (dplyr::is.grouped_df(data)) {
     out <- data %>% dplyr::group_map(.f = function(.x, .y) {
-      tmp_out <- purrr::map_dfr(test_vars, compute_icr, .x, {{ unit_var }}, {{ coder_var }}, check_pairs,
+      tmp_out <- purrr::map_dfr(test_vars, compute_icr, .x, {{ unit_var }}, {{ coder_var }},
                                 levels, na.omit,
                                 agreement, holsti, kripp_alpha, cohens_kappa, fleiss_kappa, brennan_prediger,
                                 lotus, s_lotus, check_pairs)
       # Add the group variable to the resulting data frames
       dplyr::mutate(tmp_out, group = .y[[1]])
-    }
-    )
+    })
     # Bind all data frames together and reorder resulting data frame
     out <- dplyr::bind_rows(out) %>%
       dplyr::select(group, tidyselect::everything())
@@ -156,6 +155,7 @@ test_icr <- function(data, unit_var, coder_var, ..., levels = NULL, na.omit = FA
       lotus = lotus,
       s_lotus = s_lotus,
       check_disagreements = check_disagreements,
+      check_pairs = check_pairs,
       text_var = if (!is.null(text_var)) quo_name(enquo(text_var)) else NULL
     )
   )
@@ -184,50 +184,69 @@ compute_icr <- function(test_var, data, unit_var, coder_var,
 
   ucm <- unit_coder_matrix(data, {{ unit_var }}, {{ coder_var }}, {{ test_var }})
 
-  compute_estimates <- function(ucm, var_string, var_level) {
-    estimates <- tibble::tibble(
+  if (length(na.omit(ucm)) == 0) {
+    stop("Empty units-coders matrix detected. ",
+         "This is most likely due to none of the units having been coded by all coders. ",
+         "See vignette('v04_icr') for details.", call. = FALSE)
+  }
+
+  # Extract variable level or default to "nominal"
+  var_string <- as_name(enquo(test_var))
+  var_level <- ifelse(hasName(levels, var_string) && levels[[var_string]] %in% c("nominal", "ordinal", "interval", "ratio"),
+                      levels[[var_string]], "nominal")
+
+  # Check for missing values
+  if (any(is.na(ucm))) {
+    if (na.omit) {
+      ucm <- na.omit(ucm)
+    } else {
+      warning(glue("Variable '{var_string}' contains missing values.",
+                   "Consider setting na.omit = TRUE or recoding missing values",
+                   .sep = " "),
+              call. = FALSE)
+    }
+  }
+
+  calculate_reliability <- function(ucm, var_level) {
+    test_vals <- tibble::tibble(
       Variable = var_string,
       n_Units = dim(ucm)[1],
       n_Coders = dim(ucm)[2],
       n_Categories = length(unique(na.omit(as.vector(ucm)))),
       Level = var_level
     )
-    if (agreement) estimates <- dplyr::bind_cols(estimates, Agreement = icr_agreement(ucm))
-    if (holsti) estimates <- dplyr::bind_cols(estimates, Holstis_CR = icr_holstis_CR(ucm))
-    if (kripp_alpha) estimates <- dplyr::bind_cols(estimates, Krippendorffs_Alpha = icr_kripp_alpha(ucm, var_level))
-    if (cohens_kappa) estimates <- dplyr::bind_cols(estimates, Cohens_Kappa = icr_cohens_kappa(ucm))
-    if (fleiss_kappa) estimates <- dplyr::bind_cols(estimates, Fleiss_Kappa = icr_fleiss_kappa(ucm))
-    if (brennan_prediger) estimates <- dplyr::bind_cols(estimates, Brennan_Predigers_Kappa = icr_brennan_prediger(ucm))
-    if (lotus) estimates <- dplyr::bind_cols(estimates, Lotus = icr_lotus(ucm))
-    if (s_lotus) estimates <- dplyr::bind_cols(estimates, S_Lotus = icr_lotus(ucm, standardize = TRUE))
-    return(estimates)
+
+    # Add metrics conditionally
+    reliabilities <- list()
+    if (agreement) reliabilities$Agreement <- icr_agreement(ucm)
+    if (holsti) reliabilities$Holstis_CR <- icr_holstis_CR(ucm)
+    if (kripp_alpha) reliabilities$Krippendorffs_Alpha <- icr_kripp_alpha(ucm, var_level)
+    if (cohens_kappa) reliabilities$Cohens_Kappa <- icr_cohens_kappa(ucm)
+    if (fleiss_kappa) reliabilities$Fleiss_Kappa <- icr_fleiss_kappa(ucm)
+    if (brennan_prediger) reliabilities$Brennan_Predigers_Kappa <- icr_brennan_prediger(ucm)
+    if (lotus) reliabilities$Lotus <- icr_lotus(ucm)
+    if (s_lotus) reliabilities$S_Lotus <- icr_lotus(ucm, standardize = TRUE)
+
+    test_vals <- dplyr::bind_cols(test_vals, reliabilities)
+    return(test_vals)
   }
 
   if (check_pairs) {
-    coder_names <- colnames(ucm)
-    coder_pairs <- combn(coder_names, 2, simplify = FALSE)
+    # Get all unique coder pairs and calculate reliability for each
+    coder_pairs <- combn(colnames(ucm), 2, simplify = FALSE)
     pair_results <- lapply(coder_pairs, function(pair) {
-      if (all(pair %in% colnames(ucm))) {
-        ucm_pair <- ucm[, pair]
-        if (any(is.na(ucm_pair)) && na.omit) ucm_pair <- na.omit(ucm_pair)
-        var_string <- as_name(enquo(test_var))
-        var_level <- levels[[var_string]] %||% "nominal"
-        estimates <- compute_estimates(ucm_pair, var_string, var_level)
-        estimates$Coder_Pair <- paste(pair, collapse = " & ")
-        return(estimates)
-      }
+      ucm_pair <- ucm[, pair, drop = FALSE]
+      test_vals <- calculate_reliability(ucm_pair, var_level)
+      test_vals$Coder_Pair <- paste(pair, collapse = " & ")
+      test_vals
     })
-    results <- dplyr::bind_rows(pair_results) %>%
+    test_vals <- dplyr::bind_rows(pair_results) %>%
       dplyr::relocate(Coder_Pair, .after = n_Coders)
-    return(results)
   } else {
-    var_string <- as_name(enquo(test_var))
-    var_level <- levels[[var_string]] %||% "nominal"
-    if (any(is.na(ucm)) && na.omit) ucm <- na.omit(ucm)
-    results <- compute_estimates(ucm, var_string, var_level) %>%
-      dplyr::relocate(Coder_Pair, .after = n_Coders)
-    return(results)
+    # Calculate reliability for the entire matrix
+    test_vals <- calculate_reliability(ucm, var_level)
   }
+  return(test_vals)
 }
 
 ## Generate units-coders matrix

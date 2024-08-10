@@ -114,3 +114,57 @@ test_that("test_icr works with grouped data", {
 
   expect_equal(dim(t1), c(5, 9))
 })
+
+test_that("check_disagreements identifies disagreements correctly", {
+  data <- tibble(
+    unit = c(1, 1, 2, 2, 3, 3, 4, 4),
+    coder = c('a', 'b', 'a', 'b', 'a', 'b', 'a', 'b'),
+    code = c('1', '1', '0', '1', '1', '0', '0', '0')
+    )
+
+  result <- test_icr(data, unit, coder, code, check_disagreements = TRUE)
+  expect_true("code_a" %in% names(result),
+              info = "Output should include a 'code_a' column when check_disagreements is TRUE.")
+  expect_equal(nrow(result), 2,
+               info = "Result should have a row for each coder disagreement (here: 2) when check_disagreements is TRUE.")
+})
+
+test_that("check_pairs computes pair-wise reliabilities correctly with only 2 coders", {
+
+  data <- tibble(
+    unit = c(1, 1, 2, 2, 3, 3, 4, 4),
+    coder = c('a', 'b', 'a', 'b', 'a', 'b', 'a', 'b'),
+    code = c('1', '1', '0', '1', '1', '0', '0', '0')
+  )
+
+  result <- test_icr(data, unit, coder, code, check_pairs = TRUE)
+
+  expect_named(result, c("Variable", "n_Units", "n_Coders", "Coder_Pair", "n_Categories", "Level", "Agreement", "Holstis_CR", "Krippendorffs_Alpha"),
+               info = "Output should include expected columns.")
+  expect_equal(nrow(result), 1,
+               info = "Output should have one row for each unique pair of coders. Here: 1")
+})
+
+test_that("check_pairs computes pair-wise reliabilities correctly with only 3 coders", {
+
+  data <- tibble(
+    unit = c(1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4),
+    coder = c('a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c'),
+    code = c('1', '1', '1', '0', '1', '1', '1', '0', '0', '0', '0', '0')
+  )
+
+  result <- test_icr(data, unit, coder, code, check_pairs = TRUE)
+
+  expect_named(result, c("Variable", "n_Units", "n_Coders", "Coder_Pair", "n_Categories", "Level", "Agreement", "Holstis_CR", "Krippendorffs_Alpha"),
+               info = "Output should include expected columns.")
+  expect_equal(nrow(result), 3,
+               info = "Output should have one row for each unique pair of coders. Here: 3")
+})
+
+test_that("test_icr prints a specific error message when check_pairs and check_disagreements are both set to TRUE", {
+  expect_error(
+    test_icr(data, unit, coder, code, check_disagreements = TRUE, check_pairs = TRUE),
+    "The parameters 'check_pairs' and 'check_disagreements' are mutually exclusive",
+    fixed = TRUE
+  )
+})
