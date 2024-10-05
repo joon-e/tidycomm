@@ -33,8 +33,6 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
-design <- design_uzh
-
 pacman::p_load(tidyverse, viridisLite, viridis, tidycomm)
 ```
 
@@ -59,8 +57,7 @@ reg_tab <- tidycomm::regress(model,
 Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in @tbl-tab1 einsehbar ist.
 
 ```{r}
-
-r |> 
+reg_tab |> 
   knit_regress_table()
 ```
 
@@ -75,7 +72,7 @@ In @fig-reslev ist gut zu erkennen.
 #| label: fig-reslev
 #| fig.cap: residualsleverage plot
 
-r |> 
+reg_tab |> 
   tidycomm::visualize(which = "reslev")
 ```
 
@@ -85,7 +82,7 @@ Schaut man sich darüber hinaus @fig-scaleloc im schönen UZH-Design an, wird ei
 #| label: fig-scaleloc
 #| fig.cap: scalelocation plot
 
-r |> 
+reg_tab |> 
   tidycomm::visualize(which = "scaloc", .design = design_uzh())
 ```
 
@@ -96,6 +93,6 @@ Nicht zuletzt sollte man sich die Residuen in Abhängigkeit der geschätzten Wer
 #| fig.cap: residualsleverage plot
 
 
-r |> 
+reg_tab |> 
   tidycomm::visualize(which = "resfit", .design = design_viridis())
 ```

@@ -32,6 +32,8 @@ knit_regress_table <- function(x,
     dplyr::select(dplyr::any_of(c("VIF", "TOL"))) |>
     ncol()
 
+  footnote <- tab$checks
+
   kableHeader <- c(" ")
 
   if(ColNum_unst > 1) {
@@ -70,9 +72,9 @@ knit_regress_table <- function(x,
                   dplyr::across(dplyr::any_of("p"), ~gsub("0\\.","\\.", .x))) |>
     dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) |>
     dplyr::mutate(dplyr::across(dplyr::any_of("VIF"), as.character)) |>
-    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "-", .x)))
+    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "–", .x)))
 
-  if(knitr::is_html_output() | knitr::is_latex_output()) {
+  if(knitr::is_latex_output()) {
 
   tab_knit <- tab_format |>
     kableExtra::kable(caption = cap,
@@ -88,15 +90,15 @@ knit_regress_table <- function(x,
     kableExtra::footnote(footnote,
                          general_title = "",
                          threeparttable = TRUE)
-  }
-
-  if (knitr::pandoc_to("docx")){
+  } else if (knitr::pandoc_to("docx")){
   tab_knit <- tab_format |>
     flextable::flextable()
+  } else
 
-  }
+tab_knit <- tab_format |>
+    gt::gt()
 
-  return(tab_format)
+  return(tab_knit)
 
 }
 
