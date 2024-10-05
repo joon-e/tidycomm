@@ -9,7 +9,7 @@ utils::globalVariables(c(".", "Delta_M", "Group_Var", "M", "N", "SD",
                          "d.upp", "group1", "group2", "level", "m.diff", "m.low",
                          "m.upp", "name", "pval", "val", "z", "group", "x", "n",
                          "label_independent", "value", "label_independent_desc",
-                         "percent"))
+                         "percent", "disagreement", "Coder_Pair", "n_Coders"))
 
 
 ## Helper function for indicating a lack of visualization

@@ -18,7 +18,10 @@ test_icr(
   fleiss_kappa = FALSE,
   brennan_prediger = FALSE,
   lotus = FALSE,
-  s_lotus = FALSE
+  s_lotus = FALSE,
+  check_disagreements = FALSE,
+  text_var = NULL,
+  check_pairs = FALSE
 )
 }
 \arguments{
@@ -61,6 +64,18 @@ computed. Defaults to \code{FALSE}}
 
 \item{s_lotus}{Logical indicating whether Fretwurst's standardized Lotus
 (S-Lotus) should be computed. Defaults to \code{FALSE}.}
+
+\item{check_disagreements}{Logical, indicates whether to check for intercoder disagreements.
+This must be set to TRUE to use the \code{text_var} parameter, as \code{text_var} is used specifically
+for evaluating reasons behind intercoder disagreements. Defaults to \code{FALSE}.
+This is mutually exclusive with \code{check_pairs}.}
+
+\item{text_var}{Optional, specifies the name of the text variable that contains annotated data.
+This variable is used to facilitate the analysis of reasons for intercoder disagreements.
+This parameter should only be provided if \code{check_disagreements} is \code{TRUE}. Defaults to \code{NULL}.}
+
+\item{check_pairs}{Logical, indicates whether to compute and compare intercoder reliability
+for each pair of coders. Defaults to \code{FALSE}. This is mutually exclusive with \code{check_disagreements}.}
 }
 \value{
 a \link{tdcmm} model
