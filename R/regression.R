@@ -20,6 +20,7 @@
 #'   need to be numeric
 #' @param check_homoscedasticity if set, homoscedasticity is being checked
 #'   using a Breusch-Pagan test
+#' @param formula if exist, the lm-formula is used
 #'
 #' @return a [tdcmm] model
 #'
@@ -36,11 +37,27 @@ regress <- function(data,
                     check_multicollinearity = FALSE,
                     check_homoscedasticity = FALSE) {
 
-  yvar <- expr({{ dependent_var }})
-  xvars <- grab_vars(data, enquos(...), alternative = "none")
+  # Check if 'data' is an lm model
+  if (inherits(data, "lm")) {
+    # Extract the formula and the data from the lm model
+    model <- data
+    model_formula <- stats::formula(model)  # Extract the formula from the model
+    data <- dplyr::as_tibble(model$model)  # Extract the data from the model
+    yvar_string <- all.vars(model_formula)[1]  # Dependent variable
+    xvars_string <- all.vars(model_formula)[-1]  # Independent variables
 
-  yvar_string <- as_label(yvar)
-  xvars_string <- purrr::map_chr(xvars, as_label)
+    # Create dummy placeholders for yvar and xvars to ensure compatibility
+    yvar <- rlang::sym(yvar_string)  # Convert yvar_string back to symbol
+    xvars <- rlang::syms(xvars_string)  # Convert xvars_string back to symbols
+
+  } else {
+    # Original processing for when data and variables are provided separately
+    yvar <- expr({{ dependent_var }})
+    xvars <- grab_vars(data, enquos(...), alternative = "none")
+
+    yvar_string <- as_label(yvar)  # Convert dependent variable to string
+    xvars_string <- purrr::map_chr(xvars, as_label)  # Convert independent variables to string
+  }
 
   # basic checks
   if (length(xvars) == 0) {

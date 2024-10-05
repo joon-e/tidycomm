@@ -9,7 +9,7 @@
 #
 #' @export
 knit_regress_table <- function(x,
-                                    design = design_lmu(),
+                                    design = design_uzh(),
                                     digits = 2,
                                     cap = "Linear Regression for",
                                     footnote = "footers irgendwann"

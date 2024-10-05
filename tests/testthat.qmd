@@ -33,6 +33,8 @@ knitr::opts_chunk$set(
   warning = FALSE
 )
 
+design <- design_uzh
+
 pacman::p_load(tidyverse, viridisLite, viridis, tidycomm)
 ```
 
@@ -44,16 +46,11 @@ DATEN <- tidycomm::WoJ
 
 model <- lm(autonomy_selection ~ work_experience + trust_government, data = DATEN)
 
-summary(model)
+reg_tab <- tidycomm::regress(model, 
+                    check_multicollinearity = TRUE, 
+                    check_independenterrors = TRUE, 
+                    check_homoscedasticity = TRUE) 
 
-model_std <- datawizard::standardize(model)
- 
-summary(model_std)
-
-r <- tidycomm::WoJ %>% 
-  tidycomm::regress(autonomy_selection, work_experience, trust_government, 
-                    check_multicollinearity = FALSE, 
-                    check_independenterrors = TRUE) 
 
 ```
 
@@ -64,7 +61,7 @@ Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschaue
 ```{r}
 
 r |> 
-  knit_regress_table(cap = 'Regressionsmodell 1 für Autonomy Selection') 
+  knit_regress_table()
 ```
 
 ## Teiltabelle
