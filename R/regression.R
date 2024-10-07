@@ -109,10 +109,14 @@ regress <- function(data,
 
   model <- stats::lm(model_formula, data)
 
- # model_std <- datawizard::standardize(model)
-
   model_summary <- summary(model)
-#  model_std_summary <- summary(model_std)
+
+  SDs <- model$model |>
+    summarise(across(everything(), ~sd(.x, na.rm = TRUE))) |>
+    pivot_longer(cols = everything(), names_to = "Variable", values_to = "SD")
+
+  sd_Y <- SDs[1,2] |>
+    pull()
 
   model_tibble <-
     tibble::tibble(
@@ -121,15 +125,25 @@ regress <- function(data,
       `SE B` = model_summary$coefficients[,2],
       LL = stats::confint(model)[,1],
       UL = stats::confint(model)[,2],
-      beta = lm.beta::lm.beta(model)$standardized.coefficients,
- #     beta = model_std_summary$coefficients[,1],
-      # LL_std = confint(model_std)[,1],
-      # UL_std = confint(model_std)[,2],
       t = model_summary$coefficients[,3],
       p = model_summary$coefficients[,4]
     )
 
-  # checks
+  model_tibble <- model_tibble |>
+    left_join(SDs, by = "Variable") |>
+    mutate(beta = B * SD/sd_Y,
+           beta_LL = LL * SD/sd_Y,
+           beta_UL = UL * SD/sd_Y,
+           beta_LL_comp = stats::confint(model, level = .9)[,1]  * SD/sd_Y,
+           beta_UL_comp = stats::confint(model, level = .9)[,2]  * SD/sd_Y) |>
+    select(any_of(c('Variable',
+                    'B', 'SE B', 'LL', 'UL',
+                    'beta', 'beta_LL', 'beta_UL',
+                    'beta_LL_comp', 'beta_UL_comp',
+                    't', 'p',
+                    'TOL', 'VIF')))
+
+    # checks
   model_checks <- list()
 
   if (check_independenterrors) {

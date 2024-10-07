@@ -9,24 +9,12 @@
 #
 #' @export
 knit_regress_table <- function(x,
-                                    design = design_uzh(),
                                     digits = 2,
                                     cap = NULL
                                ) {
 
   model <- model(x)
   model_summary <- summary(model)
-
-  # overall quality
-  # quality_notes <- sprintf("R² = %f, F(%d, %d) = %f, p = %f",
-  #                          model_summary$fstatistic[["value"]],
-  #                          model_summary$fstatistic[["numdf"]],
-  #                          model_summary$fstatistic[["dendf"]],
-  #                          pf(model_summary$fstatistic[["value"]],
-  #                             model_summary$fstatistic[["numdf"]],
-  #                             model_summary$fstatistic[["dendf"]],
-  #                             lower.tail = FALSE),
-  #                          model_summary$r.squared)
 
   pf <- pf(model_summary$fstatistic[["value"]],
         model_summary$fstatistic[["numdf"]],
@@ -48,98 +36,52 @@ knit_regress_table <- function(x,
 
   dependent_var <- model$terms[[2]] %>%
    gsub("_", " ", .) %>%
-    str_to_title(.)
+    stringr::str_to_title(.)
 
   if(!is.null(cap)) {
     cap <- glue::glue("Regression Model on {dependent_var}")
   }
 
-  quality_notes <- glue::glue("{dependent_var}, R² = {R_squared}, R²adj = {R_squared_adj}, F({model_summary$fstatistic[['numdf']]},{model_summary$fstatistic[['dendf']]}) = {F}, p = {pf}")
+  quality_notes <- glue::glue("{dependent_var}, R² = {R_squared}, R²adj = {R_squared_adj}, F({model_summary$fstatistic[['numdf']]},{model_summary$fstatistic[['dendf']]}) = {F}, p = {pf}, CI-Level = 95%")
 
   tab <- x
 
-  ColNum_unst <- x |>
-    dplyr::select(dplyr::any_of(c("B", "SE B", "LL", "UL"))) |>
-    ncol()
-
-  ColNum_std <- x |>
-    dplyr::select(dplyr::any_of(c("beta"))) |>
-    ncol()
-
-  ColNum_sig <- x |>
-    dplyr::select(dplyr::any_of(c("t", "p"))) |>
-    ncol()
-
-  ColNum_multicol <- x |>
-    dplyr::select(dplyr::any_of(c("VIF", "TOL"))) |>
-    ncol()
-
-  kableHeader <- c(" ")
-
-  if(ColNum_unst > 1) {
-    kableHeader <- c(kableHeader, `unstd.` = ColNum_unst)
-  } else if (ColNum_unst == 1){
-    kableHeader <- c(kableHeader, " ")
-  }
-
-  if(ColNum_std > 1) {
-    kableHeader <- c(kableHeader, `std.` = ColNum_std)
-  } else if (ColNum_std == 1){
-    kableHeader <- c(kableHeader, " ")
-  }
-
-  if(ColNum_sig > 1) {
-    kableHeader <- c(kableHeader, `sig.` = ColNum_sig)
-  } else if (ColNum_sig == 1){
-    kableHeader <- c(kableHeader, " ")
-  }
-
-
-  if(ColNum_multicol > 1) {
-    kableHeader <- c(kableHeader, `Multicoll.` = ColNum_multicol)
-  } else if (ColNum_multicol == 1){
-    kableHeader <- c(kableHeader, " ")
-  }
-
-  if(sum(c(ColNum_unst > 1, ColNum_std > 1, ColNum_sig > 1, ColNum_multicol > 1)) == 0) {
-    kableHeader <- NULL
-  }
-
   tab_format <- tab |>
+    select(any_of(c('Variable',
+                    'B', 'SE B', 'LL', 'UL',
+                    'beta', 'beta_LL', 'beta_UL',
+       #             'beta_LL_comp', 'beta_UL_comp',
+                    't', 'p',
+                    'TOL', 'VIF'))) |>
     dplyr::mutate(dplyr::across(-1, ~round(.x, digits)),
                   dplyr::across(dplyr::any_of("p"), ~format.pval(.x, eps = .001, nsmall = 3)),
                   dplyr::across(dplyr::any_of("p"), ~gsub("0\\.","\\.", .x))) |>
-    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) |>
-    dplyr::mutate(dplyr::across(dplyr::any_of("VIF"), as.character)) |>
-    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF", "TOL")), ~dplyr::if_else(row_number()==1, "–", .x)))
-
-  if(knitr::is_latex_output()) {
-
-  tab_knit <- tab_format |>
-    kableExtra::kable(caption = cap,
-                      align = c("l", rep("r", NCOL(tab) - 1)),
-                      booktabs = TRUE,
-                      longtable = FALSE,
-                      linesep = "") |>
-    kableExtra::kable_styling(latex_options = c("repeat_header",
-                                                "full_width = F")) |>
-    kableExtra::kable_styling(full_width = FALSE) |>
-    kableExtra::add_header_above(header = kableHeader,
-                                 line = TRUE, line_sep = 3, bold = F) |>
-      kableExtra::footnote(quality_notes,
-                         general_title = "",
-                         threeparttable = TRUE)
-  } else if (knitr::pandoc_to("docx")){
-  tab_knit <- tab_format |>
-    flextable::flextable() |>
-    flextable::add_footer(quality_notes)
-  } else
+    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "beta_LL", "beta_UL", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) |>
+    dplyr::mutate(dplyr::across(dplyr::any_of("VIF"), as.character))|>
+    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF","beta_LL", "beta_UL", "TOL")), ~dplyr::if_else(row_number()==1, "—", .x)))
 
 tab_knit <- tab_format |>
     gt::gt() |>
-    gt::tab_footnote(quality_notes)
+    gt::cols_align(align = ("right"),
+                   columns = -1) |>
+    gt::tab_footnote(quality_notes) |>
+    gt::tab_spanner(label = "unstd.",
+                    columns =  c("B", "SE B", starts_with("LL"), starts_with("UL"))) |>
+    gt::tab_spanner(label = "std.",
+                    columns = c("beta", "beta_LL", "beta_UL")) |>
+    gt::tab_spanner(label = "sig.",
+                    columns = c("t", "p")) |>
+    gt::tab_spanner(label = "multicoll.",
+                    columns = c(starts_with("TOL"), starts_with("VIF"))) |>
+    gt::cols_label(beta_LL = "LL", beta_UL = "UL") |>
+    gt::sub_missing(missing_text = "—")
+
+  if (knitr::pandoc_to("docx")){
+
+  tab_knit <- tab_knit |>
+    gt::as_raw_html()
+  }
 
   return(tab_knit)
-
 }
 

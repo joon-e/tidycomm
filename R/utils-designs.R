@@ -114,7 +114,7 @@ design_uzh <- function() {
 #' for all lines that act as comparative lines, and a [ggplot2] `theme`
 #' @export
 design_viridis <- function() {
-  return(list(main_color_1 = "#440154FF",
+  return(list(main_color_1 = "#51C56AFF",
               main_colors = c("#440154FF",
                               "#482173FF",
                               "#433E85FF",

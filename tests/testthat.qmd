@@ -6,10 +6,13 @@ format:
   pdf:
     documentclass: scrartcl
     papersize: a4
+    keep-tex: true
     toc: true
     number-sections: true
     colorlinks: true
-  html: default 
+  html: 
+    embed-resources: true 
+  docx: default
 
 lang: de-CH
 editor: source
@@ -41,21 +44,6 @@ pacman::p_load(tidyverse, viridisLite, viridis, tidycomm)
 #| include: false
 
 DATEN <- tidycomm::WoJ
-
-model <- lm(autonomy_selection ~ work_experience + trust_government, data = DATEN)
-
-summary(model)
-
-reg_tab <- tidycomm::regress(model, 
-                    check_multicollinearity = TRUE, 
-                    check_independenterrors = TRUE, 
-                    check_homoscedasticity = TRUE) 
-
-  model <- model(reg_tab)
-  model_summary <- summary(model)
-
-# str(reg_tab)
-
 ```
 
 # Regressionsanalyse mit den Daten "World of Journalism"
@@ -65,9 +53,48 @@ Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschaue
 ```{r}
 #| label: tbl-tab1
 #| tbl-cap: Regression auf autonome Auswahl
+
+model <- lm(autonomy_selection ~ work_experience + trust_government + ethics_1 + ethics_2 + ethics_3 + ethics_4, data = DATEN)
+
+summary(model)
+
+model <- lm.beta::lm.beta(model)
+
+reg_tab <- tidycomm::regress(model, 
+                    check_multicollinearity = TRUE) 
+
 reg_tab |> 
-  knit_regress_table()
+  knit_regress_table() 
 ```
+
+```{r}
+
+design <- tidycomm::design_uzh()
+
+reg_tab |> 
+ filter(!is.na(beta)) |> 
+ ggplot(aes(y = Variable, x = beta)) +
+  # Dicke Linie für die Vergleichs-CIs (comp)
+  geom_segment(aes(x = beta_LL_comp, xend = beta_UL_comp, y = Variable, yend = Variable), 
+               color = design$main_colors[4] , size = 4, alpha = 1) +
+  # Dünne Linie für die normalen CIs
+  geom_segment(aes(x = beta_LL, xend = beta_UL, y = Variable, yend = Variable), 
+               color = design$main_colors[6], size = 0.8, alpha = 1) +
+  # Vertikaler Strich für den Beta-Wert
+  geom_text(aes(x = beta, y = Variable, label = "I"), color = design$main_color_1, size = 6) +
+  geom_vline(xintercept = 0, linetype = "dotted", color = "grey", size = .8) +
+  # Achsenbeschriftungen
+  labs(title = "Beta Coefficients with Confidence Intervals", x = "Beta", y = "") +
+  theme_minimal() + 
+  theme(
+    panel.grid.major = element_blank(),   # Entferne alle großen Gitternetzlinien
+    panel.grid.minor = element_blank(),   # Entferne alle kleinen Gitternetzlinien
+    axis.line.x = element_line(size = .2)  # Zeichne eine dickere x-Achsenlinie bei 0
+  ) +
+  xlim(-.2, .3) |> 
+  geom_vline(xintercept = .1002557, linetype = "solid", color = design$main_colors[6], size = .1)
+```
+
 
 ## Teiltabelle
 
@@ -81,7 +108,7 @@ In @fig-reslev ist gut zu erkennen.
 #| fig.cap: residualsleverage plot
 
 reg_tab |> 
-  tidycomm::visualize(which = "reslev")
+  tidycomm::visualize(which = "reslev", .design = design_uzh())
 ```
 
 Schaut man sich darüber hinaus @fig-scaleloc im schönen UZH-Design an, wird einem alles klar.
