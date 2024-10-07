@@ -44,11 +44,17 @@ DATEN <- tidycomm::WoJ
 
 model <- lm(autonomy_selection ~ work_experience + trust_government, data = DATEN)
 
+summary(model)
+
 reg_tab <- tidycomm::regress(model, 
                     check_multicollinearity = TRUE, 
                     check_independenterrors = TRUE, 
                     check_homoscedasticity = TRUE) 
 
+  model <- model(reg_tab)
+  model_summary <- summary(model)
+
+# str(reg_tab)
 
 ```
 
@@ -57,6 +63,8 @@ reg_tab <- tidycomm::regress(model,
 Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in @tbl-tab1 einsehbar ist.
 
 ```{r}
+#| label: tbl-tab1
+#| tbl-cap: Regression auf autonome Auswahl
 reg_tab |> 
   knit_regress_table()
 ```

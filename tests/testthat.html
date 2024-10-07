@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="de-CH" xml:lang="de-CH"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.424">
+<meta name="generator" content="quarto-1.6.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -30,12 +30,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="testthat_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="testthat_files/libs/quarto-html/anchor.min.js"></script>
 <link href="testthat_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="testthat_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="testthat_files/libs/quarto-html/quarto-syntax-highlighting-79bb3942e891885f9f7af119cd221462.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="testthat_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="testthat_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="testthat_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script src="testthat_files/libs/kePrint-0.0.1/kePrint.js"></script>
-<link href="testthat_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+<link href="testthat_files/libs/bootstrap/bootstrap-49f6197308ed88caa11ce39e630b0d3f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
@@ -76,136 +74,553 @@ ul.task-list li input[type="checkbox"] {
 <h1>Regressionsanalyse mit den Daten “World of Journalism”</h1>
 <p>Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschauen, was mit einer Tabelle praktisch am besten geht, wie sie in <a href="#tbl-tab1" class="quarto-xref">Tabelle&nbsp;1</a> einsehbar ist.</p>
 <div class="cell" data-layout-align="center">
-<div id="tbl-tab1" class="cell anchored" data-layout-align="center">
+<div id="tbl-tab1" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-layout-align="center">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="table quarto-float-caption quarto-float-tbl" id="tbl-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Tabelle&nbsp;1: Regressionsmodell 1 für Autonomy Selection
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Tabelle&nbsp;1: Regression auf autonome Auswahl
 </figcaption>
 <div aria-describedby="tbl-tab1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<table class="table cell table-sm table-striped small" data-quarto-postprocess="true">
-<colgroup>
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-<col style="width: 10%">
-</colgroup>
+<div id="ikqbifdwrc" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ikqbifdwrc table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#ikqbifdwrc thead, #ikqbifdwrc tbody, #ikqbifdwrc tfoot, #ikqbifdwrc tr, #ikqbifdwrc td, #ikqbifdwrc th {
+  border-style: none;
+}
+
+#ikqbifdwrc p {
+  margin: 0;
+  padding: 0;
+}
+
+#ikqbifdwrc .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#ikqbifdwrc .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#ikqbifdwrc .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#ikqbifdwrc .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#ikqbifdwrc .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#ikqbifdwrc .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#ikqbifdwrc .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#ikqbifdwrc .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#ikqbifdwrc .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#ikqbifdwrc .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#ikqbifdwrc .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#ikqbifdwrc .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#ikqbifdwrc .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#ikqbifdwrc .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#ikqbifdwrc .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ikqbifdwrc .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#ikqbifdwrc .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#ikqbifdwrc .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#ikqbifdwrc .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ikqbifdwrc .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#ikqbifdwrc .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ikqbifdwrc .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#ikqbifdwrc .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ikqbifdwrc .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#ikqbifdwrc .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#ikqbifdwrc .gt_left {
+  text-align: left;
+}
+
+#ikqbifdwrc .gt_center {
+  text-align: center;
+}
+
+#ikqbifdwrc .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#ikqbifdwrc .gt_font_normal {
+  font-weight: normal;
+}
+
+#ikqbifdwrc .gt_font_bold {
+  font-weight: bold;
+}
+
+#ikqbifdwrc .gt_font_italic {
+  font-style: italic;
+}
+
+#ikqbifdwrc .gt_super {
+  font-size: 65%;
+}
+
+#ikqbifdwrc .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#ikqbifdwrc .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#ikqbifdwrc .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#ikqbifdwrc .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#ikqbifdwrc .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#ikqbifdwrc .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#ikqbifdwrc .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#ikqbifdwrc .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#ikqbifdwrc div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table do-not-create-environment cell caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
-<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-unstnd.
-</div></th>
-<th data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-std.
-</div></th>
-<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-sig.
-</div></th>
-<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
-Multikoll.
-</div></th>
-</tr>
-<tr class="odd">
-<th style="text-align: left;" data-quarto-table-cell-role="th">Variable</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">B</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">SE B</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">LL</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">UL</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">beta</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">t</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">p</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">VIF</th>
-<th style="text-align: right;" data-quarto-table-cell-role="th">TOL</th>
+<tr class="header gt_col_headings">
+<th id="Variable" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Variable</th>
+<th id="B" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">B</th>
+<th id="SE B" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">SE B</th>
+<th id="LL" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">LL</th>
+<th id="UL" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">UL</th>
+<th id="beta" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">beta</th>
+<th id="t" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">t</th>
+<th id="p" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">p</th>
+<th id="VIF" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">VIF</th>
+<th id="TOL" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">TOL</th>
 </tr>
 </thead>
-<tbody>
+<tbody class="gt_table_body">
 <tr class="odd">
-<td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">3.52</td>
-<td style="text-align: right;">0.09</td>
-<td style="text-align: right;">3.34</td>
-<td style="text-align: right;">3.70</td>
-<td style="text-align: right;">---</td>
-<td style="text-align: right;">38.83</td>
-<td style="text-align: right;">&lt;.001</td>
-<td style="text-align: right;">---</td>
-<td style="text-align: right;">---</td>
+<td class="gt_row gt_left" headers="Variable">(Intercept)</td>
+<td class="gt_row gt_right" headers="B">3.52</td>
+<td class="gt_row gt_right" headers="SE B">0.09</td>
+<td class="gt_row gt_right" headers="LL">3.34</td>
+<td class="gt_row gt_right" headers="UL">3.70</td>
+<td class="gt_row gt_left" headers="beta">–</td>
+<td class="gt_row gt_right" headers="t">38.83</td>
+<td class="gt_row gt_left" headers="p">&lt;.001</td>
+<td class="gt_row gt_left" headers="VIF">–</td>
+<td class="gt_row gt_left" headers="TOL">–</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">work_experience</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.02</td>
-<td style="text-align: right;">.160</td>
-<td style="text-align: right;">5.72</td>
-<td style="text-align: right;">&lt;.001</td>
-<td style="text-align: right;">1.01</td>
-<td style="text-align: right;">.990</td>
+<td class="gt_row gt_left" headers="Variable">work_experience</td>
+<td class="gt_row gt_right" headers="B">0.01</td>
+<td class="gt_row gt_right" headers="SE B">0.00</td>
+<td class="gt_row gt_right" headers="LL">0.01</td>
+<td class="gt_row gt_right" headers="UL">0.02</td>
+<td class="gt_row gt_left" headers="beta">.160</td>
+<td class="gt_row gt_right" headers="t">5.72</td>
+<td class="gt_row gt_left" headers="p">&lt;.001</td>
+<td class="gt_row gt_left" headers="VIF">1.01</td>
+<td class="gt_row gt_left" headers="TOL">.990</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">trust_government</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">.050</td>
-<td style="text-align: right;">1.85</td>
-<td style="text-align: right;">.060</td>
-<td style="text-align: right;">1.01</td>
-<td style="text-align: right;">.990</td>
+<td class="gt_row gt_left" headers="Variable">trust_government</td>
+<td class="gt_row gt_right" headers="B">0.05</td>
+<td class="gt_row gt_right" headers="SE B">0.03</td>
+<td class="gt_row gt_right" headers="LL">0.00</td>
+<td class="gt_row gt_right" headers="UL">0.10</td>
+<td class="gt_row gt_left" headers="beta">.050</td>
+<td class="gt_row gt_right" headers="t">1.85</td>
+<td class="gt_row gt_left" headers="p">.060</td>
+<td class="gt_row gt_left" headers="VIF">1.01</td>
+<td class="gt_row gt_left" headers="TOL">.990</td>
 </tr>
-</tbody><tfoot>
-<tr class="odd">
-<td style="text-align: left; padding: 0;"><sup></sup> footers</td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
-<td style="text-align: right;"></td>
+</tbody><tfoot class="gt_footnotes">
+<tr class="even">
+<td colspan="10" class="gt_footnote">R² = 0.029, R²adj = 0.027, F = 17.400584450598 (df = 1181), p = &lt; 0.001</td>
 </tr>
 </tfoot>
 
 </table>
 
-
+</div>
 </div>
 </div>
 </figure>
 </div>
 </div>
+<section id="teiltabelle" class="level2">
+<h2 class="anchored" data-anchor-id="teiltabelle">Teiltabelle</h2>
+</section>
 <section id="analyse-der-voraussetzungen" class="level2">
 <h2 class="anchored" data-anchor-id="analyse-der-voraussetzungen">Analyse der Voraussetzungen</h2>
 <p>In <a href="#fig-reslev" class="quarto-xref">Abbildung&nbsp;1</a> ist gut zu erkennen.</p>
 <div class="cell" data-layout-align="center">
-<div id="fig-reslev" class="cell quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<div id="fig-reslev" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-layout-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="fig-reslev" class="quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-fig-align="center" width="85%">
+<div id="fig-reslev" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="testthat_files/figure-html/fig-reslev-1.png" id="fig-reslev" class="img-fluid quarto-figure-center figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-reslev">
+<img src="testthat_files/figure-html/fig-reslev-1.png" id="fig-reslev" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-reslev">
 </div>
-<figcaption class="figure quarto-subfloat-caption quarto-subfloat-fig" id="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a)
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-reslev-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Abbildung&nbsp;1: residualsleverage plot
 </figcaption>
 </figure>
@@ -213,23 +628,23 @@ Abbildung&nbsp;1: residualsleverage plot
 </div>
 <p>Schaut man sich darüber hinaus <a href="#fig-scaleloc" class="quarto-xref">Abbildung&nbsp;2</a> im schönen UZH-Design an, wird einem alles klar.</p>
 <div class="cell" data-layout-align="center">
-<div id="fig-scaleloc" class="cell quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<div id="fig-scaleloc" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-layout-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="fig-scaleloc" class="quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-fig-align="center" width="85%">
+<div id="fig-scaleloc" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="testthat_files/figure-html/fig-scaleloc-1.png" id="fig-scaleloc" class="img-fluid quarto-figure-center figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-scaleloc">
+<img src="testthat_files/figure-html/fig-scaleloc-1.png" id="fig-scaleloc" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-scaleloc">
 </div>
-<figcaption class="figure quarto-subfloat-caption quarto-subfloat-fig" id="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a)
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-scaleloc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Abbildung&nbsp;2: scalelocation plot
 </figcaption>
 </figure>
@@ -237,23 +652,23 @@ Abbildung&nbsp;2: scalelocation plot
 </div>
 <p>Nicht zuletzt sollte man sich die Residuen in Abhängigkeit der geschätzten Werte ansehen, was im schönen Viridis-Design in <a href="#fig-resfit" class="quarto-xref">Abbildung&nbsp;3</a> durchaus möglich ist, auch wenn das dunkle Lila nicht gut zu erkennen ist.</p>
 <div class="cell" data-layout-align="center">
-<div id="fig-resfit" class="cell quarto-figure quarto-figure-center anchored" data-layout-align="center">
+<div id="fig-resfit" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-layout-align="center">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="fig-resfit" class="quarto-figure quarto-figure-center anchored" data-fig-pos="H" data-fig-align="center" width="85%">
+<div id="fig-resfit" class="quarto-float quarto-figure quarto-figure-center anchored" width="85%" data-fig-align="center">
 <figure class="quarto-float quarto-subfloat-fig figure">
 <div aria-describedby="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="testthat_files/figure-html/fig-resfit-1.png" id="fig-resfit" class="img-fluid quarto-figure-center figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-resfit">
+<img src="testthat_files/figure-html/fig-resfit-1.png" id="fig-resfit" class="img-fluid quarto-figure quarto-figure-center anchored figure-img" style="width:85.0%" data-fig-pos="H" data-ref-parent="fig-resfit">
 </div>
-<figcaption class="figure quarto-subfloat-caption quarto-subfloat-fig" id="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 (a)
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<figcaption class="figure quarto-float-caption quarto-float-fig" id="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-resfit-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Abbildung&nbsp;3: residualsleverage plot
 </figcaption>
 </figure>
@@ -299,18 +714,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -342,7 +746,47 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -377,7 +821,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
@@ -392,38 +840,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       }
     }
     stripColumnClz(note)
-    const typesetMath = (el) => {
-      if (window.MathJax) {
-        // MathJax Typeset
-        window.MathJax.typeset([el]);
-      } else if (window.katex) {
-        // KaTeX Render
-        var mathElements = el.getElementsByClassName("math");
-        var macros = [];
-        for (var i = 0; i < mathElements.length; i++) {
-          var texText = mathElements[i].firstChild;
-          if (mathElements[i].tagName == "SPAN") {
-            window.katex.render(texText.data, mathElements[i], {
-              displayMode: mathElements[i].classList.contains('display'),
-              throwOnError: false,
-              macros: macros,
-              fleqn: false
-            });
-          }
-        }
-      }
-    }
     if (id === null || id.startsWith('sec-')) {
       // Special case sections, only their first couple elements
       const container = document.createElement("div");
       if (note.children && note.children.length > 2) {
-        for (let i = 0; i < 2; i++) {
-          container.appendChild(note.children[i].cloneNode(true));
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
         }
-        typesetMath(container);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
         return container.innerHTML
       } else {
-        typesetMath(note);
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
         return note.innerHTML;
       }
     } else {
@@ -432,8 +870,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (anchorLink) {
         anchorLink.remove();
       }
-      typesetMath(note);
-      return note.innerHTML;
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {

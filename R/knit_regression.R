@@ -11,9 +11,51 @@
 knit_regress_table <- function(x,
                                     design = design_uzh(),
                                     digits = 2,
-                                    cap = "Linear Regression for",
-                                    footnote = "footers irgendwann"
-) {
+                                    cap = NULL
+                               ) {
+
+  model <- model(x)
+  model_summary <- summary(model)
+
+  # overall quality
+  # quality_notes <- sprintf("R² = %f, F(%d, %d) = %f, p = %f",
+  #                          model_summary$fstatistic[["value"]],
+  #                          model_summary$fstatistic[["numdf"]],
+  #                          model_summary$fstatistic[["dendf"]],
+  #                          pf(model_summary$fstatistic[["value"]],
+  #                             model_summary$fstatistic[["numdf"]],
+  #                             model_summary$fstatistic[["dendf"]],
+  #                             lower.tail = FALSE),
+  #                          model_summary$r.squared)
+
+  pf <- pf(model_summary$fstatistic[["value"]],
+        model_summary$fstatistic[["numdf"]],
+        model_summary$fstatistic[["dendf"]],
+        lower.tail = FALSE) |>
+    format.pval(eps = .001, nsmall = 3) %>%
+    gsub("0\\.","\\.", .)
+
+  R_squared <- model_summary$r.squared |>
+    round(3)  %>%
+    gsub("0\\.","\\.", .)
+
+  R_squared_adj <- model_summary$adj.r.squared |>
+    round(3) %>%
+    gsub("0\\.","\\.", .)
+
+  F <- model_summary$fstatistic[['value']] |>
+    round(0)
+
+  dependent_var <- model$terms[[2]] %>%
+   gsub("_", " ", .) %>%
+    str_to_title(.)
+
+  if(!is.null(cap)) {
+    cap <- glue::glue("Regression Model on {dependent_var}")
+  }
+
+  quality_notes <- glue::glue("{dependent_var}, R² = {R_squared}, R²adj = {R_squared_adj}, F({model_summary$fstatistic[['numdf']]},{model_summary$fstatistic[['dendf']]}) = {F}, p = {pf}")
+
   tab <- x
 
   ColNum_unst <- x |>
@@ -31,8 +73,6 @@ knit_regress_table <- function(x,
   ColNum_multicol <- x |>
     dplyr::select(dplyr::any_of(c("VIF", "TOL"))) |>
     ncol()
-
-  footnote <- tab$checks
 
   kableHeader <- c(" ")
 
@@ -65,7 +105,6 @@ knit_regress_table <- function(x,
     kableHeader <- NULL
   }
 
-
   tab_format <- tab |>
     dplyr::mutate(dplyr::across(-1, ~round(.x, digits)),
                   dplyr::across(dplyr::any_of("p"), ~format.pval(.x, eps = .001, nsmall = 3)),
@@ -87,16 +126,18 @@ knit_regress_table <- function(x,
     kableExtra::kable_styling(full_width = FALSE) |>
     kableExtra::add_header_above(header = kableHeader,
                                  line = TRUE, line_sep = 3, bold = F) |>
-    kableExtra::footnote(footnote,
+      kableExtra::footnote(quality_notes,
                          general_title = "",
                          threeparttable = TRUE)
   } else if (knitr::pandoc_to("docx")){
   tab_knit <- tab_format |>
-    flextable::flextable()
+    flextable::flextable() |>
+    flextable::add_footer(quality_notes)
   } else
 
 tab_knit <- tab_format |>
-    gt::gt()
+    gt::gt() |>
+    gt::tab_footnote(quality_notes)
 
   return(tab_knit)
 
