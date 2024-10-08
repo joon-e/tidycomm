@@ -56,10 +56,6 @@ Es ist immer ratsam sich zunächst die Regressionskoeffizienten genau anzuschaue
 
 model <- lm(autonomy_selection ~ work_experience + trust_government + ethics_1 + ethics_2 + ethics_3 + ethics_4, data = DATEN)
 
-summary(model)
-
-model <- lm.beta::lm.beta(model)
-
 reg_tab <- tidycomm::regress(model, 
                     check_multicollinearity = TRUE) 
 
