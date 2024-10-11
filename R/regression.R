@@ -111,13 +111,6 @@ regress <- function(data,
 
   model_summary <- summary(model)
 
-  SDs <- model$model |>
-    dplyr::summarise(across(everything(), ~sd(.x, na.rm = TRUE))) |>
-    tidyr::pivot_longer(cols = everything(), names_to = "Variable", values_to = "SD")
-
-  sd_Y <- SDs[1,2] |>
-    dplyr::pull()
-
   model_tibble <-
     tibble::tibble(
       Variable = dimnames(model_summary$coefficients)[[1]],
@@ -128,20 +121,6 @@ regress <- function(data,
       t = model_summary$coefficients[,3],
       p = model_summary$coefficients[,4]
     )
-
-  model_tibble <- model_tibble |>
-    dplyr::left_join(SDs, by = "Variable") |>
-    dplyr::mutate(beta = B * SD/sd_Y,
-           beta_LL = LL * SD/sd_Y,
-           beta_UL = UL * SD/sd_Y,
-           beta_LL_comp = stats::confint(model, level = .9)[,1]  * SD/sd_Y,
-           beta_UL_comp = stats::confint(model, level = .9)[,2]  * SD/sd_Y) |>
-    dplyr::select(any_of(c('Variable',
-                    'B', 'SE B', 'LL', 'UL',
-                    'beta', 'beta_LL', 'beta_UL',
-                    'beta_LL_comp', 'beta_UL_comp',
-                    't', 'p',
-                    'TOL', 'VIF')))
 
     # checks
   model_checks <- list()

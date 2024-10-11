@@ -58,7 +58,6 @@ model <- lm(autonomy_selection ~ work_experience + trust_government + ethics_1 +
 
 reg_tab <- tidycomm::regress(model, 
                     check_multicollinearity = TRUE) 
-
 reg_tab |> 
   knit_regress_table() 
 ```
