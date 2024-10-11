@@ -63,31 +63,8 @@ reg_tab |>
 ```
 
 ```{r}
-
-design <- tidycomm::design_uzh()
-
 reg_tab |> 
- filter(!is.na(beta)) |> 
- ggplot(aes(y = Variable, x = beta)) +
-  # Dicke Linie für die Vergleichs-CIs (comp)
-  geom_segment(aes(x = beta_LL_comp, xend = beta_UL_comp, y = Variable, yend = Variable), 
-               color = design$main_colors[4] , size = 4, alpha = 1) +
-  # Dünne Linie für die normalen CIs
-  geom_segment(aes(x = beta_LL, xend = beta_UL, y = Variable, yend = Variable), 
-               color = design$main_colors[6], size = 0.8, alpha = 1) +
-  # Vertikaler Strich für den Beta-Wert
-  geom_text(aes(x = beta, y = Variable, label = "I"), color = design$main_color_1, size = 6) +
-  geom_vline(xintercept = 0, linetype = "dotted", color = "grey", size = .8) +
-  # Achsenbeschriftungen
-  labs(title = "Beta Coefficients with Confidence Intervals", x = "Beta", y = "") +
-  theme_minimal() + 
-  theme(
-    panel.grid.major = element_blank(),   # Entferne alle großen Gitternetzlinien
-    panel.grid.minor = element_blank(),   # Entferne alle kleinen Gitternetzlinien
-    axis.line.x = element_line(size = .2)  # Zeichne eine dickere x-Achsenlinie bei 0
-  ) +
-  xlim(-.2, .3) |> 
-  geom_vline(xintercept = .1002557, linetype = "solid", color = design$main_colors[6], size = .1)
+  visualize(which = "sbci")
 ```
 
 

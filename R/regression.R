@@ -203,6 +203,9 @@ visualize.tdcmm_rgrssn <- function(x,
     if (which == "pp") {
       return(visualize_regress_pp(x, .design))
     }
+    if (which == "sbci") {
+      return(visualize_regress_sbci(x, .design))
+    }
     if (which == "qq") {
       return(visualize_regress_qq(x, .design))
     }
