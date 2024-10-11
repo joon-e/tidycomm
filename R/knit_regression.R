@@ -93,14 +93,26 @@ tab_knit <- tab_format |>
                    columns = -1) |>
     gt::tab_footnote(quality_notes) |>
     gt::tab_spanner(label = "unstd.",
-                    columns =  c("B", "StdErr", starts_with("LL"), starts_with("UL"))) |>
+                    columns =  c("B",
+                                 "StdErr",
+                                 starts_with("LL"),
+                                 starts_with("UL")
+                                 )) |>
     gt::tab_spanner(label = "std.",
-                    columns = c("beta", "beta_LL", "beta_UL")) |>
+                    columns = c("beta",
+                                "beta_LL",
+                                "beta_UL")) |>
     gt::tab_spanner(label = "sig.",
                     columns = c("t", "p")) |>
     gt::tab_spanner(label = "multicoll.",
-                    columns = c(starts_with("TOL"), starts_with("VIF"))) |>
-    gt::cols_label(StdErr = "SE B", beta_LL = "LL", beta_UL = "UL") |>
+                    columns = c(starts_with("TOL"),
+                                starts_with("VIF"))) |>
+    gt::cols_label(StdErr = "SE B",
+                   LL = "CI[LL",
+                   UL = "B UL]",
+                   beta = "B*",
+                   beta_LL = "CI[LL",
+                   beta_UL = "B* UL]") |>
     gt::sub_missing()
 
   if (knitr::pandoc_to("docx")){
