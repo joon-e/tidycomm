@@ -45,7 +45,6 @@ knit_regress_table <- function(x,
   quality_notes <- glue::glue("{dependent_var}, R² = {R_squared}, R²adj = {R_squared_adj}, F({model_summary$fstatistic[['numdf']]},{model_summary$fstatistic[['dendf']]}) = {F}, p = {pf}, CI-Level = 95%")
 
   tab <- x
-
   tab_format <- tab |>
     select(any_of(c('Variable',
                     'B', 'SE B', 'LL', 'UL',
@@ -58,7 +57,7 @@ knit_regress_table <- function(x,
                   dplyr::across(dplyr::any_of("p"), ~gsub("0\\.","\\.", .x))) |>
     dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "beta_LL", "beta_UL", "TOL")), ~sub("^(-?)0.", "\\1.", sprintf("%.3f", .x)))) |>
     dplyr::mutate(dplyr::across(dplyr::any_of("VIF"), as.character))|>
-    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF","beta_LL", "beta_UL", "TOL")), ~dplyr::if_else(row_number()==1, "—", .x)))
+    dplyr::mutate(dplyr::across(dplyr::any_of(c("beta", "VIF","beta_LL", "beta_UL", "TOL")), ~dplyr::if_else(nrow==1, "—", .x)))
 
 tab_knit <- tab_format |>
     gt::gt() |>
