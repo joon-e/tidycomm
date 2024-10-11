@@ -115,9 +115,8 @@ regress <- function(data,
     tibble::tibble(
       Variable = dimnames(model_summary$coefficients)[[1]],
       B = model_summary$coefficients[,1],
-      `SE B` = model_summary$coefficients[,2],
-      LL = stats::confint(model)[,1],
-      UL = stats::confint(model)[,2],
+      StdErr = model_summary$coefficients[,2],
+      beta = lm.beta::lm.beta(model)$standardized.coefficients,
       t = model_summary$coefficients[,3],
       p = model_summary$coefficients[,4]
     )

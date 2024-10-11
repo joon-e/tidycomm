@@ -27,12 +27,14 @@ knit_regress_table <- function(x,
   model_tibble <- model_tibble |>
     dplyr::left_join(SDs, by = "Variable") |>
     dplyr::mutate(beta = B * SD/sd_Y,
+                  LL = stats::confint(model)[,1],
+                  UL = stats::confint(model)[,2],
                   beta_LL = LL * SD/sd_Y,
                   beta_UL = UL * SD/sd_Y,
                   beta_LL_comp = stats::confint(model, level = .9)[,1]  * SD/sd_Y,
                   beta_UL_comp = stats::confint(model, level = .9)[,2]  * SD/sd_Y) |>
     dplyr::select(dplyr::any_of(c('Variable',
-                           'B', 'SE B', 'LL', 'UL',
+                           'B', 'StdErr', 'LL', 'UL',
                            'beta', 'beta_LL', 'beta_UL',
   #                         'beta_LL_compare', 'beta_UL_compare',
                            't', 'p',
@@ -71,7 +73,7 @@ knit_regress_table <- function(x,
   tab <- model_tibble
   tab_format <- tab |>
     select(dplyr::any_of(c('Variable',
-                    'B', 'SE B', 'LL', 'UL',
+                    'B', 'StdErr', 'LL', 'UL',
                     'beta', 'beta_LL', 'beta_UL',
        #             'beta_LL_compare', 'beta_UL_compare',
                     't', 'p',
@@ -91,14 +93,14 @@ tab_knit <- tab_format |>
                    columns = -1) |>
     gt::tab_footnote(quality_notes) |>
     gt::tab_spanner(label = "unstd.",
-                    columns =  c("B", "SE B", starts_with("LL"), starts_with("UL"))) |>
+                    columns =  c("B", "StdErr", starts_with("LL"), starts_with("UL"))) |>
     gt::tab_spanner(label = "std.",
                     columns = c("beta", "beta_LL", "beta_UL")) |>
     gt::tab_spanner(label = "sig.",
                     columns = c("t", "p")) |>
     gt::tab_spanner(label = "multicoll.",
                     columns = c(starts_with("TOL"), starts_with("VIF"))) |>
-    gt::cols_label(beta_LL = "LL", beta_UL = "UL") |>
+    gt::cols_label(StdErr = "SE B", beta_LL = "LL", beta_UL = "UL") |>
     gt::sub_missing()
 
   if (knitr::pandoc_to("docx")){
