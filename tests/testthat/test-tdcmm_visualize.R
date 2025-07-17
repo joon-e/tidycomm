@@ -39,7 +39,7 @@ test_that("implemented visualize() calls return ggplot2 (gg)", {
   expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2), which = "alpha"),
                   "gg")
   expect_s3_class(visualize(correlate(WoJ, ethics_1, ethics_2, ethics_3)),
-                  "gg")
+                  "ggmatrix")
   expect_s3_class(suppressWarnings(visualize(correlate(WoJ,
                                                        autonomy_selection,
                                                        autonomy_emphasis,
@@ -49,14 +49,14 @@ test_that("implemented visualize() calls return ggplot2 (gg)", {
                                                             ethics_1,
                                                             ethics_2,
                                                             ethics_3))),
-                  "gg")
+                  "ggmatrix")
 
   r <- WoJ %>% regress(autonomy_selection, temp_contract, work_experience, ethics_2)
   expect_s3_class(visualize(r), "gg")
   expect_s3_class(visualize(r, "jitter"), "gg")
   expect_s3_class(visualize(r, "alpha"), "gg")
   expect_warning(v <- visualize(r, "correlogram"))
-  expect_s3_class(v, "gg")
+  expect_s3_class(v, "ggmatrix")
   expect_s3_class(visualize(r, "resfit"), "gg")
   expect_s3_class(visualize(r, "pp"), "gg")
   expect_s3_class(visualize(r, "qq"), "gg")
