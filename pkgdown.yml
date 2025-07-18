@@ -1,0 +1,13 @@
+pandoc: 3.1.11
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  v01_univariate: v01_univariate.html
+  v02_bivariate: v02_bivariate.html
+  v03_reliability: v03_reliability.html
+  v04_icr: v04_icr.html
+  v05_scales: v05_scales.html
+last_built: 2025-07-18T12:37Z
+urls:
+  reference: https://joon-e.github.io/tidycomm/reference
+  article: https://joon-e.github.io/tidycomm/articles
