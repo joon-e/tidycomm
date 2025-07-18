@@ -3,6 +3,7 @@ url: https://joon-e.github.io/tidycomm
 template:
   bootstrap: 5
   bootswatch: lumen
+  light-switch: true
 
 reference:
   - title: "Univariate analysis"
