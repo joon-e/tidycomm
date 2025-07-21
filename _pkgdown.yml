@@ -1,9 +1,9 @@
-destination: docs
-url: https://joon-e.github.io/tidycomm/index.html
+url: https://joon-e.github.io/tidycomm
 
 template:
-  params:
-    bootswatch: lumen
+  bootstrap: 5
+  bootswatch: lumen
+  light-switch: true
 
 reference:
   - title: "Univariate analysis"

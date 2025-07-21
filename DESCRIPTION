@@ -9,15 +9,15 @@ Authors@R: c(
     person("Lara", "Kobilke", , "lara.kobilke@ifkw.lmu.de", role = "aut",
            comment = c(ORCID = "0000-0001-6194-4724"))
   )
-Description: Provides convenience functions for common data
-    modification and analysis tasks in communication research. This
-    includes functions for univariate and bivariate data analysis, index
-    generation and reliability computation, and intercoder reliability
-    tests. All functions follow the style and syntax of the tidyverse, and
-    are construed to perform their computations on multiple variables at
-    once. Functions for univariate and bivariate data analysis comprise
-    summary statistics for continuous and categorical variables, as well
-    as several tests of bivariate association including effect sizes.
+Description: Provides convenience functions for common data modification
+    and analysis tasks in communication research. This includes functions
+    for univariate and bivariate data analysis, index generation and
+    reliability computation, and intercoder reliability tests. All
+    functions follow the style and syntax of the tidyverse, and are
+    construed to perform their computations on multiple variables at once.
+    Functions for univariate and bivariate data analysis comprise summary
+    statistics for continuous and categorical variables, as well as
+    several tests of bivariate association including effect sizes.
     Functions for data modification comprise index generation and
     automated reliability analysis of index variables. Functions for
     intercoder reliability comprise tests of several intercoder
@@ -30,11 +30,11 @@ License: GPL-3
 URL: https://joon-e.github.io/tidycomm/
 BugReports: https://github.com/joon-e/tidycomm/issues
 Depends:
-    R (>= 2.10)
+    R (>= 3.6.0)
 Imports:
     car,
     dplyr,
-	fastDummies,
+    fastDummies,
     forcats,
     GGally,
     ggplot2,
@@ -42,9 +42,9 @@ Imports:
     lm.beta,
     lubridate,
     magrittr,
-	MASS,
+    MASS,
     MBESS,
-	misty,
+    misty,
     pillar,
     purrr,
     rlang,
@@ -52,12 +52,12 @@ Imports:
     tibble,
     tidyr,
     tidyselect
-Suggests: 
+Suggests:
     covr,
     knitr,
     rmarkdown,
     testthat (>= 2.1.0)
-VignetteBuilder: 
+VignetteBuilder:
     knitr
 Encoding: UTF-8
 LazyData: true
