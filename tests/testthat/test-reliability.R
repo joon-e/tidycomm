@@ -1,5 +1,3 @@
-context("Reliability")
-
 test_that("compute_reliability returns tibble", {
   rel <- WoJ %>%
     compute_reliability(ethics_1, ethics_2, ethics_3, ethics_4)

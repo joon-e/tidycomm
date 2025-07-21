@@ -1,5 +1,3 @@
-context("Correlation")
-
 # Main functions
 
 test_that("correlation test returns tibble", {

@@ -1,5 +1,3 @@
-context("Scaling")
-
 test_that("scaling return values work", {
 
   # reverse_scale
