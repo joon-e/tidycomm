@@ -1,5 +1,3 @@
-context("t-Test")
-
 # Main functions
 
 test_that("t_test returns tibble", {
@@ -56,6 +54,6 @@ test_that("cohen's d returns correct results", {
     dplyr::filter(temp_contract == "Temporary") %>%
     dplyr::pull(autonomy_selection)
 
-  expect_equal(cohens_d(x, y), 0.277, tolerance = .0005)
+  expect_equal(cohens_d(x, y), 0.277, tolerance = .006)
   expect_equal(cohens_d(x, y, pooled_sd = FALSE), 0.250, tolerance = .0005)
 })

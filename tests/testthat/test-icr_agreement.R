@@ -1,5 +1,3 @@
-context("ICR: Agreement")
-
 test_that("Check equal works", {
   expect_true(check_equal(c(1, 1, 1, 1, 1)))
   expect_false(check_equal(c(0, 1, 1, 1, 1)))

@@ -1,5 +1,3 @@
-context("Describe")
-
 # Main function
 
 test_that("describe returns tibble", {

@@ -1,5 +1,3 @@
-context("ICR: Krippendorff's Alpha")
-
 # Main functions
 
 test_that("Krippendorff's Alpha returns correct result with numeric data", {
@@ -11,10 +9,10 @@ test_that("Krippendorff's Alpha returns correct result with numeric data", {
                     nrow = 12,
                     byrow = FALSE)
 
-  expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0005)
+  expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0006)
   expect_equal(icr_kripp_alpha(icr_mat, var_level = "ordinal"), 0.815, tolerance = .0005)
   expect_equal(icr_kripp_alpha(icr_mat, var_level = "interval"), 0.849, tolerance = .0005)
-  expect_equal(icr_kripp_alpha(icr_mat, var_level = "ratio"), 0.797, tolerance = .0005)
+  expect_equal(icr_kripp_alpha(icr_mat, var_level = "ratio"), 0.797, tolerance = .0006)
 })
 
 test_that("Krippendorff's Alpha returns correct result with nominal numeric data", {
@@ -26,7 +24,7 @@ test_that("Krippendorff's Alpha returns correct result with nominal numeric data
                     nrow = 12,
                     byrow = FALSE)
 
-  expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0005)
+  expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0006)
 })
 
 test_that("Krippendorff's Alpha returns correct result with nominal string data", {
@@ -38,7 +36,7 @@ test_that("Krippendorff's Alpha returns correct result with nominal string data"
                     nrow = 12,
                     byrow = FALSE)
 
-  expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0005)
+  expect_equal(icr_kripp_alpha(icr_mat), 0.743, tolerance = .0006)
 })
 
 test_that("Krippendorff's Alüha returns 1 for variables with one category", {

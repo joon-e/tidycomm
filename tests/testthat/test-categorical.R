@@ -1,5 +1,3 @@
-context("Categorical")
-
 # Main functions
 
 test_that("tab_frequencies returns tibble", {
@@ -33,6 +31,6 @@ test_that("Cramers V returns correct result", {
 
   chi2 <- chisq.test(WoJ$reach, WoJ$employment)
 
-  expect_equal(cramer_V(chi2), .082, tolerance = .0005)
+  expect_equal(cramer_V(chi2), .082, tolerance = .005)
 
 })

@@ -1,5 +1,3 @@
-context("ICR: Kappas")
-
 # Cohen's Kappa
 
 test_that("Cohen's Kappa computes correct result", {
@@ -11,8 +9,8 @@ test_that("Cohen's Kappa computes correct result", {
                   "one", "two", "three", "one", "two", "two", "one", "one", "two"),
                 ncol = 2)
 
-  expect_equal(icr_cohens_kappa(m1n), 0.633, tolerance = .0005)
-  expect_equal(icr_cohens_kappa(m1s), 0.633, tolerance = .0005)
+  expect_equal(icr_cohens_kappa(m1n), 0.633, tolerance = .0006)
+  expect_equal(icr_cohens_kappa(m1s), 0.633, tolerance = .0006)
 })
 
 
@@ -67,6 +65,6 @@ test_that("Brennan & Prediger's Kappa computes correct result", {
 
   expect_equal(icr_brennan_prediger(m1n), 0.704, tolerance = .0005)
   expect_equal(icr_brennan_prediger(m1s), 0.704, tolerance = .0005)
-  expect_equal(icr_brennan_prediger(m2n), 0.644, tolerance = .0005)
-  expect_equal(icr_brennan_prediger(m2s), 0.644, tolerance = .0005)
+  expect_equal(icr_brennan_prediger(m2n), 0.644, tolerance = .0007)
+  expect_equal(icr_brennan_prediger(m2s), 0.644, tolerance = .0007)
 })

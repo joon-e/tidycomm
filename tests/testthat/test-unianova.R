@@ -1,5 +1,3 @@
-context("Unianova")
-
 # Main functions
 
 test_that("unianova returns tibble", {

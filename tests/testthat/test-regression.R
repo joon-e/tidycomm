@@ -1,5 +1,3 @@
-# Main functions
-
 test_that("regress returns tibble for any input", {
   tt <- tibble::tibble(x = 1:10,
                        y = c(2:5, 1, 6:10))

@@ -1,5 +1,3 @@
-context("Tab Percentiles")
-
 # Main functions
 
 test_that("tab_percentiles calculates correct percentiles", {
