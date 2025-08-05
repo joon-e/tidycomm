@@ -10,8 +10,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
 [![Codecov test
-coverage](https://codecov.io/gh/joon-e/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/joon-e/tidycomm?branch=master)
-[![R-CMD-check](https://github.com/joon-e/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/joon-e/tidycomm/actions)
+coverage](https://codecov.io/gh/tidycomm/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/tidycomm/tidycomm?branch=master)
+[![R-CMD-check](https://github.com/tidycomm/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/tidycomm/tidycomm/actions)
 <!-- badges: end -->
 
 Tidycomm provides convenience functions for common tasks in
@@ -33,7 +33,8 @@ install.packages("tidycomm")
 Or install the most recent development version of tidycomm with:
 
 ``` r
-remotes::install_github("joon-e/tidycomm")
+# install.packages("pak")
+pak::pak("tidycomm/tidycomm")
 ```
 
 ## Usage
