@@ -10,7 +10,7 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![CRAN
 status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
 [![Codecov test
-coverage](https://codecov.io/gh/tidycomm/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/tidycomm/tidycomm?branch=master)
+coverage](https://app.codecov.io/gh/tidycomm/tidycomm/branch/master/graph/badge.svg)](https://app.codecov.io/gh/tidycomm/tidycomm?branch=master)
 [![R-CMD-check](https://github.com/tidycomm/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/tidycomm/tidycomm/actions)
 <!-- badges: end -->
 
@@ -129,12 +129,12 @@ snscomments %>% # experimental social-media-post perception sample data
 For detailed examples, see the following articles:
 
 - [Univariate analysis of continuous and categorical
-  variables](https://joon-e.github.io/tidycomm/articles/v01_univariate.html)
+  variables](https://tidycomm.github.io/tidycomm/articles/v01_univariate.html)
 - [Bivariate analysis of continuous and/or categorical
-  variables](https://joon-e.github.io/tidycomm/articles/v02_bivariate.html)
+  variables](https://tidycomm.github.io/tidycomm/articles/v02_bivariate.html)
 - [Adding indices and computing reliability
-  estimates](https://joon-e.github.io/tidycomm/articles/v03_reliability.html)
+  estimates](https://tidycomm.github.io/tidycomm/articles/v03_reliability.html)
 - [Intercoder reliability
-  tests](https://joon-e.github.io/tidycomm/articles/v04_icr.html)
+  tests](https://tidycomm.github.io/tidycomm/articles/v04_icr.html)
 - [Modification of
-  scales](https://joon-e.github.io/tidycomm/articles/v05_scales.html)
+  scales](https://tidycomm.github.io/tidycomm/articles/v05_scales.html)

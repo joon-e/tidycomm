@@ -33,7 +33,7 @@ warn_about_missing_visualization <- function(x) {
 ## Keeps existing variables if they were specified in the function call or
 ## gets an alternative selection of variables if none were specified.
 ##
-## @param data a [tibble][tibble::tibble-package]
+## @param data a [tibble][tibble::tibble]
 ## @param vars Variables passed to function with `...`, wrapped in `rlang::enquos`
 ## @param alternative Which variables to grab alternatively if no variables were
 ##   specified in the function call. Defaults to "numeric".

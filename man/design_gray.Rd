@@ -11,7 +11,7 @@ a list with \code{main_color_1}, a vector of 12 \code{main_colors}, a
 corresponding \code{main_contrast_1} (the color of text to write on top of the
 main color) and a corresponding \code{main_contrasts}, the \code{main_size} (for
 lines), a \code{comparison_linetype}, \code{comparison_color}, and \code{comparison_size}
-for all lines that act as comparative lines, and a \link{ggplot2} \code{theme}
+for all lines that act as comparative lines, and a \link[ggplot2:theme]{theme()}
 }
 \description{
 Gray design

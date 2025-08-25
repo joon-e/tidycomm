@@ -10,11 +10,11 @@ new_tdcmm(x, func, data, model = NULL, checks = NULL, params = list())
 is_tdcmm(x)
 }
 \arguments{
-\item{x}{A \link[tibble:tibble-package]{tibble}.}
+\item{x}{A \link[tibble:tibble]{tibble}.}
 
 \item{func}{Function name called that produced this model.}
 
-\item{data}{The \link{tibble} that served as input to the function.}
+\item{data}{The \link[tibble:tibble]{tibble} that served as input to the function.}
 
 \item{model}{A list of model object(s) used in preparation of the output.
 Defaults to \code{NULL}. A single model should be wrapped in a list of length

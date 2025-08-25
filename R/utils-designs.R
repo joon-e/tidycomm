@@ -4,7 +4,7 @@
 #' corresponding `main_contrast_1` (the color of text to write on top of the
 #' main color) and a corresponding `main_contrasts`, the `main_size` (for
 #' lines), a `comparison_linetype`, `comparison_color`, and `comparison_size`
-#' for all lines that act as comparative lines, and a [ggplot2] `theme`
+#' for all lines that act as comparative lines, and a [theme()][ggplot2::theme]
 #' @export
 design_lmu <- function() {
   return(list(main_color_1 = "#00883A",
@@ -58,7 +58,7 @@ design_lmu <- function() {
 #' corresponding `main_contrast_1` (the color of text to write on top of the
 #' main color) and a corresponding `main_contrasts`, the `main_size` (for
 #' lines), a `comparison_linetype`, `comparison_color`, and `comparison_size`
-#' for all lines that act as comparative lines, and a [ggplot2] `theme`
+#' for all lines that act as comparative lines, and a [theme()][ggplot2::theme]
 #' @export
 design_gray <- function() {
   return(list(main_color_1 = "#000000",
@@ -111,7 +111,7 @@ design_gray <- function() {
 #' corresponding `main_contrast_1` (the color of text to write on top of the
 #' main color) and a corresponding `main_contrasts`, the `main_size` (for
 #' lines), a `comparison_linetype`, `comparison_color`, and `comparison_size`
-#' for all lines that act as comparative lines, and a [ggplot2] `theme`
+#' for all lines that act as comparative lines, and a [theme()][ggplot2::theme]
 #' @export
 design_grey <- function() {
   return(design_gray())

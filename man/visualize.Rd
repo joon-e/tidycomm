@@ -41,7 +41,7 @@ has to be a list with 9 keys: \code{main_color_1}, a vector of 12 \code{main_col
 corresponding \code{main_contrast_1} (the color of text to write on top of the
 main color) and a corresponding \code{main_contrasts}, the \code{main_size} (for
 lines), a \code{comparison_linetype}, \code{comparison_color}, and \code{comparison_size}
-for all lines that act as comparative lines, and a \link{ggplot2} \code{theme}}
+for all lines that act as comparative lines, and a \code{\link[ggplot2:theme]{ggplot2::theme}}}
 
 \item{which}{string to specify type of regression visualization. One of
 "jitter" (default), "alpha", "correlogram", "residualsfitted" (or "resfit"),
@@ -49,10 +49,10 @@ for all lines that act as comparative lines, and a \link{ggplot2} \code{theme}}
 See below for details.}
 }
 \value{
-A \link{ggplot2} object
+A \link[ggplot2:ggplot]{ggplot} object
 }
 \description{
-Returns \link{ggplot2} visualization appropriate to respective \code{tdcmm} model
+Returns \link[ggplot2:ggplot]{ggplot} visualization appropriate to respective \code{tdcmm} model
 (see list below). Returns \code{NULL} (and a warning) if no visualization has
 been implemented for the particular model.
 }
@@ -132,9 +132,9 @@ with care
 }
 }
 
-Note that the returned \link{ggplot2} object can be modified easily by appending
+Note that the returned \link[ggplot2:ggplot]{ggplot} object can be modified easily by appending
 or overwriting individual geom's or scale's. See the examples below and the
-documentation of \link{ggplot2}.
+documentation of \link[ggplot2:ggplot]{ggplot}.
 }
 \examples{
 \dontrun{
