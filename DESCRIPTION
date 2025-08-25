@@ -1,6 +1,6 @@
 Package: tidycomm
 Title: Data Modification and Analysis for Communication Research
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: c(
     person("Julian", "Unkel", , "julian.unkel@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-9568-7041")),
@@ -27,8 +27,8 @@ Description: Provides convenience functions for common data modification
     1981 <doi: 10.1177/001316448104100307>; Cohen 1960 <doi:
     10.1177/001316446002000104>; Fleiss 1971 <doi: 10.1037/h0031619>).
 License: GPL-3
-URL: https://joon-e.github.io/tidycomm/
-BugReports: https://github.com/joon-e/tidycomm/issues
+URL: https://tidycomm.github.io/tidycomm/
+BugReports: https://github.com/tidycomm/tidycomm/issues
 Depends:
     R (>= 3.6.0)
 Imports:
@@ -63,4 +63,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

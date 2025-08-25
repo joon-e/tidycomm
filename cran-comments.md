@@ -1,36 +1,32 @@
-## Resubmission
-This is a resubmission. In this version we have:
+# Resubmission
+This is a resubmission of package tidycomm, which was archived on 2025-08-25 due to failing checks.
 
-* Corrected the DOI links in the documentation. They are now properly formatted as standalone \doi{} commands without being encapsulated within any other markup, as per the CRAN guidelines.
+The following issues were addressed:
+1. Rd cross-references: All \link{} references to objects from other packages (e.g., ggplot2, tibble) now include proper package prefixes, e.g., \link[ggplot2]{ggplot} and \link[tibble]{tibble}.
+2. Test failures: The visualize() function now returns GGally::ggmatrix objects (for richer visualization of correlation matrices). Tests expecting a 'gg' object were updated to expect 'ggmatrix' objects instead, resolving the previous test failures.
+
+All checks now pass on R-release, R-devel, and Windows/Linux flavors.
+Please consider re-activating the package. Thank you!
 
 ## About
-This update elevates the version directly to 0.4.1 as it introduces significant enhancements including new tdcmm/tibble returns and functions such as partial correlation, linear regression, one-sample t-test, scale transformations, percentiles, visualizations, and additional datasets (snscomments and incvlcomments). Additionally, we have applied a minor patch to encase the 'visualize()' examples within 'dontrun()' to reduce the elapsed time during the compilation of these examples.
+This update elevates the version to 0.4.2 as it only introduces minor bugfixes without any function enhancement.
 
 ## Test environments
 
-* local Win 10 install, R 4.3.2
+* local Win 10 install, R-4.5.1
 * OS X latest (on GitHub Actions), release
-* Ubuntu 20.04 (on GitHub Actions), release
-* Ubuntu 20.04 (on GitHub Actions), devel
+* Ubuntu 24.04 (on GitHub Actions), release
+* Ubuntu 24.04 (on GitHub Actions), devel
 * Windows latest (on GitHub Actions), release
-
-There were 3 NOTES identified when testing the package on Windows using R-hub, but all are referenced in the open issues of the R-hub package and thus appear to be unrelated to this package:
-
-> checking for non-standard things in the check directory ... NOTE
-Found the following files/directories:
-  ''NULL''
-
-> checking for detritus in the temp directory ... NOTE
-Found the following files/directories:
-  'lastMiKTeXException'
-
-> checking HTML version of manual ... NOTE
-   Skipping checking math rendering: package 'V8' unavailable
-
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 note
+── R CMD check results ──────────────────────────────────────────────────────────────── tidycomm 0.4.2 ────
+Duration: 3m 5.9s
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
+
+R CMD check succeeded
 
 
 ## revdepcheck results

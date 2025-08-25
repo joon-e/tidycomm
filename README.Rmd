@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN status](https://www.r-pkg.org/badges/version/tidycomm)](https://CRAN.R-project.org/package=tidycomm)
-[![Codecov test coverage](https://codecov.io/gh/tidycomm/tidycomm/branch/master/graph/badge.svg)](https://codecov.io/gh/tidycomm/tidycomm?branch=master)
+[![Codecov test coverage](https://app.codecov.io/gh/tidycomm/tidycomm/branch/master/graph/badge.svg)](https://app.codecov.io/gh/tidycomm/tidycomm?branch=master)
 [![R-CMD-check](https://github.com/tidycomm/tidycomm/workflows/R-CMD-check/badge.svg)](https://github.com/tidycomm/tidycomm/actions)
 <!-- badges: end -->
 
@@ -89,8 +89,8 @@ snscomments %>% # experimental social-media-post perception sample data
 
 For detailed examples, see the following articles:
 
-* [Univariate analysis of continuous and categorical variables](https://joon-e.github.io/tidycomm/articles/v01_univariate.html)
-* [Bivariate analysis of continuous and/or categorical variables](https://joon-e.github.io/tidycomm/articles/v02_bivariate.html)
-* [Adding indices and computing reliability estimates](https://joon-e.github.io/tidycomm/articles/v03_reliability.html)
-* [Intercoder reliability tests](https://joon-e.github.io/tidycomm/articles/v04_icr.html)
-* [Modification of scales](https://joon-e.github.io/tidycomm/articles/v05_scales.html)
+* [Univariate analysis of continuous and categorical variables](https://tidycomm.github.io/tidycomm/articles/v01_univariate.html)
+* [Bivariate analysis of continuous and/or categorical variables](https://tidycomm.github.io/tidycomm/articles/v02_bivariate.html)
+* [Adding indices and computing reliability estimates](https://tidycomm.github.io/tidycomm/articles/v03_reliability.html)
+* [Intercoder reliability tests](https://tidycomm.github.io/tidycomm/articles/v04_icr.html)
+* [Modification of scales](https://tidycomm.github.io/tidycomm/articles/v05_scales.html)

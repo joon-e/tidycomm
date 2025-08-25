@@ -1,3 +1,17 @@
+# tidycomm 0.4.2
+
+## Installation / Compatibility
+* Minimum required R version increased from 2.10 to 3.6.0.
+
+## Bugfixes
+* Updated GGally usage to rely on `ggmatrix` class instead of `gg`, ensuring compatibility with the latest ggplot2 changes.
+* Migrated tests to testthat v3 to maintain correct test behavior.
+
+## Documentation
+* Merged README.Rmd with index for pkgdown site.
+* Updated links to reflect the new GitHub organization (https://github.com/tidycomm/tidycomm).
+* Enabled Bootstrap 5 and light/dark switch for the pkgdown documentation site.
+
 # tidycomm 0.4.1
 
 # tidycomm 0.3.0
