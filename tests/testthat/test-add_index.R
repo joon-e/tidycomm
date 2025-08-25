@@ -1,5 +1,3 @@
-context("Add index")
-
 test_that("add_index adds variable", {
 
   WoJ_i <- WoJ %>%

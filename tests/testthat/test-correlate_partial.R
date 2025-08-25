@@ -1,5 +1,3 @@
-context("Partial Correlation")
-
 # Main functions
 
 test_that("correlate(partial = work_experience) returns tibble", {

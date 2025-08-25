@@ -1,5 +1,3 @@
-context("ICR: Main functions")
-
 test_that("unit-coder matrices are generated", {
 
   ucm_string <- unit_coder_matrix(fbposts, post_id, coder_id, type)
